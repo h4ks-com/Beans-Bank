@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beapin - Bean Currency</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .total-beans {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .total-beans h2 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+        .total-beans .amount {
+            font-size: 3em;
+            font-weight: bold;
+        }
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: #f5f5f5;
+            border-radius: 12px;
+            padding: 6px;
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+        }
+        .mode-btn.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .mode-btn:hover:not(.active) {
+            color: #667eea;
+        }
+        .mode-content {
+            display: none;
+        }
+        .mode-content.active {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+        button[type="submit"]:active {
+            transform: translateY(0);
+        }
+        button[type="submit"]:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .result-box {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+        .result-box.success {
+            background: #d4edda;
+            border: 2px solid #c3e6cb;
+            color: #155724;
+        }
+        .result-box.error {
+            background: #f8d7da;
+            border: 2px solid #f5c6cb;
+            color: #721c24;
+        }
+        .result-box.info {
+            background: #d1ecf1;
+            border: 2px solid #bee5eb;
+            color: #0c5460;
+        }
+        .result-box strong {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .result-box a {
+            color: #004085;
+            word-break: break-all;
+        }
+        .info-text {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #666;
+            font-size: 0.95em;
+            border-left: 4px solid #667eea;
+        }
+        .api-link {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+        .api-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .api-link a:hover {
+            text-decoration: underline;
+        }
+        .wallet-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .wallet-info .balance {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-top: 5px;
+        }
+        .auth-section {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .auth-section .user-info {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .auth-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .auth-btn:hover {
+            transform: translateY(-2px);
+        }
+        .auth-btn.logout {
+            background: linear-gradient(135deg, #ea6767 0%, #a27676 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🫘 Beapin</h1>
+        <p class="subtitle">Bean Currency for h4ks.com</p>
+
+        {{ if not .TestMode }}
+        <div class="auth-section">
+            {{ if .IsAuthenticated }}
+                <div class="user-info">🔐 Logged in as: {{ .Username }}</div>
+                <a href="/auth/logout" class="auth-btn logout">Logout</a>
+            {{ else }}
+                <div class="user-info">🔓 Not logged in</div>
+                <a href="/auth/login" class="auth-btn">Login with Logto</a>
+            {{ end }}
+        </div>
+        {{ end }}
+
+        <div class="total-beans">
+            <h2>Total Beans in System</h2>
+            <div class="amount" id="totalBeans">{{ .TotalBeans }}</div>
+        </div>
+
+        <div class="mode-selector">
+            <button class="mode-btn active" onclick="switchMode('transfer')">
+                💸 Transfer Beans
+            </button>
+            <button class="mode-btn" onclick="switchMode('link')">
+                🔗 Generate Link
+            </button>
+        </div>
+
+        <!-- Transfer Beans Mode -->
+        <div id="transferMode" class="mode-content active">
+            <div class="info-text">
+                <strong>🔐 Direct Transfer</strong><br>
+                Transfer beans directly to another user. You must be authenticated and the recipient will receive beans immediately.
+            </div>
+
+            <div id="walletInfo" class="wallet-info" style="display: none;">
+                <div style="color: #666; font-size: 0.9em;">Your Balance</div>
+                <div class="balance" id="userBalance">0 beans</div>
+            </div>
+
+            <form id="directTransferForm">
+                <div class="form-group">
+                    <label for="directToUser">Recipient Username:</label>
+                    <input type="text" id="directToUser" name="toUser" required placeholder="recipient_username">
+                </div>
+                <div class="form-group">
+                    <label for="directAmount">Amount:</label>
+                    <input type="number" id="directAmount" name="amount" required min="1" placeholder="10">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="forceCreate" name="force" style="width: auto; margin-right: 8px;">
+                        Create recipient wallet if it doesn't exist
+                    </label>
+                </div>
+                <button type="submit" id="transferBtn">Transfer Beans</button>
+            </form>
+
+            <div id="transferResult" class="result-box"></div>
+        </div>
+
+        <!-- Generate Link Mode -->
+        <div id="linkMode" class="mode-content">
+            <div class="info-text">
+                <strong>🔗 Transfer Link</strong><br>
+                Create a transfer link that allows the sender to confirm the transfer later. Useful for sharing transfer requests.
+            </div>
+
+            <form id="linkForm">
+                <div class="form-group">
+                    <label for="linkFromUser">From User:</label>
+                    <input type="text" id="linkFromUser" name="fromUser" required placeholder="sender_username">
+                </div>
+                <div class="form-group">
+                    <label for="linkToUser">To User:</label>
+                    <input type="text" id="linkToUser" name="toUser" required placeholder="recipient_username">
+                </div>
+                <div class="form-group">
+                    <label for="linkAmount">Amount:</label>
+                    <input type="number" id="linkAmount" name="amount" required min="1" placeholder="10">
+                </div>
+                <button type="submit">Generate Transfer Link</button>
+            </form>
+
+            <div id="linkResult" class="result-box"></div>
+        </div>
+
+        <div class="api-link">
+            <a href="/swagger/index.html">📚 API Documentation</a>
+        </div>
+    </div>
+
+    <script>
+        const isAuthenticated = {{ .IsAuthenticated }};
+        const testMode = {{ .TestMode }};
+        const username = "{{ .Username }}";
+
+        function switchMode(mode) {
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.mode-content').forEach(content => content.classList.remove('active'));
+
+            if (mode === 'transfer') {
+                document.querySelector('.mode-btn:first-child').classList.add('active');
+                document.getElementById('transferMode').classList.add('active');
+                if (isAuthenticated && !testMode) {
+                    loadWalletInfo();
+                }
+            } else {
+                document.querySelector('.mode-btn:last-child').classList.add('active');
+                document.getElementById('linkMode').classList.add('active');
+            }
+        }
+
+        async function loadWalletInfo() {
+            try {
+                const response = await fetch('/api/v1/wallet', {
+                    credentials: 'same-origin'
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('userBalance').textContent = data.bean_amount + ' beans';
+                    document.getElementById('walletInfo').style.display = 'block';
+                } else if (response.status === 401) {
+                    window.location.href = '/auth/login';
+                }
+            } catch (error) {
+                console.error('Failed to load wallet:', error);
+            }
+        }
+
+        document.getElementById('directTransferForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            if (!isAuthenticated && !testMode) {
+                window.location.href = '/auth/login';
+                return;
+            }
+
+            const toUser = document.getElementById('directToUser').value;
+            const amount = parseInt(document.getElementById('directAmount').value);
+            const force = document.getElementById('forceCreate').checked;
+            const resultDiv = document.getElementById('transferResult');
+            const submitBtn = document.getElementById('transferBtn');
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+            resultDiv.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/v1/transfer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        to_user: toUser,
+                        amount: amount,
+                        force: force
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultDiv.className = 'result-box success';
+                    resultDiv.innerHTML = `<strong>✅ Transfer Successful!</strong>${amount} beans transferred to ${toUser}<br>New balance: ${data.new_balance} beans`;
+                    document.getElementById('directTransferForm').reset();
+                    loadWalletInfo();
+                } else if (response.status === 401) {
+                    window.location.href = '/auth/login';
+                } else {
+                    resultDiv.className = 'result-box error';
+                    resultDiv.innerHTML = `<strong>❌ Transfer Failed</strong>${data.error || 'An error occurred'}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result-box error';
+                resultDiv.innerHTML = `<strong>❌ Network Error</strong>${error.message}`;
+            }
+
+            resultDiv.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Transfer Beans';
+        });
+
+        document.getElementById('linkForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const fromUser = document.getElementById('linkFromUser').value;
+            const toUser = document.getElementById('linkToUser').value;
+            const amount = document.getElementById('linkAmount').value;
+            const resultDiv = document.getElementById('linkResult');
+
+            const link = window.location.origin + '/transfer/' + fromUser + '/' + toUser + '/' + amount;
+
+            resultDiv.className = 'result-box info';
+            resultDiv.innerHTML = `<strong>🔗 Transfer Link Generated</strong><a href="${link}" target="_blank">${link}</a><br><br><small>Share this link with ${fromUser} to initiate the transfer.</small>`;
+            resultDiv.style.display = 'block';
+        });
+
+        if (isAuthenticated && !testMode) {
+            loadWalletInfo();
+        }
+    </script>
+</body>
+</html>

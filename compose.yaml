@@ -1,0 +1,24 @@
+services:
+  beapin:
+    build: .
+    ports:
+      - "${PORT}:8080"
+    environment:
+      - PORT=8080
+      - GIN_MODE=release
+      - DATABASE_URL=sqlite:/data/beapin.db
+      - LOGTO_ENDPOINT=${LOGTO_ENDPOINT:-}
+      - LOGTO_APP_ID=${LOGTO_APP_ID:-}
+      - LOGTO_APP_SECRET=${LOGTO_APP_SECRET:-}
+      - LOGTO_REDIRECT_URI=${LOGTO_REDIRECT_URI:-http://localhost:8080/callback}
+      - LOGTO_POST_LOGOUT_URI=${LOGTO_POST_LOGOUT_URI:-http://localhost:8080/}
+      - JWT_SECRET=${JWT_SECRET:-change-this-secret-in-production}
+      - SESSION_SECRET=${SESSION_SECRET:-change-this-session-secret}
+      - ADMIN_USERS=${ADMIN_USERS:-admin}
+      - TEST_MODE=false
+    volumes:
+      - beapin_data:/data
+    restart: unless-stopped
+
+volumes:
+  beapin_data:

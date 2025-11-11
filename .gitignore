@@ -1,0 +1,42 @@
+# Binaries
+beapin
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Swagger generated files
+docs/docs.go
+docs/swagger.json
+docs/swagger.yaml
+
+# Test coverage
+coverage.txt
+coverage.out
+*.cover
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Go workspace
+go.work
+go.work.sum
