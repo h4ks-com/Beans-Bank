@@ -6,10 +6,12 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/docker/go-connections/nat"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/testcontainers/testcontainers-go"
@@ -22,23 +24,45 @@ type beapinContainer struct {
 }
 
 func setupBeapin(ctx context.Context, t *testing.T) (*beapinContainer, error) {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	jwtSecret := os.Getenv("JWT_SECRET")
+	if jwtSecret == "" {
+		jwtSecret = "test-secret"
+	}
+
+	sessionSecret := os.Getenv("SESSION_SECRET")
+	if sessionSecret == "" {
+		sessionSecret = "test-session-secret"
+	}
+
+	adminUsers := os.Getenv("ADMIN_USERS")
+	if adminUsers == "" {
+		adminUsers = "admin"
+	}
+
+	natPort := nat.Port(port + "/tcp")
+
 	req := testcontainers.ContainerRequest{
 		FromDockerfile: testcontainers.FromDockerfile{
 			Context:    "../",
 			Dockerfile: "Dockerfile",
 		},
-		ExposedPorts: []string{"8080/tcp"},
+		ExposedPorts: []string{string(natPort)},
 		Env: map[string]string{
-			"PORT":            "8080",
+			"PORT":            port,
 			"GIN_MODE":        "release",
 			"DATABASE_URL":    "sqlite::memory:",
-			"JWT_SECRET":      "test-secret",
-			"SESSION_SECRET":  "test-session-secret",
-			"ADMIN_USERS":     "admin",
+			"JWT_SECRET":      jwtSecret,
+			"SESSION_SECRET":  sessionSecret,
+			"ADMIN_USERS":     adminUsers,
 			"TEST_MODE":       "true",
 		},
 		WaitingFor: wait.ForHTTP("/").
-			WithPort("8080/tcp").
+			WithPort(natPort).
 			WithStatusCodeMatcher(func(status int) bool {
 				return status == 200 || status == 404
 			}).
@@ -63,7 +87,7 @@ func setupBeapin(ctx context.Context, t *testing.T) (*beapinContainer, error) {
 		return beapinC, err
 	}
 
-	mappedPort, err := container.MappedPort(ctx, "8080")
+	mappedPort, err := container.MappedPort(ctx, natPort)
 	if err != nil {
 		return beapinC, err
 	}
