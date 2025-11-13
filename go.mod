@@ -1,4 +1,4 @@
-module github.com/h4ks-com/beapin
+module github.com/h4ks-com/bean-bank
 
 go 1.24.0
 

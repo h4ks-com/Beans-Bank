@@ -9,20 +9,20 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
-	"github.com/h4ks-com/beapin/internal/auth"
-	"github.com/h4ks-com/beapin/internal/config"
-	"github.com/h4ks-com/beapin/internal/database"
-	"github.com/h4ks-com/beapin/internal/handlers"
-	"github.com/h4ks-com/beapin/internal/middleware"
-	"github.com/h4ks-com/beapin/internal/repository"
-	"github.com/h4ks-com/beapin/internal/services"
+	"github.com/h4ks-com/bean-bank/internal/auth"
+	"github.com/h4ks-com/bean-bank/internal/config"
+	"github.com/h4ks-com/bean-bank/internal/database"
+	"github.com/h4ks-com/bean-bank/internal/handlers"
+	"github.com/h4ks-com/bean-bank/internal/middleware"
+	"github.com/h4ks-com/bean-bank/internal/repository"
+	"github.com/h4ks-com/bean-bank/internal/services"
 
-	_ "github.com/h4ks-com/beapin/docs"
+	_ "github.com/h4ks-com/bean-bank/docs"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @title           Beapin API
+// @title           Bean Bank API
 // @version         1.0
 // @description     Bean currency management system for h4ks.com
 // @BasePath        /api/v1

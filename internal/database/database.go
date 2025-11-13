@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/h4ks-com/beapin/internal/models"
+	"github.com/h4ks-com/bean-bank/internal/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"

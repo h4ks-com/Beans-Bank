@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/h4ks-com/beapin/internal/models"
-	"github.com/h4ks-com/beapin/internal/repository"
+	"github.com/h4ks-com/bean-bank/internal/models"
+	"github.com/h4ks-com/bean-bank/internal/repository"
 )
 
 var (
@@ -47,7 +47,7 @@ func (s *TokenService) GenerateToken(username string, expiresIn time.Duration) (
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(expiresIn)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
-			Issuer:    "beapin",
+			Issuer:    "bean-bank",
 		},
 	}
 

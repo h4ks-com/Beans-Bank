@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/h4ks-com/beapin/internal/services"
+	"github.com/h4ks-com/bean-bank/internal/services"
 )
 
 type PublicHandler struct {

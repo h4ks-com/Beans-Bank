@@ -18,12 +18,12 @@ import (
 	"github.com/testcontainers/testcontainers-go/wait"
 )
 
-type beapinContainer struct {
+type beanBankContainer struct {
 	testcontainers.Container
 	URI string
 }
 
-func setupBeapin(ctx context.Context, t *testing.T) (*beapinContainer, error) {
+func setupBeanBank(ctx context.Context, t *testing.T) (*beanBankContainer, error) {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -74,26 +74,26 @@ func setupBeapin(ctx context.Context, t *testing.T) (*beapinContainer, error) {
 		Started:          true,
 	})
 
-	var beapinC *beapinContainer
+	var beanBankC *beanBankContainer
 	if container != nil {
-		beapinC = &beapinContainer{Container: container}
+		beanBankC = &beanBankContainer{Container: container}
 	}
 	if err != nil {
-		return beapinC, err
+		return beanBankC, err
 	}
 
 	host, err := container.Host(ctx)
 	if err != nil {
-		return beapinC, err
+		return beanBankC, err
 	}
 
 	mappedPort, err := container.MappedPort(ctx, natPort)
 	if err != nil {
-		return beapinC, err
+		return beanBankC, err
 	}
 
-	beapinC.URI = fmt.Sprintf("http://%s:%s", host, mappedPort.Port())
-	return beapinC, nil
+	beanBankC.URI = fmt.Sprintf("http://%s:%s", host, mappedPort.Port())
+	return beanBankC, nil
 }
 
 func TestE2E_TotalBeans(t *testing.T) {
@@ -102,11 +102,11 @@ func TestE2E_TotalBeans(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	beapinC, err := setupBeapin(ctx, t)
+	beanBankC, err := setupBeanBank(ctx, t)
 	require.NoError(t, err)
-	testcontainers.CleanupContainer(t, beapinC)
+	testcontainers.CleanupContainer(t, beanBankC)
 
-	resp, err := http.Get(beapinC.URI + "/api/v1/total")
+	resp, err := http.Get(beanBankC.URI + "/api/v1/total")
 	require.NoError(t, err)
 	defer resp.Body.Close()
 
@@ -130,14 +130,14 @@ func TestE2E_CreateToken(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	beapinC, err := setupBeapin(ctx, t)
+	beanBankC, err := setupBeanBank(ctx, t)
 	require.NoError(t, err)
-	testcontainers.CleanupContainer(t, beapinC)
+	testcontainers.CleanupContainer(t, beanBankC)
 
-	ensureWalletExists(t, beapinC.URI, "alice")
+	ensureWalletExists(t, beanBankC.URI, "alice")
 
 	reqBody := strings.NewReader(`{"expires_in": "1h"}`)
-	req, err := http.NewRequest(http.MethodPost, beapinC.URI+"/api/v1/tokens", reqBody)
+	req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/tokens", reqBody)
 	require.NoError(t, err)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Test-Username", "alice")
@@ -169,13 +169,13 @@ func TestE2E_GetWallet(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	beapinC, err := setupBeapin(ctx, t)
+	beanBankC, err := setupBeanBank(ctx, t)
 	require.NoError(t, err)
-	testcontainers.CleanupContainer(t, beapinC)
+	testcontainers.CleanupContainer(t, beanBankC)
 
-	ensureWalletExists(t, beapinC.URI, "bob")
+	ensureWalletExists(t, beanBankC.URI, "bob")
 
-	req, err := http.NewRequest(http.MethodGet, beapinC.URI+"/api/v1/wallet", nil)
+	req, err := http.NewRequest(http.MethodGet, beanBankC.URI+"/api/v1/wallet", nil)
 	require.NoError(t, err)
 	req.Header.Set("X-Test-Username", "bob")
 
@@ -207,18 +207,18 @@ func TestE2E_Transfer(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	beapinC, err := setupBeapin(ctx, t)
+	beanBankC, err := setupBeanBank(ctx, t)
 	require.NoError(t, err)
-	testcontainers.CleanupContainer(t, beapinC)
+	testcontainers.CleanupContainer(t, beanBankC)
 
-	ensureWalletExists(t, beapinC.URI, "alice")
-	ensureWalletExists(t, beapinC.URI, "bob")
+	ensureWalletExists(t, beanBankC.URI, "alice")
+	ensureWalletExists(t, beanBankC.URI, "bob")
 
-	bobWallet := getWalletTestMode(t, beapinC.URI, "bob")
+	bobWallet := getWalletTestMode(t, beanBankC.URI, "bob")
 	bobInitialBalance := bobWallet["bean_amount"].(float64)
 
 	transferBody := strings.NewReader(`{"to_user": "bob", "amount": 1, "force": false}`)
-	req, err := http.NewRequest(http.MethodPost, beapinC.URI+"/api/v1/transfer", transferBody)
+	req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/transfer", transferBody)
 	require.NoError(t, err)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Test-Username", "alice")
@@ -233,7 +233,7 @@ func TestE2E_Transfer(t *testing.T) {
 	}
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 
-	bobWalletAfter := getWalletTestMode(t, beapinC.URI, "bob")
+	bobWalletAfter := getWalletTestMode(t, beanBankC.URI, "bob")
 	bobFinalBalance := bobWalletAfter["bean_amount"].(float64)
 
 	assert.Equal(t, bobInitialBalance+1.0, bobFinalBalance, "bob should have received 1 bean")
@@ -245,14 +245,14 @@ func TestE2E_TransferWithForce(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	beapinC, err := setupBeapin(ctx, t)
+	beanBankC, err := setupBeanBank(ctx, t)
 	require.NoError(t, err)
-	testcontainers.CleanupContainer(t, beapinC)
+	testcontainers.CleanupContainer(t, beanBankC)
 
-	ensureWalletExists(t, beapinC.URI, "charlie")
+	ensureWalletExists(t, beanBankC.URI, "charlie")
 
 	transferBody := strings.NewReader(`{"to_user": "newuser", "amount": 1, "force": true}`)
-	req, err := http.NewRequest(http.MethodPost, beapinC.URI+"/api/v1/transfer", transferBody)
+	req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/transfer", transferBody)
 	require.NoError(t, err)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Test-Username", "charlie")
@@ -263,7 +263,7 @@ func TestE2E_TransferWithForce(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 
-	newuserWallet := getWalletTestMode(t, beapinC.URI, "newuser")
+	newuserWallet := getWalletTestMode(t, beanBankC.URI, "newuser")
 	newuserBalance := newuserWallet["bean_amount"].(float64)
 
 	assert.Equal(t, 1.0, newuserBalance, "newuser should have 1 bean (force-created with 0 + 1 transfer)")
@@ -275,15 +275,15 @@ func TestE2E_GetTransactions(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	beapinC, err := setupBeapin(ctx, t)
+	beanBankC, err := setupBeanBank(ctx, t)
 	require.NoError(t, err)
-	testcontainers.CleanupContainer(t, beapinC)
+	testcontainers.CleanupContainer(t, beanBankC)
 
-	ensureWalletExists(t, beapinC.URI, "dave")
-	ensureWalletExists(t, beapinC.URI, "eve")
+	ensureWalletExists(t, beanBankC.URI, "dave")
+	ensureWalletExists(t, beanBankC.URI, "eve")
 
 	transferBody := strings.NewReader(`{"to_user": "eve", "amount": 1, "force": false}`)
-	req, err := http.NewRequest(http.MethodPost, beapinC.URI+"/api/v1/transfer", transferBody)
+	req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/transfer", transferBody)
 	require.NoError(t, err)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Test-Username", "dave")
@@ -292,7 +292,7 @@ func TestE2E_GetTransactions(t *testing.T) {
 	require.NoError(t, err)
 	resp.Body.Close()
 
-	req, err = http.NewRequest(http.MethodGet, beapinC.URI+"/api/v1/transactions", nil)
+	req, err = http.NewRequest(http.MethodGet, beanBankC.URI+"/api/v1/transactions", nil)
 	require.NoError(t, err)
 	req.Header.Set("X-Test-Username", "dave")
 
@@ -409,23 +409,23 @@ func TestE2E_TokenAuthentication(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	beapinC, err := setupBeapin(ctx, t)
+	beanBankC, err := setupBeanBank(ctx, t)
 	require.NoError(t, err)
-	testcontainers.CleanupContainer(t, beapinC)
+	testcontainers.CleanupContainer(t, beanBankC)
 
-	token := createToken(t, beapinC.URI, "tokenuser")
+	token := createToken(t, beanBankC.URI, "tokenuser")
 
 	t.Run("token works for authentication", func(t *testing.T) {
-		wallet := getWallet(t, beapinC.URI, token)
+		wallet := getWallet(t, beanBankC.URI, token)
 		assert.Equal(t, "tokenuser", wallet["username"].(string))
 		assert.Equal(t, 1.0, wallet["bean_amount"].(float64))
 	})
 
 	t.Run("token works for transfer", func(t *testing.T) {
-		ensureWalletExists(t, beapinC.URI, "recipient")
+		ensureWalletExists(t, beanBankC.URI, "recipient")
 
 		transferBody := strings.NewReader(`{"to_user": "recipient", "amount": 1, "force": false}`)
-		req, err := http.NewRequest(http.MethodPost, beapinC.URI+"/api/v1/transfer", transferBody)
+		req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/transfer", transferBody)
 		require.NoError(t, err)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Authorization", "Bearer "+token)
@@ -438,7 +438,7 @@ func TestE2E_TokenAuthentication(t *testing.T) {
 	})
 
 	t.Run("token works for transactions", func(t *testing.T) {
-		req, err := http.NewRequest(http.MethodGet, beapinC.URI+"/api/v1/transactions", nil)
+		req, err := http.NewRequest(http.MethodGet, beanBankC.URI+"/api/v1/transactions", nil)
 		require.NoError(t, err)
 		req.Header.Set("Authorization", "Bearer "+token)
 
@@ -465,14 +465,14 @@ func TestE2E_TokenList(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	beapinC, err := setupBeapin(ctx, t)
+	beanBankC, err := setupBeanBank(ctx, t)
 	require.NoError(t, err)
-	testcontainers.CleanupContainer(t, beapinC)
+	testcontainers.CleanupContainer(t, beanBankC)
 
-	token1 := createToken(t, beapinC.URI, "multitoken")
-	token2 := createToken(t, beapinC.URI, "multitoken")
+	token1 := createToken(t, beanBankC.URI, "multitoken")
+	token2 := createToken(t, beanBankC.URI, "multitoken")
 
-	req, err := http.NewRequest(http.MethodGet, beapinC.URI+"/api/v1/tokens", nil)
+	req, err := http.NewRequest(http.MethodGet, beanBankC.URI+"/api/v1/tokens", nil)
 	require.NoError(t, err)
 	req.Header.Set("Authorization", "Bearer "+token1)
 
@@ -492,8 +492,8 @@ func TestE2E_TokenList(t *testing.T) {
 	assert.Len(t, tokens, 2, "user should have 2 tokens")
 
 	t.Run("both tokens work independently", func(t *testing.T) {
-		wallet1 := getWallet(t, beapinC.URI, token1)
-		wallet2 := getWallet(t, beapinC.URI, token2)
+		wallet1 := getWallet(t, beanBankC.URI, token1)
+		wallet2 := getWallet(t, beanBankC.URI, token2)
 
 		assert.Equal(t, "multitoken", wallet1["username"].(string))
 		assert.Equal(t, "multitoken", wallet2["username"].(string))
@@ -506,13 +506,13 @@ func TestE2E_TokenDeletion(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	beapinC, err := setupBeapin(ctx, t)
+	beanBankC, err := setupBeanBank(ctx, t)
 	require.NoError(t, err)
-	testcontainers.CleanupContainer(t, beapinC)
+	testcontainers.CleanupContainer(t, beanBankC)
 
-	token := createToken(t, beapinC.URI, "deletetest")
+	token := createToken(t, beanBankC.URI, "deletetest")
 
-	req, err := http.NewRequest(http.MethodGet, beapinC.URI+"/api/v1/tokens", nil)
+	req, err := http.NewRequest(http.MethodGet, beanBankC.URI+"/api/v1/tokens", nil)
 	require.NoError(t, err)
 	req.Header.Set("Authorization", "Bearer "+token)
 
@@ -530,7 +530,7 @@ func TestE2E_TokenDeletion(t *testing.T) {
 
 	tokenID := tokens[0]["id"].(float64)
 
-	req, err = http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/api/v1/tokens/%d", beapinC.URI, int(tokenID)), nil)
+	req, err = http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/api/v1/tokens/%d", beanBankC.URI, int(tokenID)), nil)
 	require.NoError(t, err)
 	req.Header.Set("Authorization", "Bearer "+token)
 
@@ -541,7 +541,7 @@ func TestE2E_TokenDeletion(t *testing.T) {
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 
 	t.Run("deleted token no longer works", func(t *testing.T) {
-		req, err := http.NewRequest(http.MethodGet, beapinC.URI+"/api/v1/wallet", nil)
+		req, err := http.NewRequest(http.MethodGet, beanBankC.URI+"/api/v1/wallet", nil)
 		require.NoError(t, err)
 		req.Header.Set("Authorization", "Bearer "+token)
 
@@ -559,12 +559,12 @@ func TestE2E_InvalidToken(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	beapinC, err := setupBeapin(ctx, t)
+	beanBankC, err := setupBeanBank(ctx, t)
 	require.NoError(t, err)
-	testcontainers.CleanupContainer(t, beapinC)
+	testcontainers.CleanupContainer(t, beanBankC)
 
 	t.Run("invalid token returns 401", func(t *testing.T) {
-		req, err := http.NewRequest(http.MethodGet, beapinC.URI+"/api/v1/wallet", nil)
+		req, err := http.NewRequest(http.MethodGet, beanBankC.URI+"/api/v1/wallet", nil)
 		require.NoError(t, err)
 		req.Header.Set("Authorization", "Bearer invalid_token_here")
 
@@ -576,7 +576,7 @@ func TestE2E_InvalidToken(t *testing.T) {
 	})
 
 	t.Run("missing authorization header returns 401", func(t *testing.T) {
-		req, err := http.NewRequest(http.MethodGet, beapinC.URI+"/api/v1/wallet", nil)
+		req, err := http.NewRequest(http.MethodGet, beanBankC.URI+"/api/v1/wallet", nil)
 		require.NoError(t, err)
 
 		resp, err := http.DefaultClient.Do(req)

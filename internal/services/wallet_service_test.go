@@ -3,9 +3,9 @@ package services
 import (
 	"testing"
 
-	"github.com/h4ks-com/beapin/internal/database"
-	"github.com/h4ks-com/beapin/internal/models"
-	"github.com/h4ks-com/beapin/internal/repository"
+	"github.com/h4ks-com/bean-bank/internal/database"
+	"github.com/h4ks-com/bean-bank/internal/models"
+	"github.com/h4ks-com/bean-bank/internal/repository"
 	"github.com/stretchr/testify/assert"
 )
 

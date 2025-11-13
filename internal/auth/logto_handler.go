@@ -7,7 +7,7 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"github.com/h4ks-com/beapin/internal/config"
+	"github.com/h4ks-com/bean-bank/internal/config"
 	"github.com/logto-io/go/v2/client"
 )
 

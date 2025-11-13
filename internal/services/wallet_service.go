@@ -3,8 +3,8 @@ package services
 import (
 	"errors"
 
-	"github.com/h4ks-com/beapin/internal/models"
-	"github.com/h4ks-com/beapin/internal/repository"
+	"github.com/h4ks-com/bean-bank/internal/models"
+	"github.com/h4ks-com/bean-bank/internal/repository"
 )
 
 var (

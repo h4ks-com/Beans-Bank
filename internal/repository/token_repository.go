@@ -3,7 +3,7 @@ package repository
 import (
 	"time"
 
-	"github.com/h4ks-com/beapin/internal/models"
+	"github.com/h4ks-com/bean-bank/internal/models"
 	"gorm.io/gorm"
 )
 

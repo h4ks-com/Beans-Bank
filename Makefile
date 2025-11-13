@@ -1,7 +1,7 @@
 .PHONY: help build run test swagger clean docker-build docker-up docker-down
 
 help:
-	@echo "Beapin - Bean Currency API"
+	@echo "Bean Bank - Bean Currency API"
 	@echo ""
 	@echo "Available targets:"
 	@echo "  build        - Build the binary"
@@ -21,7 +21,7 @@ help:
 	@echo "  deps         - Download and tidy dependencies"
 
 build: swagger
-	go build -o beapin ./cmd/server
+	go build -o bean-bank ./cmd/server
 
 run: swagger
 	go run cmd/server/main.go
@@ -49,12 +49,12 @@ swagger:
 	swag init -g cmd/server/main.go
 
 clean:
-	rm -f beapin
+	rm -f bean-bank
 	rm -f coverage.out coverage.html
 	rm -rf docs/
 
 docker-build:
-	docker build -t beapin:latest .
+	docker build -t bean-bank:latest .
 
 docker-up:
 	docker compose up -d
@@ -63,7 +63,7 @@ docker-down:
 	docker compose down
 
 docker-logs:
-	docker compose logs -f beapin
+	docker compose logs -f bean-bank
 
 fmt:
 	go fmt ./...

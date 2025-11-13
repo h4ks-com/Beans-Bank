@@ -15,7 +15,7 @@ func SwaggerUIWithBearerFix() gin.HandlerFunc {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Beapin API Documentation</title>
+    <title>Bean Bank API Documentation</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css">
     <style>
         html { box-sizing: border-box; overflow: -moz-scrollbars-vertical; overflow-y: scroll; }
