@@ -175,7 +175,3 @@ go build -o beapin ./cmd/server
 ## License
 
 MIT
-
-## Repository
-
-https://github.com/h4ks-com/beapin
