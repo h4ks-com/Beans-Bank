@@ -402,3 +402,187 @@ func getWalletTestMode(t *testing.T, baseURL, username string) map[string]interf
 
 	return result
 }
+
+func TestE2E_TokenAuthentication(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping E2E test")
+	}
+
+	ctx := context.Background()
+	beapinC, err := setupBeapin(ctx, t)
+	require.NoError(t, err)
+	testcontainers.CleanupContainer(t, beapinC)
+
+	token := createToken(t, beapinC.URI, "tokenuser")
+
+	t.Run("token works for authentication", func(t *testing.T) {
+		wallet := getWallet(t, beapinC.URI, token)
+		assert.Equal(t, "tokenuser", wallet["username"].(string))
+		assert.Equal(t, 1.0, wallet["bean_amount"].(float64))
+	})
+
+	t.Run("token works for transfer", func(t *testing.T) {
+		ensureWalletExists(t, beapinC.URI, "recipient")
+
+		transferBody := strings.NewReader(`{"to_user": "recipient", "amount": 1, "force": false}`)
+		req, err := http.NewRequest(http.MethodPost, beapinC.URI+"/api/v1/transfer", transferBody)
+		require.NoError(t, err)
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "Bearer "+token)
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		assert.Equal(t, http.StatusOK, resp.StatusCode)
+	})
+
+	t.Run("token works for transactions", func(t *testing.T) {
+		req, err := http.NewRequest(http.MethodGet, beapinC.URI+"/api/v1/transactions", nil)
+		require.NoError(t, err)
+		req.Header.Set("Authorization", "Bearer "+token)
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+		body, err := io.ReadAll(resp.Body)
+		require.NoError(t, err)
+
+		var transactions []map[string]interface{}
+		err = json.Unmarshal(body, &transactions)
+		require.NoError(t, err)
+
+		assert.Greater(t, len(transactions), 0, "should have at least one transaction")
+	})
+}
+
+func TestE2E_TokenList(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping E2E test")
+	}
+
+	ctx := context.Background()
+	beapinC, err := setupBeapin(ctx, t)
+	require.NoError(t, err)
+	testcontainers.CleanupContainer(t, beapinC)
+
+	token1 := createToken(t, beapinC.URI, "multitoken")
+	token2 := createToken(t, beapinC.URI, "multitoken")
+
+	req, err := http.NewRequest(http.MethodGet, beapinC.URI+"/api/v1/tokens", nil)
+	require.NoError(t, err)
+	req.Header.Set("Authorization", "Bearer "+token1)
+
+	resp, err := http.DefaultClient.Do(req)
+	require.NoError(t, err)
+	defer resp.Body.Close()
+
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+	body, err := io.ReadAll(resp.Body)
+	require.NoError(t, err)
+
+	var tokens []map[string]interface{}
+	err = json.Unmarshal(body, &tokens)
+	require.NoError(t, err)
+
+	assert.Len(t, tokens, 2, "user should have 2 tokens")
+
+	t.Run("both tokens work independently", func(t *testing.T) {
+		wallet1 := getWallet(t, beapinC.URI, token1)
+		wallet2 := getWallet(t, beapinC.URI, token2)
+
+		assert.Equal(t, "multitoken", wallet1["username"].(string))
+		assert.Equal(t, "multitoken", wallet2["username"].(string))
+	})
+}
+
+func TestE2E_TokenDeletion(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping E2E test")
+	}
+
+	ctx := context.Background()
+	beapinC, err := setupBeapin(ctx, t)
+	require.NoError(t, err)
+	testcontainers.CleanupContainer(t, beapinC)
+
+	token := createToken(t, beapinC.URI, "deletetest")
+
+	req, err := http.NewRequest(http.MethodGet, beapinC.URI+"/api/v1/tokens", nil)
+	require.NoError(t, err)
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	resp, err := http.DefaultClient.Do(req)
+	require.NoError(t, err)
+
+	body, err := io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	resp.Body.Close()
+
+	var tokens []map[string]interface{}
+	err = json.Unmarshal(body, &tokens)
+	require.NoError(t, err)
+	require.Greater(t, len(tokens), 0, "should have at least one token")
+
+	tokenID := tokens[0]["id"].(float64)
+
+	req, err = http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/api/v1/tokens/%d", beapinC.URI, int(tokenID)), nil)
+	require.NoError(t, err)
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	resp, err = http.DefaultClient.Do(req)
+	require.NoError(t, err)
+	defer resp.Body.Close()
+
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+	t.Run("deleted token no longer works", func(t *testing.T) {
+		req, err := http.NewRequest(http.MethodGet, beapinC.URI+"/api/v1/wallet", nil)
+		require.NoError(t, err)
+		req.Header.Set("Authorization", "Bearer "+token)
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		assert.Equal(t, http.StatusUnauthorized, resp.StatusCode)
+	})
+}
+
+func TestE2E_InvalidToken(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping E2E test")
+	}
+
+	ctx := context.Background()
+	beapinC, err := setupBeapin(ctx, t)
+	require.NoError(t, err)
+	testcontainers.CleanupContainer(t, beapinC)
+
+	t.Run("invalid token returns 401", func(t *testing.T) {
+		req, err := http.NewRequest(http.MethodGet, beapinC.URI+"/api/v1/wallet", nil)
+		require.NoError(t, err)
+		req.Header.Set("Authorization", "Bearer invalid_token_here")
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		assert.Equal(t, http.StatusUnauthorized, resp.StatusCode)
+	})
+
+	t.Run("missing authorization header returns 401", func(t *testing.T) {
+		req, err := http.NewRequest(http.MethodGet, beapinC.URI+"/api/v1/wallet", nil)
+		require.NoError(t, err)
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		assert.Equal(t, http.StatusUnauthorized, resp.StatusCode)
+	})
+}

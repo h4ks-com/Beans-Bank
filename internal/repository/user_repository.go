@@ -62,3 +62,9 @@ func (r *UserRepository) GetTotalBeans() (int64, error) {
 	err := r.db.Model(&models.User{}).Select("COALESCE(SUM(bean_amount), 0)").Scan(&total).Error
 	return total, err
 }
+
+func (r *UserRepository) GetTopWallets(limit int) ([]models.User, error) {
+	var users []models.User
+	err := r.db.Order("bean_amount DESC").Limit(limit).Find(&users).Error
+	return users, err
+}

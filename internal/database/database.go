@@ -24,6 +24,8 @@ func Connect(databaseURL string) (*gorm.DB, error) {
 	} else if len(databaseURL) > 10 && databaseURL[:6] == "sqlite" {
 		// Strip "sqlite:" prefix for SQLite driver
 		dbPath := databaseURL[7:]
+		// Add query parameters to ensure write access
+		dbPath = dbPath + "?_pragma=foreign_keys(1)&_pragma=journal_mode(WAL)"
 		db, err = gorm.Open(sqlite.Open(dbPath), config)
 	} else {
 		db, err = gorm.Open(postgres.Open(databaseURL), config)

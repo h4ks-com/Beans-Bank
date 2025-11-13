@@ -55,7 +55,7 @@ func (h *LogtoHandler) Callback(ctx *gin.Context) {
 	}
 
 	log.Printf("[LogtoHandler] Callback successful, IsAuthenticated: %v", logtoClient.IsAuthenticated())
-	ctx.Redirect(http.StatusFound, "/")
+	ctx.Redirect(http.StatusFound, "/wallet")
 }
 
 func (h *LogtoHandler) Logout(ctx *gin.Context) {
@@ -73,6 +73,13 @@ func (h *LogtoHandler) Logout(ctx *gin.Context) {
 func (h *LogtoHandler) RequireAuth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		log.Printf("[LogtoHandler] RequireAuth for path: %s", ctx.Request.URL.Path)
+
+		if ctx.GetHeader("Authorization") != "" {
+			log.Printf("[LogtoHandler] Authorization header present, skipping Logto")
+			ctx.Next()
+			return
+		}
+
 		logtoClient := h.CreateLogtoClient(ctx)
 
 		isAuth := logtoClient.IsAuthenticated()
@@ -93,8 +100,15 @@ func (h *LogtoHandler) RequireAuth() gin.HandlerFunc {
 			return
 		}
 
-		log.Printf("[LogtoHandler] Successfully authenticated user: %s", idTokenClaims.Sub)
-		ctx.Set("username", idTokenClaims.Sub)
+		log.Printf("[LogtoHandler] ID Token Claims: %+v", idTokenClaims)
+
+		username := idTokenClaims.Sub
+		if idTokenClaims.Username != "" {
+			username = idTokenClaims.Username
+		}
+
+		log.Printf("[LogtoHandler] Successfully authenticated user: %s", username)
+		ctx.Set("username", username)
 		ctx.Next()
 	}
 }

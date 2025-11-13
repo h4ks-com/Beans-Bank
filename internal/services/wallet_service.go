@@ -74,3 +74,7 @@ func (s *WalletService) UpdateBalance(username string, newAmount int) error {
 	user.BeanAmount = newAmount
 	return s.userRepo.Update(user)
 }
+
+func (s *WalletService) GetTopWallets(limit int) ([]models.User, error) {
+	return s.userRepo.GetTopWallets(limit)
+}

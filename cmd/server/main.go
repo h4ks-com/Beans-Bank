@@ -29,7 +29,7 @@ import (
 // @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization
-// @description Type "Bearer" followed by a space and JWT token
+// @description Bearer token authentication. Format: "Bearer {token}"
 func main() {
 	cfg, err := config.Load()
 	if err != nil {
@@ -57,12 +57,14 @@ func main() {
 
 	authMiddleware := middleware.NewAuthMiddleware(tokenService, cfg.TestMode)
 	adminMiddleware := middleware.NewAdminMiddleware(cfg.AdminUsers)
+	logtoHandler := auth.NewLogtoHandler(&cfg.Logto)
 
 	walletHandler := handlers.NewWalletHandler(walletService)
 	transferHandler := handlers.NewTransferHandler(transferService)
 	tokenHandler := handlers.NewTokenHandler(tokenService)
 	adminHandler := handlers.NewAdminHandler(userRepo, transactionRepo, walletService)
 	publicHandler := handlers.NewPublicHandler(walletService)
+	browserHandler := handlers.NewBrowserHandler(walletService, transferService, tokenService, logtoHandler)
 
 	router := gin.Default()
 
@@ -75,8 +77,6 @@ func main() {
 		SameSite: http.SameSiteLaxMode,
 	})
 	router.Use(sessions.Sessions("beapin_session", store))
-
-	logtoHandler := auth.NewLogtoHandler(&cfg.Logto)
 
 	router.LoadHTMLGlob("web/templates/*")
 
@@ -101,6 +101,9 @@ func main() {
 			if isAuthenticated {
 				if claims, err := logtoClient.GetIdTokenClaims(); err == nil {
 					username = claims.Sub
+					if claims.Username != "" {
+						username = claims.Username
+					}
 					log.Printf("[Homepage] User: %s", username)
 				}
 			}
@@ -108,6 +111,34 @@ func main() {
 
 		c.HTML(200, "index.html", gin.H{
 			"TotalBeans":      total,
+			"IsAuthenticated": isAuthenticated,
+			"Username":        username,
+			"TestMode":        cfg.TestMode,
+		})
+	})
+
+	router.GET("/wallet", func(c *gin.Context) {
+		isAuthenticated := false
+		username := ""
+		if !cfg.TestMode {
+			logtoClient := logtoHandler.CreateLogtoClient(c)
+			isAuthenticated = logtoClient.IsAuthenticated()
+			if !isAuthenticated {
+				c.Redirect(http.StatusFound, "/auth/login")
+				return
+			}
+			if claims, err := logtoClient.GetIdTokenClaims(); err == nil {
+				username = claims.Sub
+				if claims.Username != "" {
+					username = claims.Username
+				}
+			}
+		} else {
+			isAuthenticated = true
+			username = "test_user"
+		}
+
+		c.HTML(200, "wallet.html", gin.H{
 			"IsAuthenticated": isAuthenticated,
 			"Username":        username,
 			"TestMode":        cfg.TestMode,
@@ -172,18 +203,35 @@ func main() {
 		})
 	})
 
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("/swagger/*any", func(c *gin.Context) {
+		path := c.Param("any")
+		if path == "/" || path == "/index.html" {
+			handlers.SwaggerUIWithBearerFix()(c)
+		} else {
+			ginSwagger.WrapHandler(swaggerFiles.Handler)(c)
+		}
+	})
+
+	browser := router.Group("/browser")
+	if !cfg.TestMode {
+		browser.Use(logtoHandler.RequireAuth())
+	}
+	{
+		browser.GET("/wallet", browserHandler.GetWallet)
+		browser.GET("/transactions", browserHandler.GetTransactions)
+		browser.POST("/transfer", browserHandler.Transfer)
+		browser.POST("/tokens", browserHandler.CreateToken)
+		browser.GET("/tokens", browserHandler.ListTokens)
+		browser.DELETE("/tokens/:id", browserHandler.DeleteToken)
+	}
 
 	api := router.Group("/api/v1")
 	{
 		api.GET("/total", publicHandler.GetTotalBeans)
+		api.GET("/leaderboard", publicHandler.GetLeaderboard)
 
 		authenticated := api.Group("")
-		if cfg.TestMode {
-			authenticated.Use(authMiddleware.RequireAuth())
-		} else {
-			authenticated.Use(logtoHandler.RequireAuth())
-		}
+		authenticated.Use(authMiddleware.RequireAuth())
 		{
 			authenticated.GET("/wallet", walletHandler.GetWallet)
 			authenticated.GET("/transactions", walletHandler.GetTransactions)
@@ -195,11 +243,7 @@ func main() {
 		}
 
 		admin := api.Group("/admin")
-		if cfg.TestMode {
-			admin.Use(authMiddleware.RequireAuth())
-		} else {
-			admin.Use(logtoHandler.RequireAuth())
-		}
+		admin.Use(authMiddleware.RequireAuth())
 		admin.Use(adminMiddleware.RequireAdmin())
 		{
 			admin.GET("/users", adminHandler.ListUsers)
