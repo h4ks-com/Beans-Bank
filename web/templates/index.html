@@ -6,6 +6,36 @@
     <title>Bean Bank - Bean Leaderboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --bg-gradient-start: #667eea;
+            --bg-gradient-end: #764ba2;
+            --header-bg: rgba(255, 255, 255, 0.1);
+            --card-bg: white;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --text-light: white;
+            --brand-color: #667eea;
+            --btn-primary-bg: white;
+            --btn-primary-text: #667eea;
+            --btn-secondary-bg: rgba(255, 255, 255, 0.2);
+            --btn-secondary-border: rgba(255, 255, 255, 0.3);
+        }
+
+        [data-theme="dark"] {
+            --bg-gradient-start: #0f172a;
+            --bg-gradient-end: #1e293b;
+            --header-bg: rgba(30, 41, 59, 0.8);
+            --card-bg: #1e293b;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-light: #e2e8f0;
+            --brand-color: #3b82f6;
+            --btn-primary-bg: #3b82f6;
+            --btn-primary-text: white;
+            --btn-secondary-bg: rgba(71, 85, 105, 0.5);
+            --btn-secondary-border: rgba(148, 163, 184, 0.3);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,26 +44,28 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
             min-height: 100vh;
             padding: 0;
+            transition: background 0.3s ease;
         }
 
         .header {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--header-bg);
             backdrop-filter: blur(10px);
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: background 0.3s ease;
         }
 
         .logo {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            color: white;
+            color: var(--text-light);
             font-size: 1.5rem;
             font-weight: 700;
         }
@@ -42,16 +74,6 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-        }
-
-        .btn-api {
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-        }
-
-        .btn-api:hover {
-            background: rgba(255, 255, 255, 0.25);
         }
 
         .btn {
@@ -68,8 +90,8 @@
         }
 
         .btn-primary {
-            background: white;
-            color: #667eea;
+            background: var(--btn-primary-bg);
+            color: var(--btn-primary-text);
         }
 
         .btn-primary:hover {
@@ -78,17 +100,22 @@
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: var(--btn-secondary-bg);
+            color: var(--text-light);
+            border: 1px solid var(--btn-secondary-border);
         }
 
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.3);
         }
 
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
+
         .user-info {
-            color: white;
+            color: var(--text-light);
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -101,32 +128,34 @@
         }
 
         .stats-card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 12px;
             padding: 1.5rem;
             margin-bottom: 2rem;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             text-align: center;
+            transition: background 0.3s ease;
         }
 
         .stats-card h2 {
-            color: #666;
+            color: var(--text-secondary);
             font-size: 0.9rem;
             font-weight: 500;
             margin-bottom: 0.5rem;
         }
 
         .stats-card .value {
-            color: #667eea;
+            color: var(--brand-color);
             font-size: 2.5rem;
             font-weight: 700;
         }
 
         .leaderboard-card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 12px;
             padding: 2rem;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: background 0.3s ease;
         }
 
         .leaderboard-header {
@@ -137,7 +166,7 @@
         }
 
         .leaderboard-header h1 {
-            color: #333;
+            color: var(--text-primary);
             font-size: 1.5rem;
         }
 
@@ -147,21 +176,21 @@
         }
 
         .leaderboard-table thead {
-            background: #f8f9fa;
+            background: rgba(148, 163, 184, 0.1);
             border-radius: 8px;
         }
 
         .leaderboard-table th {
             padding: 1rem;
             text-align: left;
-            color: #666;
+            color: var(--text-secondary);
             font-weight: 600;
             font-size: 0.9rem;
         }
 
         .leaderboard-table td {
             padding: 1rem;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
         }
 
         .leaderboard-table tr:last-child td {
@@ -169,12 +198,12 @@
         }
 
         .leaderboard-table tr:hover {
-            background: #f8f9fa;
+            background: rgba(148, 163, 184, 0.1);
         }
 
         .rank {
             font-weight: 700;
-            color: #667eea;
+            color: var(--brand-color);
         }
 
         .rank-1 { color: #FFD700; }
@@ -183,12 +212,12 @@
 
         .username {
             font-weight: 500;
-            color: #333;
+            color: var(--text-primary);
         }
 
         .beans {
             font-weight: 600;
-            color: #667eea;
+            color: var(--brand-color);
         }
 
         .medal {
@@ -199,7 +228,7 @@
         .loading {
             text-align: center;
             padding: 2rem;
-            color: #666;
+            color: var(--text-secondary);
         }
 
         @media (max-width: 768px) {
@@ -232,10 +261,9 @@
             Bean Bank
         </div>
         <div class="user-section">
-            <a href="/swagger/index.html" target="_blank" class="btn btn-api">
-                <i class="fas fa-code"></i>
-                Get Started with the Bean API
-            </a>
+            <button class="btn btn-secondary btn-small" onclick="toggleTheme()" id="themeToggle" title="Toggle theme">
+                <i class="fas fa-moon"></i>
+            </button>
             {{ if not .TestMode }}
                 {{ if .IsAuthenticated }}
                     <div class="user-info">
@@ -317,6 +345,28 @@
                 document.getElementById('leaderboard').innerHTML = '<p class="loading">Failed to load leaderboard</p>';
             }
         }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            const icon = document.querySelector('#themeToggle i');
+            icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            const icon = document.querySelector('#themeToggle i');
+            if (icon) {
+                icon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            }
+        })();
 
         loadLeaderboard();
     </script>
