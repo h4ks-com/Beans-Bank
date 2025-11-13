@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 	"github.com/h4ks-com/bean-bank/internal/models"
 	"github.com/h4ks-com/bean-bank/internal/repository"
 )
@@ -48,6 +49,7 @@ func (s *TokenService) GenerateToken(username string, expiresIn time.Duration) (
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(expiresIn)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			Issuer:    "bean-bank",
+			ID:        uuid.New().String(),
 		},
 	}
 

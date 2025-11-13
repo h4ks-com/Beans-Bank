@@ -42,6 +42,10 @@ type TransactionHistoryResponse struct {
 // @Router /wallet [get]
 func (h *WalletHandler) GetWallet(c *gin.Context) {
 	username := middleware.GetUsername(c)
+	if username == "" {
+		c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "username not found in context"})
+		return
+	}
 
 	user, err := h.walletService.GetOrCreateWallet(username)
 	if err != nil {
@@ -68,6 +72,10 @@ func (h *WalletHandler) GetWallet(c *gin.Context) {
 // @Router /transactions [get]
 func (h *WalletHandler) GetTransactions(c *gin.Context) {
 	username := middleware.GetUsername(c)
+	if username == "" {
+		c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "username not found in context"})
+		return
+	}
 
 	transactions, err := h.walletService.GetTransactionHistory(username)
 	if err != nil {
