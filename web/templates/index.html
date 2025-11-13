@@ -5,128 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bean Bank - Bean Leaderboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/common.css">
     <style>
-        :root {
-            --bg-gradient-start: #667eea;
-            --bg-gradient-end: #764ba2;
-            --header-bg: rgba(255, 255, 255, 0.1);
-            --card-bg: white;
-            --text-primary: #333;
-            --text-secondary: #666;
-            --text-light: white;
-            --brand-color: #667eea;
-            --btn-primary-bg: white;
-            --btn-primary-text: #667eea;
-            --btn-secondary-bg: rgba(255, 255, 255, 0.2);
-            --btn-secondary-border: rgba(255, 255, 255, 0.3);
-        }
-
-        [data-theme="dark"] {
-            --bg-gradient-start: #0f172a;
-            --bg-gradient-end: #1e293b;
-            --header-bg: rgba(30, 41, 59, 0.8);
-            --card-bg: #1e293b;
-            --text-primary: #e2e8f0;
-            --text-secondary: #94a3b8;
-            --text-light: #e2e8f0;
-            --brand-color: #3b82f6;
-            --btn-primary-bg: #3b82f6;
-            --btn-primary-text: white;
-            --btn-secondary-bg: rgba(71, 85, 105, 0.5);
-            --btn-secondary-border: rgba(148, 163, 184, 0.3);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
-            min-height: 100vh;
-            padding: 0;
-            transition: background 0.3s ease;
-        }
-
-        .header {
-            background: var(--header-bg);
-            backdrop-filter: blur(10px);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: background 0.3s ease;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-light);
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .user-section {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s;
-        }
-
-        .btn-primary {
-            background: var(--btn-primary-bg);
-            color: var(--btn-primary-text);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-
-        .btn-secondary {
-            background: var(--btn-secondary-bg);
-            color: var(--text-light);
-            border: 1px solid var(--btn-secondary-border);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-small {
-            padding: 0.4rem 0.8rem;
-            font-size: 0.85rem;
-        }
-
-        .user-info {
-            color: var(--text-light);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
         .stats-card {
             background: var(--card-bg);
             border-radius: 12px;
@@ -225,19 +105,7 @@
             margin-right: 0.5rem;
         }
 
-        .loading {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-secondary);
-        }
-
         @media (max-width: 768px) {
-            .header {
-                padding: 1rem;
-                flex-direction: column;
-                gap: 1rem;
-            }
-
             .leaderboard-card {
                 padding: 1rem;
             }
@@ -346,29 +214,8 @@
             }
         }
 
-        function toggleTheme() {
-            const html = document.documentElement;
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-
-            const icon = document.querySelector('#themeToggle i');
-            icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-        }
-
-        (function() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-
-            const icon = document.querySelector('#themeToggle i');
-            if (icon) {
-                icon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-            }
-        })();
-
         loadLeaderboard();
     </script>
+    <script src="/static/js/theme.js"></script>
 </body>
 </html>

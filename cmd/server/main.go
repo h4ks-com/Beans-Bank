@@ -79,6 +79,7 @@ func main() {
 	router.Use(sessions.Sessions("beapin_session", store))
 
 	router.LoadHTMLGlob("web/templates/*")
+	router.Static("/static", "./web/static")
 
 	authRoutes := router.Group("/auth")
 	{
