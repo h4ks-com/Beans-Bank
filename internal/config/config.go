@@ -36,6 +36,7 @@ type JWTConfig struct {
 
 type SessionConfig struct {
 	Secret string
+	Secure bool
 }
 
 func Load() (*Config, error) {
@@ -68,6 +69,7 @@ func Load() (*Config, error) {
 		},
 		Session: SessionConfig{
 			Secret: getEnv("SESSION_SECRET", ""),
+			Secure: getEnv("SESSION_SECURE", "false") == "true",
 		},
 		AdminUsers: adminUsers,
 		TestMode:   getEnv("TEST_MODE", "false") == "true",

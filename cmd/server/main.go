@@ -73,7 +73,7 @@ func main() {
 		Path:     "/",
 		MaxAge:   86400 * 7, // 7 days
 		HttpOnly: true,
-		Secure:   false, // Set to true in production with HTTPS
+		Secure:   cfg.Session.Secure,
 		SameSite: http.SameSiteLaxMode,
 	})
 	router.Use(sessions.Sessions("beapin_session", store))

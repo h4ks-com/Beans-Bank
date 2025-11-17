@@ -1,4 +1,4 @@
-# Beapin 🫘
+# Beans Bank API 🫘
 
 Bean currency management system for h4ks.com
 
@@ -80,6 +80,8 @@ Key variables:
 - `PORT` - Server port (default: 8080)
 - `DATABASE_URL` - PostgreSQL connection string
 - `JWT_SECRET` - Secret for JWT token signing
+- `SESSION_SECRET` - Secret for session cookie encryption
+- `SESSION_SECURE` - Set to `true` in production with HTTPS (default: false)
 - `ADMIN_USERS` - Comma-separated list of admin usernames
 - `TEST_MODE` - Set to `true` to bypass authentication (testing only)
 
