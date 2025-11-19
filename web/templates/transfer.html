@@ -4,185 +4,247 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirm Transfer - Bean Bank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/common.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-container {
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 2rem 1rem;
         }
-        .container {
-            background: white;
+
+        .transfer-card {
+            background: var(--card-bg);
             border-radius: 20px;
-            padding: 40px;
+            padding: 2.5rem;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             max-width: 500px;
             width: 100%;
+            border: 1px solid var(--card-border);
         }
+
         h1 {
-            color: #667eea;
+            color: var(--brand-color);
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
         }
+
         .transfer-details {
-            background: #f5f5f5;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 30px;
+            background: rgba(148, 163, 184, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--item-border);
         }
+
         .detail-row {
             display: flex;
             justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #e0e0e0;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--item-border);
         }
+
         .detail-row:last-child {
             border-bottom: none;
         }
+
         .detail-label {
-            color: #666;
+            color: var(--text-secondary);
             font-weight: 500;
         }
+
         .detail-value {
-            color: #333;
+            color: var(--text-primary);
             font-weight: 600;
         }
+
         .amount-highlight {
             font-size: 2em;
-            color: #667eea;
+            color: var(--brand-color);
         }
+
         .button-group {
             display: flex;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 1rem;
+            margin-top: 1.5rem;
         }
-        button {
+
+        .btn-action {
             flex: 1;
-            padding: 15px;
+            padding: 1rem;
             border: none;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s;
         }
+
         .btn-confirm {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--brand-color);
             color: white;
         }
+
         .btn-confirm:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
         }
+
         .btn-cancel {
-            background: #e0e0e0;
-            color: #666;
-        }
-        .btn-cancel:hover {
-            background: #d0d0d0;
-        }
-        :root {
-            --success-bg: #d4edda;
-            --success-text: #155724;
-            --success-border: #c3e6cb;
-            --error-bg: #f8d7da;
-            --error-text: #721c24;
-            --error-border: #f5c6cb;
+            background: var(--btn-secondary-bg);
+            color: var(--text-light);
+            border: 1px solid var(--btn-secondary-border);
         }
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --success-bg: rgba(34, 197, 94, 0.25);
-                --success-text: #86efac;
-                --success-border: rgba(34, 197, 94, 0.4);
-                --error-bg: rgba(239, 68, 68, 0.25);
-                --error-text: #fca5a5;
-                --error-border: rgba(239, 68, 68, 0.4);
-            }
+        .btn-cancel:hover {
+            background: var(--tab-bg-hover);
         }
 
         .message {
-            padding: 15px;
+            padding: 1rem;
             border-radius: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
             text-align: center;
+            font-weight: 500;
         }
+
         .success {
-            background: var(--success-bg);
-            color: var(--success-text);
-            border: 1px solid var(--success-border);
+            background: var(--alert-success-bg);
+            color: var(--alert-success-text);
+            border: 1px solid var(--alert-success-border);
         }
+
         .error {
-            background: var(--error-bg);
-            color: var(--error-text);
-            border: 1px solid var(--error-border);
+            background: var(--alert-error-bg);
+            color: var(--alert-error-text);
+            border: 1px solid var(--alert-error-border);
         }
+
         .warning {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeaa7;
+            background: var(--alert-info-bg);
+            color: var(--alert-info-text);
+            border: 1px solid var(--alert-info-border);
+        }
+
+        .footer-link {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--item-border);
+        }
+
+        .footer-link a {
+            color: var(--brand-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.3s;
+        }
+
+        .footer-link a:hover {
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .transfer-card {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .amount-highlight {
+                font-size: 1.5em;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Confirm Transfer</h1>
-
-        {{ if .Error }}
-        <div class="message error">
-            {{ .Error }}
+    <div class="header">
+        <div class="logo">
+            <i class="fas fa-coins"></i>
+            Bean Bank
         </div>
-        {{ end }}
-
-        {{ if .Success }}
-        <div class="message success">
-            ✅ Transfer successful!
-        </div>
-        {{ end }}
-
-        {{ if .NeedsAuth }}
-        <div class="message warning">
-            ⚠️ You need to authenticate before confirming this transfer.
-        </div>
-        <form action="/auth/login" method="get">
-            <input type="hidden" name="redirect" value="/transfer/{{ .FromUser }}/{{ .ToUser }}/{{ .Amount }}">
-            <button type="submit" class="btn-confirm" style="width: 100%;">Login to Continue</button>
-        </form>
-        {{ else if not .Success }}
-        <div class="transfer-details">
-            <div class="detail-row">
-                <span class="detail-label">From:</span>
-                <span class="detail-value">{{ .FromUser }}</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">To:</span>
-                <span class="detail-value">{{ .ToUser }}</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">Amount:</span>
-                <span class="detail-value amount-highlight">🫘{{ .Amount }}</span>
-            </div>
-        </div>
-
-        <form action="/transfer/{{ .FromUser }}/{{ .ToUser }}/{{ .Amount }}/confirm" method="post">
-            <div class="button-group">
-                <button type="button" class="btn-cancel" onclick="window.location.href='/'">Cancel</button>
-                <button type="submit" class="btn-confirm">Confirm Transfer</button>
-            </div>
-        </form>
-        {{ end }}
-
-        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
-            <a href="/" style="color: #667eea; text-decoration: none; font-weight: 600;">← Back to Home</a>
+        <div class="user-section">
+            <button class="btn btn-secondary btn-small" onclick="toggleTheme()" id="themeToggle" title="Toggle theme">
+                <i class="fas fa-moon"></i>
+            </button>
+            <a href="/" class="btn btn-secondary btn-small">
+                <i class="fas fa-home"></i>
+                Home
+            </a>
         </div>
     </div>
+
+    <div class="page-container">
+        <div class="transfer-card">
+            <h1><i class="fas fa-exchange-alt"></i> Confirm Transfer</h1>
+
+            {{ if .Error }}
+            <div class="message error">
+                <i class="fas fa-exclamation-circle"></i> {{ .Error }}
+            </div>
+            {{ end }}
+
+            {{ if .Success }}
+            <div class="message success">
+                <i class="fas fa-check-circle"></i> Transfer successful!
+            </div>
+            {{ end }}
+
+            {{ if .NeedsAuth }}
+            <div class="message warning">
+                <i class="fas fa-lock"></i> You need to authenticate before confirming this transfer.
+            </div>
+            <form action="/auth/login" method="get">
+                <input type="hidden" name="redirect" value="/transfer/{{ .FromUser }}/{{ .ToUser }}/{{ .Amount }}">
+                <button type="submit" class="btn-action btn-confirm" style="width: 100%;">
+                    <i class="fas fa-sign-in-alt"></i> Login to Continue
+                </button>
+            </form>
+            {{ else if not .Success }}
+            <div class="transfer-details">
+                <div class="detail-row">
+                    <span class="detail-label">From:</span>
+                    <span class="detail-value">{{ .FromUser }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">To:</span>
+                    <span class="detail-value">{{ .ToUser }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Amount:</span>
+                    <span class="detail-value amount-highlight">🫘{{ .Amount }}</span>
+                </div>
+            </div>
+
+            <form action="/transfer/{{ .FromUser }}/{{ .ToUser }}/{{ .Amount }}/confirm" method="post">
+                <div class="button-group">
+                    <button type="button" class="btn-action btn-cancel" onclick="window.location.href='/'">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="submit" class="btn-action btn-confirm">
+                        <i class="fas fa-check"></i> Confirm Transfer
+                    </button>
+                </div>
+            </form>
+            {{ end }}
+
+            <div class="footer-link">
+                <a href="/"><i class="fas fa-arrow-left"></i> Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/theme.js"></script>
 </body>
 </html>

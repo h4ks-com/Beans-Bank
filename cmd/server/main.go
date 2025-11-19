@@ -165,12 +165,30 @@ func main() {
 		to := c.Param("to")
 		amount := c.Param("amount")
 
-		c.HTML(200, "transfer.html", gin.H{
-			"FromUser":  from,
-			"ToUser":    to,
-			"Amount":    amount,
-			"NeedsAuth": !cfg.TestMode,
-		})
+		isAuthenticated := cfg.TestMode
+		var currentUser string
+
+		if !cfg.TestMode {
+			var ok bool
+			currentUser, ok = logtoHandler.GetAuthenticatedUser(c)
+			isAuthenticated = ok
+		} else {
+			currentUser = from
+		}
+
+		data := gin.H{
+			"FromUser": from,
+			"ToUser":   to,
+			"Amount":   amount,
+		}
+
+		if !isAuthenticated {
+			data["NeedsAuth"] = true
+		} else if currentUser != from {
+			data["Error"] = "You can only send beans from your own account"
+		}
+
+		c.HTML(200, "transfer.html", data)
 	})
 
 	router.POST("/transfer/:from/:to/:amount/confirm", func(c *gin.Context) {
@@ -189,12 +207,29 @@ func main() {
 			return
 		}
 
+		var currentUser string
 		if !cfg.TestMode {
-			c.HTML(200, "transfer.html", gin.H{
+			var ok bool
+			currentUser, ok = logtoHandler.GetAuthenticatedUser(c)
+			if !ok {
+				c.HTML(401, "transfer.html", gin.H{
+					"FromUser":  from,
+					"ToUser":    to,
+					"Amount":    amountStr,
+					"NeedsAuth": true,
+				})
+				return
+			}
+		} else {
+			currentUser = from
+		}
+
+		if currentUser != from {
+			c.HTML(403, "transfer.html", gin.H{
 				"FromUser": from,
 				"ToUser":   to,
 				"Amount":   amountStr,
-				"Error":    "OIDC authentication not yet implemented",
+				"Error":    "You can only send beans from your own account",
 			})
 			return
 		}

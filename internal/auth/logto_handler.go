@@ -32,6 +32,17 @@ func (h *LogtoHandler) CreateLogtoClient(ctx *gin.Context) *client.LogtoClient {
 func (h *LogtoHandler) Login(ctx *gin.Context) {
 	logtoClient := h.CreateLogtoClient(ctx)
 
+	redirectTo := ctx.Query("redirect")
+	if redirectTo == "" {
+		redirectTo = "/wallet"
+	}
+
+	session := sessions.Default(ctx)
+	session.Set("post_login_redirect", redirectTo)
+	if err := session.Save(); err != nil {
+		log.Printf("[LogtoHandler] Failed to save redirect to session: %v", err)
+	}
+
 	signInUri, err := logtoClient.SignIn(&client.SignInOptions{
 		RedirectUri: h.config.RedirectURI,
 	})
@@ -55,7 +66,19 @@ func (h *LogtoHandler) Callback(ctx *gin.Context) {
 	}
 
 	log.Printf("[LogtoHandler] Callback successful, IsAuthenticated: %v", logtoClient.IsAuthenticated())
-	ctx.Redirect(http.StatusFound, "/wallet")
+
+	session := sessions.Default(ctx)
+	redirectTo := "/wallet"
+	if storedRedirect := session.Get("post_login_redirect"); storedRedirect != nil {
+		redirectTo = storedRedirect.(string)
+		session.Delete("post_login_redirect")
+		if err := session.Save(); err != nil {
+			log.Printf("[LogtoHandler] Failed to clear redirect from session: %v", err)
+		}
+		log.Printf("[LogtoHandler] Redirecting to stored path: %s", redirectTo)
+	}
+
+	ctx.Redirect(http.StatusFound, redirectTo)
 }
 
 func (h *LogtoHandler) Logout(ctx *gin.Context) {
@@ -119,4 +142,25 @@ func (h *LogtoHandler) GetCurrentUser(ctx *gin.Context) (string, bool) {
 		return "", false
 	}
 	return userID.(string), true
+}
+
+func (h *LogtoHandler) GetAuthenticatedUser(ctx *gin.Context) (string, bool) {
+	logtoClient := h.CreateLogtoClient(ctx)
+
+	if !logtoClient.IsAuthenticated() {
+		return "", false
+	}
+
+	idTokenClaims, err := logtoClient.GetIdTokenClaims()
+	if err != nil {
+		log.Printf("[LogtoHandler] Failed to get ID token claims: %v", err)
+		return "", false
+	}
+
+	username := idTokenClaims.Sub
+	if idTokenClaims.Username != "" {
+		username = idTokenClaims.Username
+	}
+
+	return username, true
 }
