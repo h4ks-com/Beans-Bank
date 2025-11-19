@@ -136,3 +136,42 @@ func (h *AdminHandler) UpdateWallet(c *gin.Context) {
 		BeanAmount: req.BeanAmount,
 	})
 }
+
+type UserSearchResponse struct {
+	Username string `json:"username"`
+}
+
+// SearchUsers godoc
+// @Summary Search users
+// @Description Search for users by username (case-insensitive)
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param q query string true "Search query"
+// @Security BearerAuth
+// @Success 200 {array} UserSearchResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /users/search [get]
+func (h *AdminHandler) SearchUsers(c *gin.Context) {
+	query := c.Query("q")
+	if query == "" {
+		c.JSON(http.StatusBadRequest, ErrorResponse{Error: "query parameter 'q' is required"})
+		return
+	}
+
+	users, err := h.userRepo.SearchByUsername(query, 10)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	response := make([]UserSearchResponse, len(users))
+	for i, user := range users {
+		response[i] = UserSearchResponse{
+			Username: user.Username,
+		}
+	}
+
+	c.JSON(http.StatusOK, response)
+}

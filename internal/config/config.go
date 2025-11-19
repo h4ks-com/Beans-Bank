@@ -8,14 +8,15 @@ import (
 )
 
 type Config struct {
-	Port      string
-	GinMode   string
-	Database  DatabaseConfig
-	Logto     LogtoConfig
-	JWT       JWTConfig
-	Session   SessionConfig
-	AdminUsers []string
-	TestMode  bool
+	Port             string
+	GinMode          string
+	Database         DatabaseConfig
+	Logto            LogtoConfig
+	JWT              JWTConfig
+	Session          SessionConfig
+	ExportSigningKey string
+	AdminUsers       []string
+	TestMode         bool
 }
 
 type DatabaseConfig struct {
@@ -71,8 +72,9 @@ func Load() (*Config, error) {
 			Secret: getEnv("SESSION_SECRET", ""),
 			Secure: getEnv("SESSION_SECURE", "false") == "true",
 		},
-		AdminUsers: adminUsers,
-		TestMode:   getEnv("TEST_MODE", "false") == "true",
+		ExportSigningKey: getEnv("EXPORT_SIGNING_KEY", ""),
+		AdminUsers:       adminUsers,
+		TestMode:         getEnv("TEST_MODE", "false") == "true",
 	}, nil
 }
 

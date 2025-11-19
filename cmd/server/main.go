@@ -50,10 +50,13 @@ func main() {
 	userRepo := repository.NewUserRepository(db)
 	transactionRepo := repository.NewTransactionRepository(db)
 	tokenRepo := repository.NewTokenRepository(db)
+	harvestRepo := repository.NewHarvestRepository(db)
 
 	walletService := services.NewWalletService(userRepo, transactionRepo)
 	transferService := services.NewTransferService(userRepo, transactionRepo, db)
 	tokenService := services.NewTokenService(tokenRepo, userRepo, cfg.JWT.Secret)
+	harvestService := services.NewHarvestService(harvestRepo, userRepo, transactionRepo, db)
+	exportService := services.NewExportService(userRepo, transactionRepo, cfg.ExportSigningKey)
 
 	authMiddleware := middleware.NewAuthMiddleware(tokenService, cfg.TestMode)
 	adminMiddleware := middleware.NewAdminMiddleware(cfg.AdminUsers)
@@ -63,7 +66,9 @@ func main() {
 	transferHandler := handlers.NewTransferHandler(transferService)
 	tokenHandler := handlers.NewTokenHandler(tokenService)
 	adminHandler := handlers.NewAdminHandler(userRepo, transactionRepo, walletService)
-	publicHandler := handlers.NewPublicHandler(walletService)
+	publicHandler := handlers.NewPublicHandler(walletService, harvestService)
+	harvestHandler := handlers.NewHarvestHandler(harvestService)
+	exportHandler := handlers.NewExportHandler(exportService)
 	browserHandler := handlers.NewBrowserHandler(walletService, transferService, tokenService, logtoHandler)
 
 	router := gin.Default()
@@ -139,10 +144,19 @@ func main() {
 			username = "test_user"
 		}
 
+		isAdmin := false
+		for _, admin := range cfg.AdminUsers {
+			if admin == username {
+				isAdmin = true
+				break
+			}
+		}
+
 		c.HTML(200, "wallet.html", gin.H{
 			"IsAuthenticated": isAuthenticated,
 			"Username":        username,
 			"TestMode":        cfg.TestMode,
+			"IsAdmin":         isAdmin,
 		})
 	})
 
@@ -220,16 +234,33 @@ func main() {
 	{
 		browser.GET("/wallet", browserHandler.GetWallet)
 		browser.GET("/transactions", browserHandler.GetTransactions)
+		browser.GET("/transactions/export", exportHandler.ExportTransactions)
 		browser.POST("/transfer", browserHandler.Transfer)
 		browser.POST("/tokens", browserHandler.CreateToken)
 		browser.GET("/tokens", browserHandler.ListTokens)
 		browser.DELETE("/tokens/:id", browserHandler.DeleteToken)
+		browser.GET("/users/search", adminHandler.SearchUsers)
+
+		browserAdmin := browser.Group("/admin")
+		if !cfg.TestMode {
+			browserAdmin.Use(adminMiddleware.RequireAdmin())
+		}
+		{
+			browserAdmin.GET("/harvests", harvestHandler.GetAllHarvests)
+			browserAdmin.POST("/harvests", harvestHandler.CreateHarvest)
+			browserAdmin.PUT("/harvests/:id", harvestHandler.UpdateHarvest)
+			browserAdmin.DELETE("/harvests/:id", harvestHandler.DeleteHarvest)
+			browserAdmin.POST("/harvests/:id/assign", harvestHandler.AssignUser)
+			browserAdmin.POST("/harvests/:id/complete", harvestHandler.CompleteHarvest)
+		}
 	}
 
 	api := router.Group("/api/v1")
 	{
 		api.GET("/total", publicHandler.GetTotalBeans)
 		api.GET("/leaderboard", publicHandler.GetLeaderboard)
+		api.GET("/harvests", publicHandler.GetHarvests)
+		api.POST("/transactions/verify", exportHandler.VerifyExport)
 
 		authenticated := api.Group("")
 		authenticated.Use(authMiddleware.RequireAuth())
@@ -237,10 +268,12 @@ func main() {
 			authenticated.GET("/wallet", walletHandler.GetWallet)
 			authenticated.GET("/transactions", walletHandler.GetTransactions)
 			authenticated.POST("/transfer", transferHandler.Transfer)
+			authenticated.GET("/transactions/export", exportHandler.ExportTransactions)
 
 			authenticated.POST("/tokens", tokenHandler.CreateToken)
 			authenticated.GET("/tokens", tokenHandler.ListTokens)
 			authenticated.DELETE("/tokens/:id", tokenHandler.DeleteToken)
+			authenticated.GET("/users/search", adminHandler.SearchUsers)
 		}
 
 		admin := api.Group("/admin")
@@ -250,6 +283,13 @@ func main() {
 			admin.GET("/users", adminHandler.ListUsers)
 			admin.GET("/transactions", adminHandler.ListAllTransactions)
 			admin.PUT("/wallet/:username", adminHandler.UpdateWallet)
+
+			admin.GET("/harvests", harvestHandler.GetAllHarvests)
+			admin.POST("/harvests", harvestHandler.CreateHarvest)
+			admin.PUT("/harvests/:id", harvestHandler.UpdateHarvest)
+			admin.DELETE("/harvests/:id", harvestHandler.DeleteHarvest)
+			admin.POST("/harvests/:id/assign", harvestHandler.AssignUser)
+			admin.POST("/harvests/:id/complete", harvestHandler.CompleteHarvest)
 		}
 	}
 

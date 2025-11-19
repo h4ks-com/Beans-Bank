@@ -7,6 +7,8 @@ Bean currency management system for h4ks.com
 - 🪙 Integer-based bean currency system
 - 👛 Automatic wallet creation with 1 bean initial balance
 - 💸 Safe transfers with ACID transaction guarantees
+- 🌾 Harvest Beans task completion system with rewards
+- 📤 Cryptographically signed transaction history exports
 - 🔐 JWT API token authentication
 - 🎫 User-managed API tokens with expiry
 - 👨‍💼 Admin endpoints for system management
@@ -82,6 +84,7 @@ Key variables:
 - `JWT_SECRET` - Secret for JWT token signing
 - `SESSION_SECRET` - Secret for session cookie encryption
 - `SESSION_SECURE` - Set to `true` in production with HTTPS (default: false)
+- `EXPORT_SIGNING_KEY` - HMAC key for transaction export signing (generate with `openssl rand -hex 32`)
 - `ADMIN_USERS` - Comma-separated list of admin usernames
 - `TEST_MODE` - Set to `true` to bypass authentication (testing only)
 
@@ -89,12 +92,16 @@ Key variables:
 
 ### Public
 - `GET /` - Home page with transfer link generator
-- `GET /total` - Get total beans in system
+- `GET /api/v1/total` - Get total beans in system
+- `GET /api/v1/leaderboard` - Get top bean holders
+- `GET /api/v1/harvests` - List harvests with search and pagination
+- `POST /api/v1/transactions/verify` - Verify transaction export signature
 - `GET /swagger/*` - API documentation
 
 ### Authenticated (requires Bearer token)
 - `GET /api/v1/wallet` - Get wallet balance
 - `GET /api/v1/transactions` - Get transaction history
+- `GET /api/v1/transactions/export` - Export signed transaction history
 - `POST /api/v1/transfer` - Transfer beans
 - `POST /api/v1/tokens` - Create API token
 - `GET /api/v1/tokens` - List API tokens
@@ -104,6 +111,17 @@ Key variables:
 - `GET /api/v1/admin/users` - List all users
 - `GET /api/v1/admin/transactions` - List all transactions
 - `PUT /api/v1/admin/wallet/:username` - Update wallet balance
+- `GET /api/v1/admin/harvests` - List all harvests
+- `POST /api/v1/admin/harvests` - Create harvest
+- `PUT /api/v1/admin/harvests/:id` - Update harvest
+- `DELETE /api/v1/admin/harvests/:id` - Delete harvest
+- `POST /api/v1/admin/harvests/:id/assign` - Assign user to harvest
+- `POST /api/v1/admin/harvests/:id/complete` - Complete harvest and award beans
+
+### Browser Pages
+- `GET /` - Home page with transfer link generator
+- `GET /wallet` - User wallet page with transfers, tokens, transactions, and admin settings tab (for admin users)
+- `GET /transfer/:from/:to/:amount` - Transfer confirmation page
 
 ## Authentication
 

@@ -49,6 +49,11 @@ func setupBeanBankWithTestMode(ctx context.Context, t *testing.T, testMode bool)
 		adminUsers = "admin"
 	}
 
+	exportSigningKey := os.Getenv("EXPORT_SIGNING_KEY")
+	if exportSigningKey == "" {
+		exportSigningKey = "test-export-signing-key-for-e2e-tests"
+	}
+
 	natPort := nat.Port(port + "/tcp")
 
 	testModeStr := "false"
@@ -63,13 +68,14 @@ func setupBeanBankWithTestMode(ctx context.Context, t *testing.T, testMode bool)
 		},
 		ExposedPorts: []string{string(natPort)},
 		Env: map[string]string{
-			"PORT":            port,
-			"GIN_MODE":        "release",
-			"DATABASE_URL":    "sqlite::memory:",
-			"JWT_SECRET":      jwtSecret,
-			"SESSION_SECRET":  sessionSecret,
-			"ADMIN_USERS":     adminUsers,
-			"TEST_MODE":       testModeStr,
+			"PORT":               port,
+			"GIN_MODE":           "release",
+			"DATABASE_URL":       "sqlite::memory:",
+			"JWT_SECRET":         jwtSecret,
+			"SESSION_SECRET":     sessionSecret,
+			"ADMIN_USERS":        adminUsers,
+			"TEST_MODE":          testModeStr,
+			"EXPORT_SIGNING_KEY": exportSigningKey,
 		},
 		WaitingFor: wait.ForHTTP("/").
 			WithPort(natPort).
@@ -616,5 +622,492 @@ func TestE2E_InvalidToken(t *testing.T) {
 		defer resp.Body.Close()
 
 		assert.Equal(t, http.StatusUnauthorized, resp.StatusCode)
+	})
+}
+
+func TestE2E_TransactionExportAndVerify(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping E2E test")
+	}
+
+	ctx := context.Background()
+	beanBankC, err := setupBeanBank(ctx, t)
+	require.NoError(t, err)
+	testcontainers.CleanupContainer(t, beanBankC)
+
+	ensureWalletExists(t, beanBankC.URI, "exporter")
+	ensureWalletExists(t, beanBankC.URI, "receiver1")
+	ensureWalletExists(t, beanBankC.URI, "receiver2")
+
+	adminReq, err := http.NewRequest(http.MethodPut, beanBankC.URI+"/api/v1/admin/wallet/exporter", strings.NewReader(`{"bean_amount": 100}`))
+	require.NoError(t, err)
+	adminReq.Header.Set("Content-Type", "application/json")
+	adminReq.Header.Set("X-Test-Username", "admin")
+
+	adminResp, err := http.DefaultClient.Do(adminReq)
+	require.NoError(t, err)
+	adminResp.Body.Close()
+
+	transferBody1 := strings.NewReader(`{"to_user": "receiver1", "amount": 5, "force": false}`)
+	req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/transfer", transferBody1)
+	require.NoError(t, err)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-Test-Username", "exporter")
+
+	resp, err := http.DefaultClient.Do(req)
+	require.NoError(t, err)
+	resp.Body.Close()
+	require.Equal(t, http.StatusOK, resp.StatusCode)
+
+	transferBody2 := strings.NewReader(`{"to_user": "receiver2", "amount": 3, "force": false}`)
+	req, err = http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/transfer", transferBody2)
+	require.NoError(t, err)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-Test-Username", "exporter")
+
+	resp, err = http.DefaultClient.Do(req)
+	require.NoError(t, err)
+	resp.Body.Close()
+	require.Equal(t, http.StatusOK, resp.StatusCode)
+
+	t.Run("export_transactions_generates_signed_data", func(t *testing.T) {
+		req, err := http.NewRequest(http.MethodGet, beanBankC.URI+"/api/v1/transactions/export", nil)
+		require.NoError(t, err)
+		req.Header.Set("X-Test-Username", "exporter")
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+		body, err := io.ReadAll(resp.Body)
+		require.NoError(t, err)
+
+		var exportData map[string]interface{}
+		err = json.Unmarshal(body, &exportData)
+		require.NoError(t, err)
+
+		signature, ok := exportData["signature"].(string)
+		assert.True(t, ok, "signature should be a string")
+		assert.NotEmpty(t, signature, "signature should not be empty")
+		assert.Greater(t, len(signature), 32, "signature should be hex-encoded HMAC-SHA256")
+
+		username, ok := exportData["username"].(string)
+		assert.True(t, ok)
+		assert.Equal(t, "exporter", username)
+
+		transactions, ok := exportData["transactions"].([]interface{})
+		assert.True(t, ok)
+		assert.GreaterOrEqual(t, len(transactions), 2, "should have at least 2 transactions")
+	})
+
+	t.Run("valid_signature_verifies_successfully", func(t *testing.T) {
+		req, err := http.NewRequest(http.MethodGet, beanBankC.URI+"/api/v1/transactions/export", nil)
+		require.NoError(t, err)
+		req.Header.Set("X-Test-Username", "exporter")
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+
+		body, err := io.ReadAll(resp.Body)
+		require.NoError(t, err)
+		resp.Body.Close()
+
+		req, err = http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/transactions/verify", strings.NewReader(string(body)))
+		require.NoError(t, err)
+		req.Header.Set("Content-Type", "application/json")
+
+		resp, err = http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+		resultBody, err := io.ReadAll(resp.Body)
+		require.NoError(t, err)
+
+		var verifyResult map[string]interface{}
+		err = json.Unmarshal(resultBody, &verifyResult)
+		require.NoError(t, err)
+
+		valid, ok := verifyResult["valid"].(bool)
+		assert.True(t, ok)
+		assert.True(t, valid, "valid signature should verify successfully")
+	})
+}
+
+func TestE2E_TransactionExportTampering(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping E2E test")
+	}
+
+	ctx := context.Background()
+	beanBankC, err := setupBeanBank(ctx, t)
+	require.NoError(t, err)
+	testcontainers.CleanupContainer(t, beanBankC)
+
+	ensureWalletExists(t, beanBankC.URI, "tampertest")
+	ensureWalletExists(t, beanBankC.URI, "tamperreceiver")
+
+	adminReq, err := http.NewRequest(http.MethodPut, beanBankC.URI+"/api/v1/admin/wallet/tampertest", strings.NewReader(`{"bean_amount": 100}`))
+	require.NoError(t, err)
+	adminReq.Header.Set("Content-Type", "application/json")
+	adminReq.Header.Set("X-Test-Username", "admin")
+
+	adminResp, err := http.DefaultClient.Do(adminReq)
+	require.NoError(t, err)
+	adminResp.Body.Close()
+
+	transferBody := strings.NewReader(`{"to_user": "tamperreceiver", "amount": 10, "force": false}`)
+	req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/transfer", transferBody)
+	require.NoError(t, err)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-Test-Username", "tampertest")
+
+	resp, err := http.DefaultClient.Do(req)
+	require.NoError(t, err)
+	resp.Body.Close()
+
+	req, err = http.NewRequest(http.MethodGet, beanBankC.URI+"/api/v1/transactions/export", nil)
+	require.NoError(t, err)
+	req.Header.Set("X-Test-Username", "tampertest")
+
+	resp, err = http.DefaultClient.Do(req)
+	require.NoError(t, err)
+
+	body, err := io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	resp.Body.Close()
+
+	var exportData map[string]interface{}
+	err = json.Unmarshal(body, &exportData)
+	require.NoError(t, err)
+
+	t.Run("valid_export_passes_verification", func(t *testing.T) {
+		verifyJSON, err := json.Marshal(exportData)
+		require.NoError(t, err)
+
+		req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/transactions/verify", strings.NewReader(string(verifyJSON)))
+		require.NoError(t, err)
+		req.Header.Set("Content-Type", "application/json")
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+		body, err := io.ReadAll(resp.Body)
+		require.NoError(t, err)
+
+		var verifyResult map[string]interface{}
+		err = json.Unmarshal(body, &verifyResult)
+		require.NoError(t, err)
+
+		valid, ok := verifyResult["valid"].(bool)
+		assert.True(t, ok)
+		assert.True(t, valid, "valid export should pass verification")
+	})
+
+	t.Run("tampered_data_fails_verification", func(t *testing.T) {
+		tamperedData := make(map[string]interface{})
+		for k, v := range exportData {
+			tamperedData[k] = v
+		}
+		tamperedData["total_beans"] = 999999.0
+
+		verifyJSON, err := json.Marshal(tamperedData)
+		require.NoError(t, err)
+
+		req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/transactions/verify", strings.NewReader(string(verifyJSON)))
+		require.NoError(t, err)
+		req.Header.Set("Content-Type", "application/json")
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+		body, err := io.ReadAll(resp.Body)
+		require.NoError(t, err)
+
+		var verifyResult map[string]interface{}
+		err = json.Unmarshal(body, &verifyResult)
+		require.NoError(t, err)
+
+		valid, ok := verifyResult["valid"].(bool)
+		assert.True(t, ok)
+		assert.False(t, valid, "tampered data should fail verification")
+	})
+
+	t.Run("tampered_signature_fails_verification", func(t *testing.T) {
+		tamperedData := make(map[string]interface{})
+		for k, v := range exportData {
+			tamperedData[k] = v
+		}
+		tamperedData["signature"] = "0000000000000000000000000000000000000000000000000000000000000000"
+
+		verifyJSON, err := json.Marshal(tamperedData)
+		require.NoError(t, err)
+
+		req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/transactions/verify", strings.NewReader(string(verifyJSON)))
+		require.NoError(t, err)
+		req.Header.Set("Content-Type", "application/json")
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+		body, err := io.ReadAll(resp.Body)
+		require.NoError(t, err)
+
+		var verifyResult map[string]interface{}
+		err = json.Unmarshal(body, &verifyResult)
+		require.NoError(t, err)
+
+		valid, ok := verifyResult["valid"].(bool)
+		assert.True(t, ok)
+		assert.False(t, valid, "tampered signature should fail verification")
+	})
+
+	t.Run("both_data_and_signature_tampered_fails_verification", func(t *testing.T) {
+		tamperedData := make(map[string]interface{})
+		for k, v := range exportData {
+			tamperedData[k] = v
+		}
+		tamperedData["total_beans"] = 888888.0
+		tamperedData["signature"] = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+		verifyJSON, err := json.Marshal(tamperedData)
+		require.NoError(t, err)
+
+		req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/transactions/verify", strings.NewReader(string(verifyJSON)))
+		require.NoError(t, err)
+		req.Header.Set("Content-Type", "application/json")
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+		body, err := io.ReadAll(resp.Body)
+		require.NoError(t, err)
+
+		var verifyResult map[string]interface{}
+		err = json.Unmarshal(body, &verifyResult)
+		require.NoError(t, err)
+
+		valid, ok := verifyResult["valid"].(bool)
+		assert.True(t, ok)
+		assert.False(t, valid, "tampered data and signature should fail verification")
+	})
+
+	t.Run("invalid_json_data_returns_error", func(t *testing.T) {
+		req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/transactions/verify", strings.NewReader("{invalid json here}"))
+		require.NoError(t, err)
+		req.Header.Set("Content-Type", "application/json")
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+	})
+
+	t.Run("missing_signature_returns_error", func(t *testing.T) {
+		noSigData := make(map[string]interface{})
+		for k, v := range exportData {
+			if k != "signature" {
+				noSigData[k] = v
+			}
+		}
+
+		verifyJSON, err := json.Marshal(noSigData)
+		require.NoError(t, err)
+
+		req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/transactions/verify", strings.NewReader(string(verifyJSON)))
+		require.NoError(t, err)
+		req.Header.Set("Content-Type", "application/json")
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+	})
+}
+
+func TestE2E_HarvestCompleteWorkflow(t *testing.T) {
+	ctx := context.Background()
+	beanBankC, err := setupBeanBank(ctx, t)
+	require.NoError(t, err)
+	defer func() {
+		if err := beanBankC.Terminate(ctx); err != nil {
+			t.Fatalf("failed to terminate container: %s", err)
+		}
+	}()
+
+	t.Run("complete_harvest_workflow", func(t *testing.T) {
+		harvestUser := "harvest_user"
+		
+		// Step 1: Create a harvest as admin
+		harvestData := map[string]interface{}{
+			"title":       "Test Harvest Task",
+			"description": "Complete this task to earn beans",
+			"bean_amount": 25,
+		}
+		harvestJSON, err := json.Marshal(harvestData)
+		require.NoError(t, err)
+
+		req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/admin/harvests", strings.NewReader(string(harvestJSON)))
+		require.NoError(t, err)
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("X-Test-Username", "admin")
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		require.Equal(t, http.StatusCreated, resp.StatusCode, "Failed to create harvest")
+
+		body, err := io.ReadAll(resp.Body)
+		require.NoError(t, err)
+
+		var harvestResponse map[string]interface{}
+		err = json.Unmarshal(body, &harvestResponse)
+		require.NoError(t, err)
+		
+		harvestID := int(harvestResponse["id"].(float64))
+		t.Logf("Created harvest with ID: %d", harvestID)
+
+		// Step 2: Check user's initial balance (should be 1 bean - initial balance)
+		req, err = http.NewRequest(http.MethodGet, beanBankC.URI+"/api/v1/wallet", nil)
+		require.NoError(t, err)
+		req.Header.Set("X-Test-Username", harvestUser)
+
+		resp, err = http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		body, err = io.ReadAll(resp.Body)
+		require.NoError(t, err)
+
+		var walletBefore map[string]interface{}
+		err = json.Unmarshal(body, &walletBefore)
+		require.NoError(t, err)
+
+		initialBalance := int(walletBefore["bean_amount"].(float64))
+		t.Logf("User initial balance: %d beans", initialBalance)
+		assert.Equal(t, 1, initialBalance, "User should start with 1 bean")
+
+		// Step 3: Assign harvest to user as admin
+		assignData := map[string]string{
+			"username": harvestUser,
+		}
+		assignJSON, err := json.Marshal(assignData)
+		require.NoError(t, err)
+
+		req, err = http.NewRequest(http.MethodPost, fmt.Sprintf("%s/api/v1/admin/harvests/%d/assign", beanBankC.URI, harvestID), strings.NewReader(string(assignJSON)))
+		require.NoError(t, err)
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("X-Test-Username", "admin")
+
+		resp, err = http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		require.Equal(t, http.StatusOK, resp.StatusCode, "Failed to assign user to harvest")
+		t.Logf("Assigned harvest to user: %s", harvestUser)
+
+		// Step 4: Check user's balance again (should still be 1 bean - not completed yet)
+		req, err = http.NewRequest(http.MethodGet, beanBankC.URI+"/api/v1/wallet", nil)
+		require.NoError(t, err)
+		req.Header.Set("X-Test-Username", harvestUser)
+
+		resp, err = http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		body, err = io.ReadAll(resp.Body)
+		require.NoError(t, err)
+
+		var walletAfterAssign map[string]interface{}
+		err = json.Unmarshal(body, &walletAfterAssign)
+		require.NoError(t, err)
+
+		balanceAfterAssign := int(walletAfterAssign["bean_amount"].(float64))
+		t.Logf("User balance after assignment: %d beans", balanceAfterAssign)
+		assert.Equal(t, initialBalance, balanceAfterAssign, "Balance should not change after assignment")
+
+		// Step 5: Admin marks harvest as complete
+		req, err = http.NewRequest(http.MethodPost, fmt.Sprintf("%s/api/v1/admin/harvests/%d/complete", beanBankC.URI, harvestID), nil)
+		require.NoError(t, err)
+		req.Header.Set("X-Test-Username", "admin")
+
+		resp, err = http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		require.Equal(t, http.StatusOK, resp.StatusCode, "Failed to complete harvest")
+		t.Logf("Marked harvest as complete")
+
+		// Step 6: Check user's balance after completion (should have initial + reward beans)
+		req, err = http.NewRequest(http.MethodGet, beanBankC.URI+"/api/v1/wallet", nil)
+		require.NoError(t, err)
+		req.Header.Set("X-Test-Username", harvestUser)
+
+		resp, err = http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		body, err = io.ReadAll(resp.Body)
+		require.NoError(t, err)
+
+		var walletFinal map[string]interface{}
+		err = json.Unmarshal(body, &walletFinal)
+		require.NoError(t, err)
+
+		finalBalance := int(walletFinal["bean_amount"].(float64))
+		expectedBalance := initialBalance + 25
+		t.Logf("User final balance: %d beans (expected: %d)", finalBalance, expectedBalance)
+		assert.Equal(t, expectedBalance, finalBalance, "User should have received 25 beans after harvest completion")
+
+		// Step 7: Verify harvest is marked as completed
+		req, err = http.NewRequest(http.MethodGet, beanBankC.URI+"/api/v1/harvests", nil)
+		require.NoError(t, err)
+
+		resp, err = http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		body, err = io.ReadAll(resp.Body)
+		require.NoError(t, err)
+
+		var harvestsResponse map[string]interface{}
+		err = json.Unmarshal(body, &harvestsResponse)
+		require.NoError(t, err)
+
+		harvestsList := harvestsResponse["harvests"].([]interface{})
+		harvests := make([]map[string]interface{}, len(harvestsList))
+		for i, h := range harvestsList {
+			harvests[i] = h.(map[string]interface{})
+		}
+		var completedHarvest map[string]interface{}
+		for _, h := range harvests {
+			if int(h["id"].(float64)) == harvestID {
+				completedHarvest = h
+				break
+			}
+		}
+
+		require.NotNil(t, completedHarvest, "Harvest should be in the list")
+		assert.True(t, completedHarvest["completed"].(bool), "Harvest should be marked as completed")
+		assert.Equal(t, harvestUser, completedHarvest["assigned_user"].(string), "Harvest should be assigned to the correct user")
+		t.Logf("✓ Harvest workflow completed successfully")
 	})
 }

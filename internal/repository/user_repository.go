@@ -17,7 +17,22 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 }
 
 func (r *UserRepository) Create(user *models.User) error {
+	if user.Username == "system" {
+		return errors.New("username 'system' is reserved")
+	}
 	return r.db.Create(user).Error
+}
+
+func (r *UserRepository) FindByID(id uint) (*models.User, error) {
+	var user models.User
+	err := r.db.First(&user, id).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &user, nil
 }
 
 func (r *UserRepository) FindByUsername(username string) (*models.User, error) {
@@ -66,5 +81,14 @@ func (r *UserRepository) GetTotalBeans() (int64, error) {
 func (r *UserRepository) GetTopWallets(limit int) ([]models.User, error) {
 	var users []models.User
 	err := r.db.Order("bean_amount DESC").Limit(limit).Find(&users).Error
+	return users, err
+}
+
+func (r *UserRepository) SearchByUsername(query string, limit int) ([]models.User, error) {
+	var users []models.User
+	err := r.db.Where("LOWER(username) LIKE LOWER(?)", "%"+query+"%").
+		Order("username ASC").
+		Limit(limit).
+		Find(&users).Error
 	return users, err
 }

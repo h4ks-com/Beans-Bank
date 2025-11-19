@@ -69,10 +69,24 @@
             display: none;
             margin-top: 1rem;
             padding: 1.5rem;
-            background: var(--input-bg);
+            background: var(--card-bg);
             border-radius: 8px;
             border: 2px solid var(--brand-color);
             transition: all 0.3s ease;
+        }
+
+        .token-display label {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .token-display input[readonly] {
+            background: var(--input-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            opacity: 1;
         }
 
         .token-display h4 {
@@ -133,6 +147,117 @@
             to {bottom: 0; opacity: 0;}
         }
 
+        .export-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .export-header h3 {
+            margin: 0;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: 5% auto;
+            padding: 2rem;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--card-border);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: var(--brand-color);
+        }
+
+        .close {
+            color: var(--text-secondary);
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: var(--text-primary);
+        }
+
+        .export-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .export-section h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .export-box {
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
+
+        .export-box textarea {
+            flex: 1;
+            font-family: monospace;
+            font-size: 0.85rem;
+            padding: 0.8rem;
+            border: 2px solid var(--input-border);
+            border-radius: 8px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            resize: vertical;
+            min-height: 100px;
+            transition: all 0.3s ease;
+        }
+
+        .export-box textarea:focus {
+            outline: none;
+            border-color: var(--brand-color);
+        }
+
+        .export-json {
+            min-height: 400px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--card-border);
+        }
+
         @media (max-width: 768px) {
             .balance-card .value {
                 font-size: 2rem;
@@ -147,6 +272,118 @@
                 min-width: 120px;
                 text-align: center;
             }
+
+            .export-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+                padding: 1.5rem;
+            }
+
+            .modal-actions {
+                flex-direction: column;
+            }
+
+            .export-box {
+                flex-direction: column;
+            }
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-small i {
+            font-size: 0.9rem;
+        }
+
+        .btn-secondary i,
+        .btn-danger i,
+        .btn-primary i {
+            color: inherit;
+        }
+
+        /* Success color for both themes */
+        :root {
+            --success: #28a745;
+        }
+
+        [data-theme="dark"] {
+            --success: #22c55e;
+        }
+
+        /* Action buttons in table - ensure visibility in both themes */
+        table .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+        }
+
+        table .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        table .btn-success {
+            background: var(--success) !important;
+            color: white !important;
+            border: none;
+        }
+
+        table .btn-success:hover {
+            background: #218838 !important;
+        }
+
+        table .btn-success i {
+            color: white !important;
+        }
+
+        /* Autocomplete dropdown */
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .autocomplete-dropdown.active {
+            display: block;
+        }
+
+        .autocomplete-item {
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            color: var(--text-primary);
+        }
+
+        .autocomplete-item:hover {
+            background: var(--hover-bg);
+        }
+
+        .autocomplete-item i {
+            margin-right: 0.5rem;
+            color: var(--text-secondary);
         }
     </style>
 </head>
@@ -189,16 +426,24 @@
             <button class="tab" onclick="showTab('transactions')">
                 <i class="fas fa-history"></i> Transactions
             </button>
+            {{ if .IsAdmin }}
+            <button class="tab" onclick="showTab('admin')">
+                <i class="fas fa-cog"></i> Admin Settings
+            </button>
+            {{ end }}
         </div>
 
         <div id="transfer" class="tab-content active">
             <div class="card">
-                <h3><i class="fas fa-paper-plane"></i> Send Beans</h3>
+                <h3><i class="fas fa-paper-plane"></i> Send beans</h3>
                 <div id="transferAlert" class="alert"></div>
                 <form id="transferForm">
-                    <div class="form-group">
+                    <div class="form-group" style="position: relative;">
                         <label>To User</label>
-                        <input type="text" id="toUser" required placeholder="username">
+                        <input type="text" id="toUser" required placeholder="username"
+                               autocomplete="off"
+                               oninput="searchUsersForTransfer(this.value)">
+                        <div id="transferUserSuggestions" class="autocomplete-dropdown"></div>
                     </div>
                     <div class="form-group">
                         <label>Amount</label>
@@ -211,7 +456,7 @@
                         </label>
                     </div>
                     <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-paper-plane"></i> Send Beans
+                        <i class="fas fa-paper-plane"></i> Send beans
                     </button>
                 </form>
             </div>
@@ -220,13 +465,19 @@
                 <h3><i class="fas fa-link"></i> Generate Transfer Request URL</h3>
                 <div id="linkAlert" class="alert"></div>
                 <form id="linkForm">
-                    <div class="form-group">
+                    <div class="form-group" style="position: relative;">
                         <label>From User</label>
-                        <input type="text" id="linkFromUser" required placeholder="sender_username">
+                        <input type="text" id="linkFromUser" required placeholder="sender_username"
+                               autocomplete="off"
+                               oninput="searchUsersForLink('from', this.value)">
+                        <div id="linkFromUserSuggestions" class="autocomplete-dropdown"></div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" style="position: relative;">
                         <label>To User</label>
-                        <input type="text" id="linkToUser" required placeholder="recipient_username">
+                        <input type="text" id="linkToUser" required placeholder="recipient_username"
+                               autocomplete="off"
+                               oninput="searchUsersForLink('to', this.value)">
+                        <div id="linkToUserSuggestions" class="autocomplete-dropdown"></div>
                     </div>
                     <div class="form-group">
                         <label>Amount</label>
@@ -274,7 +525,7 @@
 
                 <div id="tokenDisplay" class="token-display">
                     <h4><i class="fas fa-key"></i> Your New API Token</h4>
-                    <p style="color: #666; margin-bottom: 1rem; font-size: 0.9rem;">
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.9rem;">
                         <i class="fas fa-exclamation-triangle"></i> Copy this token now! It won't be shown again.
                     </p>
                     <div class="token-box">
@@ -307,31 +558,177 @@
 
         <div id="transactions" class="tab-content">
             <div class="card">
-                <h3><i class="fas fa-history"></i> Transaction History</h3>
+                <div class="export-header">
+                    <h3><i class="fas fa-history"></i> Transaction History</h3>
+                    <button class="btn btn-primary btn-small" onclick="exportTransactions()">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
                 <div id="transactionList" class="loading">
                     <i class="fas fa-spinner fa-spin"></i> Loading transactions...
                 </div>
                 <div class="pagination" id="pagination"></div>
             </div>
         </div>
+
+        {{ if .IsAdmin }}
+        <div id="admin" class="tab-content">
+            <div class="card">
+                <h3><i class="fas fa-plus"></i> <span id="formTitle">Create New Harvest</span></h3>
+                <form id="harvestForm" onsubmit="saveHarvest(event)">
+                    <input type="hidden" id="harvestId">
+                    <div class="form-group">
+                        <label for="title">Title *</label>
+                        <input type="text" id="harvestTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="harvestDescription" rows="6"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="beanAmount">Bean Reward *</label>
+                        <input type="number" id="harvestBeanAmount" min="1" required>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button type="button" class="btn btn-secondary" onclick="cancelHarvestEdit()" id="cancelBtn" style="display: none;">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Harvest
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3><i class="fas fa-list"></i> All Harvests</h3>
+                <div id="harvestList" class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Loading harvests...
+                </div>
+            </div>
+        </div>
+        {{ end }}
     </div>
 
     <div id="snackbar" class="snackbar"></div>
+
+    <div id="assignModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> Assign User to Harvest</h3>
+                <span class="close" onclick="closeAssignModal()">&times;</span>
+            </div>
+            <form onsubmit="submitAssignment(event)" style="padding: 1.5rem;">
+                <div class="form-group" style="position: relative;">
+                    <label for="assignUsername">Username *</label>
+                    <input type="text" id="assignUsername" required placeholder="Enter username"
+                           autocomplete="off"
+                           oninput="searchUsers(this.value)"
+                           style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px;
+                                  background: var(--card-bg); color: var(--text-primary); font-size: 1rem;">
+                    <div id="userSuggestions" class="autocomplete-dropdown"></div>
+                    <small style="color: var(--text-secondary); margin-top: 0.5rem; display: block;">
+                        Start typing to search for existing users
+                    </small>
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeAssignModal()" style="flex: 1;">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">
+                        <i class="fas fa-check"></i> Assign
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="exportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-export"></i> Transaction Export</h3>
+                <span class="close" onclick="closeExportModal()">&times;</span>
+            </div>
+
+            <div class="export-section">
+                <h4><i class="fas fa-file-code"></i> Signed Transaction Export</h4>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                    Complete transaction history with cryptographic signature. Use this JSON to verify your export later.
+                </p>
+                <div class="export-box">
+                    <textarea id="exportJson" class="export-json" readonly></textarea>
+                    <button class="btn btn-primary" onclick="copyJson()">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="downloadExport()">
+                    <i class="fas fa-download"></i> Download as File
+                </button>
+                <button class="btn btn-secondary" onclick="closeExportModal()">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script>
         const isAuthenticated = {{ .IsAuthenticated }};
         const testMode = {{ .TestMode }};
 
-        function showTab(tab) {
+        function showTab(tab, updateHash = true) {
+            const tabs = ['transfer', 'tokens', 'transactions', 'admin'];
+            if (!tabs.includes(tab)) tab = 'transfer';
+
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
 
-            event.target.classList.add('active');
-            document.getElementById(tab).classList.add('active');
+            const tabButton = Array.from(document.querySelectorAll('.tab')).find(t =>
+                t.getAttribute('onclick')?.includes(`'${tab}'`)
+            );
+            if (tabButton) tabButton.classList.add('active');
+
+            const tabContent = document.getElementById(tab);
+            if (tabContent) tabContent.classList.add('active');
+
+            if (updateHash) {
+                window.location.hash = tab;
+            }
 
             if (tab === 'tokens') loadTokens();
             if (tab === 'transactions') loadTransactions();
+            if (tab === 'admin') loadHarvests();
         }
+
+        function handleTabHash() {
+            const hash = window.location.hash.substring(1);
+            const validTabs = ['transfer', 'tokens', 'transactions', 'admin'];
+
+            if (validTabs.includes(hash)) {
+                showTab(hash, false);
+            } else if (hash === '') {
+                showTab('transfer', false);
+            }
+        }
+
+        window.addEventListener('hashchange', handleTabHash);
+        window.addEventListener('load', handleTabHash);
+
+        document.addEventListener('click', (e) => {
+            const assignInput = document.getElementById('assignUsername');
+            const assignSuggestions = document.getElementById('userSuggestions');
+            if (assignInput && assignSuggestions && !assignInput.contains(e.target) && !assignSuggestions.contains(e.target)) {
+                assignSuggestions.classList.remove('active');
+            }
+
+            const transferInput = document.getElementById('toUser');
+            const transferSuggestions = document.getElementById('transferUserSuggestions');
+            if (transferInput && transferSuggestions && !transferInput.contains(e.target) && !transferSuggestions.contains(e.target)) {
+                transferSuggestions.classList.remove('active');
+            }
+        });
 
         function showAlert(id, message, type) {
             const alert = document.getElementById(id);
@@ -396,7 +793,7 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    showAlert('transferAlert', `Successfully sent ${amount} beans to ${toUser}`, 'success');
+                    showAlert('transferAlert', `Successfully sent 🫘${amount} to ${toUser}`, 'success');
                     document.getElementById('transferForm').reset();
                     loadWallet();
                 } else {
@@ -569,7 +966,7 @@
                         html += `<div class="transaction-item">
                             <div class="transaction-info">
                                 <strong>${tx.from_user} → ${tx.to_user}</strong>
-                                <small>${tx.amount} beans | ${date}</small>
+                                <small>🫘${tx.amount} | ${date}</small>
                             </div>
                         </div>`;
                     });
@@ -595,6 +992,448 @@
                 document.getElementById('transactionList').innerHTML = '<p class="loading">Failed to load transactions</p>';
             }
         }
+
+        async function exportTransactions() {
+            try {
+                const response = await fetch('/browser/transactions/export', {
+                    credentials: 'same-origin'
+                });
+
+                if (!response.ok) {
+                    showSnackbar('Failed to export transactions');
+                    return;
+                }
+
+                const data = await response.json();
+
+                document.getElementById('exportJson').value = JSON.stringify(data, null, 2);
+
+                document.getElementById('exportModal').style.display = 'block';
+            } catch (error) {
+                console.error('Failed to export transactions:', error);
+                showSnackbar('Network error during export');
+            }
+        }
+
+        function closeExportModal() {
+            document.getElementById('exportModal').style.display = 'none';
+        }
+
+        function copyJson() {
+            const textarea = document.getElementById('exportJson');
+            textarea.select();
+            navigator.clipboard.writeText(textarea.value).then(() => {
+                showSnackbar('✅ Export copied to clipboard!');
+            }).catch(err => {
+                showSnackbar('⚠️ Failed to copy export');
+                console.error('Failed to copy:', err);
+            });
+        }
+
+        function downloadExport() {
+            const jsonData = document.getElementById('exportJson').value;
+
+            const blob = new Blob([jsonData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+
+            const username = JSON.parse(jsonData).username;
+            const timestamp = new Date().toISOString().split('T')[0];
+            a.download = `${username}_transactions_${timestamp}.json`;
+
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showSnackbar('✅ Export downloaded!');
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('exportModal');
+            if (event.target === modal) {
+                closeExportModal();
+            }
+        }
+
+        {{ if .IsAdmin }}
+        let editingHarvestId = null;
+
+        async function loadHarvests() {
+            try {
+                const response = await fetch('/browser/admin/harvests', {
+                    credentials: 'same-origin'
+                });
+                const harvests = await response.json();
+                renderHarvestList(Array.isArray(harvests) ? harvests : []);
+            } catch (error) {
+                console.error('Failed to load harvests:', error);
+                document.getElementById('harvestList').innerHTML = '<p>Failed to load harvests</p>';
+            }
+        }
+
+        function renderHarvestList(harvests) {
+            const container = document.getElementById('harvestList');
+            if (harvests.length === 0) {
+                container.innerHTML = '<p>No harvests found. Create one above!</p>';
+                return;
+            }
+
+            let html = '<table style="width: 100%; border-collapse: collapse;"><thead><tr style="border-bottom: 2px solid var(--border);">';
+            html += '<th style="text-align: left; padding: 0.75rem;">Title</th>';
+            html += '<th style="text-align: left; padding: 0.75rem;">Beans</th>';
+            html += '<th style="text-align: left; padding: 0.75rem;">Assigned</th>';
+            html += '<th style="text-align: left; padding: 0.75rem;">Status</th>';
+            html += '<th style="text-align: right; padding: 0.75rem;">Actions</th>';
+            html += '</tr></thead><tbody>';
+
+            harvests.forEach(harvest => {
+                const statusBadge = harvest.completed ?
+                    '<span style="background: var(--success); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Completed</span>' :
+                    '<span style="background: var(--primary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Open</span>';
+                const assigned = harvest.assigned_user || '-';
+
+                const assignBtn = harvest.completed ? '' :
+                    `<button class="btn btn-small btn-secondary" onclick="assignHarvest(${harvest.id}, '${assigned}')" title="Assign User">
+                        <i class="fas fa-user-plus"></i>
+                    </button>`;
+                const completeBtn = harvest.completed || !harvest.assigned_user ? '' :
+                    `<button class="btn btn-small btn-success" onclick="completeHarvest(${harvest.id})" title="Mark Complete">
+                        <i class="fas fa-check"></i>
+                    </button>`;
+
+                html += `<tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.75rem;"><strong>${harvest.title}</strong></td>
+                    <td style="padding: 0.75rem;">${harvest.bean_amount}</td>
+                    <td style="padding: 0.75rem;">${assigned}</td>
+                    <td style="padding: 0.75rem;">${statusBadge}</td>
+                    <td style="padding: 0.75rem; text-align: right;">
+                        ${assignBtn}
+                        ${completeBtn}
+                        <button class="btn btn-small btn-secondary" onclick="editHarvest(${harvest.id})" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-small btn-danger" onclick="deleteHarvest(${harvest.id})" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>`;
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        async function saveHarvest(event) {
+            event.preventDefault();
+            const data = {
+                title: document.getElementById('harvestTitle').value,
+                description: document.getElementById('harvestDescription').value,
+                bean_amount: parseInt(document.getElementById('harvestBeanAmount').value)
+            };
+
+            try {
+                const isEdit = editingHarvestId !== null;
+                const url = isEdit ? `/browser/admin/harvests/${editingHarvestId}` : '/browser/admin/harvests';
+                const method = isEdit ? 'PUT' : 'POST';
+
+                const response = await fetch(url, {
+                    method: method,
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    showSnackbar(isEdit ? '✅ Harvest updated!' : '✅ Harvest created!');
+                    cancelHarvestEdit();
+                    loadHarvests();
+                } else {
+                    const error = await response.json();
+                    showSnackbar('❌ ' + (error.error || 'Failed to save harvest'));
+                }
+            } catch (error) {
+                console.error('Failed to save harvest:', error);
+                showSnackbar('❌ Failed to save harvest');
+            }
+        }
+
+        function editHarvest(id) {
+            fetch(`/browser/admin/harvests`, { credentials: 'same-origin' })
+                .then(r => r.json())
+                .then(data => {
+                    const harvests = Array.isArray(data) ? data : [];
+                    const harvest = harvests.find(h => h.id === id);
+                    if (harvest) {
+                        editingHarvestId = id;
+                        document.getElementById('harvestId').value = id;
+                        document.getElementById('harvestTitle').value = harvest.title;
+                        document.getElementById('harvestDescription').value = harvest.description || '';
+                        document.getElementById('harvestBeanAmount').value = harvest.bean_amount;
+                        document.getElementById('formTitle').textContent = 'Edit Harvest';
+                        document.getElementById('cancelBtn').style.display = 'block';
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                });
+        }
+
+        function cancelHarvestEdit() {
+            editingHarvestId = null;
+            document.getElementById('harvestForm').reset();
+            document.getElementById('formTitle').textContent = 'Create New Harvest';
+            document.getElementById('cancelBtn').style.display = 'none';
+        }
+
+        let assigningHarvestId = null;
+
+        function assignHarvest(id, currentUser) {
+            assigningHarvestId = id;
+            const input = document.getElementById('assignUsername');
+            input.value = currentUser !== '-' ? currentUser : '';
+            document.getElementById('assignModal').classList.add('active');
+            setTimeout(() => input.focus(), 100);
+        }
+
+        function closeAssignModal() {
+            document.getElementById('assignModal').classList.remove('active');
+            document.getElementById('assignUsername').value = '';
+            document.getElementById('userSuggestions').classList.remove('active');
+            document.getElementById('userSuggestions').innerHTML = '';
+            assigningHarvestId = null;
+        }
+
+        let searchDebounceTimer = null;
+
+        async function searchUsers(query) {
+            const suggestionsEl = document.getElementById('userSuggestions');
+
+            clearTimeout(searchDebounceTimer);
+
+            if (query.trim().length < 1) {
+                suggestionsEl.classList.remove('active');
+                suggestionsEl.innerHTML = '';
+                return;
+            }
+
+            searchDebounceTimer = setTimeout(async () => {
+                try {
+                    const response = await fetch(`/browser/users/search?q=${encodeURIComponent(query)}`, {
+                        credentials: 'same-origin'
+                    });
+
+                    if (!response.ok) {
+                        suggestionsEl.classList.remove('active');
+                        return;
+                    }
+
+                    const users = await response.json();
+
+                    if (users.length === 0) {
+                        suggestionsEl.innerHTML = '<div style="padding: 0.75rem; color: var(--text-secondary); font-style: italic;">No users found</div>';
+                        suggestionsEl.classList.add('active');
+                        return;
+                    }
+
+                    suggestionsEl.innerHTML = users.map(user =>
+                        `<div class="autocomplete-item" onclick="selectUser('${user.username}')">
+                            <i class="fas fa-user"></i> ${user.username}
+                        </div>`
+                    ).join('');
+                    suggestionsEl.classList.add('active');
+                } catch (error) {
+                    console.error('Failed to search users:', error);
+                    suggestionsEl.classList.remove('active');
+                }
+            }, 300);
+        }
+
+        function selectUser(username) {
+            document.getElementById('assignUsername').value = username;
+            document.getElementById('userSuggestions').classList.remove('active');
+            document.getElementById('userSuggestions').innerHTML = '';
+        }
+
+        let transferSearchDebounceTimer = null;
+
+        async function searchUsersForTransfer(query) {
+            const suggestionsEl = document.getElementById('transferUserSuggestions');
+
+            clearTimeout(transferSearchDebounceTimer);
+
+            if (query.trim().length < 1) {
+                suggestionsEl.classList.remove('active');
+                suggestionsEl.innerHTML = '';
+                return;
+            }
+
+            transferSearchDebounceTimer = setTimeout(async () => {
+                try {
+                    const response = await fetch(`/browser/users/search?q=${encodeURIComponent(query)}`, {
+                        credentials: 'same-origin'
+                    });
+
+                    if (!response.ok) {
+                        suggestionsEl.classList.remove('active');
+                        return;
+                    }
+
+                    const users = await response.json();
+
+                    if (users.length === 0) {
+                        suggestionsEl.innerHTML = '<div style="padding: 0.75rem; color: var(--text-secondary); font-style: italic;">No users found</div>';
+                        suggestionsEl.classList.add('active');
+                        return;
+                    }
+
+                    suggestionsEl.innerHTML = users.map(user =>
+                        `<div class="autocomplete-item" onclick="selectTransferUser('${user.username}')">
+                            <i class="fas fa-user"></i> ${user.username}
+                        </div>`
+                    ).join('');
+                    suggestionsEl.classList.add('active');
+                } catch (error) {
+                    console.error('Failed to search users:', error);
+                    suggestionsEl.classList.remove('active');
+                }
+            }, 300);
+        }
+
+        function selectTransferUser(username) {
+            document.getElementById('toUser').value = username;
+            document.getElementById('transferUserSuggestions').classList.remove('active');
+            document.getElementById('transferUserSuggestions').innerHTML = '';
+        }
+
+        let linkSearchDebounceTimer = null;
+
+        async function searchUsersForLink(field, query) {
+            const suggestionsEl = document.getElementById(`link${field === 'from' ? 'From' : 'To'}UserSuggestions`);
+
+            clearTimeout(linkSearchDebounceTimer);
+
+            if (query.trim().length < 1) {
+                suggestionsEl.classList.remove('active');
+                suggestionsEl.innerHTML = '';
+                return;
+            }
+
+            linkSearchDebounceTimer = setTimeout(async () => {
+                try {
+                    const response = await fetch(`/browser/users/search?q=${encodeURIComponent(query)}`, {
+                        credentials: 'same-origin'
+                    });
+
+                    if (!response.ok) {
+                        suggestionsEl.classList.remove('active');
+                        return;
+                    }
+
+                    const users = await response.json();
+
+                    if (users.length === 0) {
+                        suggestionsEl.innerHTML = '<div style="padding: 0.75rem; color: var(--text-secondary); font-style: italic;">No users found</div>';
+                        suggestionsEl.classList.add('active');
+                        return;
+                    }
+
+                    suggestionsEl.innerHTML = users.map(user =>
+                        `<div class="autocomplete-item" onclick="selectLinkUser('${field}', '${user.username}')">
+                            <i class="fas fa-user"></i> ${user.username}
+                        </div>`
+                    ).join('');
+                    suggestionsEl.classList.add('active');
+                } catch (error) {
+                    console.error('Failed to search users:', error);
+                    suggestionsEl.classList.remove('active');
+                }
+            }, 300);
+        }
+
+        function selectLinkUser(field, username) {
+            document.getElementById(`link${field === 'from' ? 'From' : 'To'}User`).value = username;
+            document.getElementById(`link${field === 'from' ? 'From' : 'To'}UserSuggestions`).classList.remove('active');
+            document.getElementById(`link${field === 'from' ? 'From' : 'To'}UserSuggestions`).innerHTML = '';
+        }
+
+        async function submitAssignment(event) {
+            event.preventDefault();
+            const username = document.getElementById('assignUsername').value.trim();
+            if (!username || !assigningHarvestId) return;
+
+            try {
+                const response = await fetch(`/browser/admin/harvests/${assigningHarvestId}/assign`, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username })
+                });
+
+                if (response.ok) {
+                    showSnackbar('✅ User assigned!');
+                    closeAssignModal();
+                    loadHarvests();
+                } else {
+                    const error = await response.json();
+                    showSnackbar(`❌ ${error.error || 'Failed to assign user'}`);
+                }
+            } catch (error) {
+                console.error('Failed to assign user:', error);
+                showSnackbar('❌ Failed to assign user');
+            }
+        }
+
+        async function completeHarvest(id) {
+            if (!confirm('Mark this harvest as complete and award beans to the assigned user?')) return;
+
+            try {
+                const response = await fetch(`/browser/admin/harvests/${id}/complete`, {
+                    method: 'POST',
+                    credentials: 'same-origin'
+                });
+
+                if (response.ok) {
+                    showSnackbar('✅ Harvest completed! Beans awarded.');
+                    loadHarvests();
+                } else {
+                    const error = await response.json();
+                    showSnackbar(`❌ ${error.error || 'Failed to complete harvest'}`);
+                }
+            } catch (error) {
+                console.error('Failed to complete harvest:', error);
+                showSnackbar('❌ Failed to complete harvest');
+            }
+        }
+
+        async function deleteHarvest(id) {
+            if (!confirm('Are you sure you want to delete this harvest?')) return;
+
+            try {
+                const response = await fetch(`/browser/admin/harvests/${id}`, {
+                    method: 'DELETE',
+                    credentials: 'same-origin'
+                });
+
+                if (response.ok) {
+                    showSnackbar('✅ Harvest deleted!');
+                    loadHarvests();
+                } else {
+                    showSnackbar('❌ Failed to delete harvest');
+                }
+            } catch (error) {
+                console.error('Failed to delete harvest:', error);
+                showSnackbar('❌ Failed to delete harvest');
+            }
+        }
+
+        const originalShowTab = showTab;
+        showTab = function(tab) {
+            originalShowTab(tab);
+            if (tab === 'admin') {
+                loadHarvests();
+            }
+        };
+        {{ end }}
 
         loadWallet();
     </script>

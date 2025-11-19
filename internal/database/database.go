@@ -45,6 +45,7 @@ func Migrate(db *gorm.DB) error {
 		&models.User{},
 		&models.Transaction{},
 		&models.APIToken{},
+		&models.Harvest{},
 	)
 
 	if err != nil {

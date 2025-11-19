@@ -71,6 +71,11 @@
         .leaderboard-table td {
             padding: 1rem;
             border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+            text-align: left;
+        }
+
+        .leaderboard-table tr {
+            position: relative;
         }
 
         .leaderboard-table tr:last-child td {
@@ -79,6 +84,10 @@
 
         .leaderboard-table tr:hover {
             background: rgba(148, 163, 184, 0.1);
+        }
+
+        .leaderboard-table tr::after {
+            content: none !important;
         }
 
         .rank {
@@ -105,7 +114,250 @@
             margin-right: 0.5rem;
         }
 
+        .harvest-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: background 0.3s ease;
+        }
+
+        .harvest-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .harvest-header h1 {
+            color: var(--text-primary);
+            font-size: 1.5rem;
+        }
+
+        .search-box {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 2.5rem 0.75rem 1rem;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--brand-color);
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .harvest-list {
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .harvest-item {
+            background: rgba(148, 163, 184, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .harvest-item:hover {
+            background: rgba(148, 163, 184, 0.1);
+            border-left-color: var(--brand-color);
+            transform: translateX(4px);
+        }
+
+        .harvest-item.completed {
+            opacity: 0.6;
+            border-left-color: #10b981;
+        }
+
+        .harvest-item.completed::after {
+            content: '✓';
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #10b981;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .harvest-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .harvest-meta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .harvest-beans {
+            font-weight: 600;
+            color: var(--brand-color);
+        }
+
+        .harvest-assignee {
+            color: var(--text-secondary);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 0;
+            max-width: 900px;
+            width: 90%;
+            max-height: 85vh;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.5rem;
+            line-height: 1;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+            padding: 1.5rem 3rem 1.5rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: rgba(148, 163, 184, 0.03);
+        }
+
+        .modal-description {
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 1.5rem;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .modal-description h1, .modal-description h2, .modal-description h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .modal-description code {
+            background: rgba(148, 163, 184, 0.2);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        .modal-description pre {
+            background: rgba(148, 163, 184, 0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        .modal-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            padding: 1.5rem;
+            background: rgba(148, 163, 184, 0.03);
+            border-top: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .modal-info-item {
+            color: var(--text-secondary);
+        }
+
+        .modal-info-item strong {
+            color: var(--text-primary);
+        }
+
+        .loading-more {
+            text-align: center;
+            padding: 1rem;
+            color: var(--text-secondary);
+        }
+
         @media (max-width: 768px) {
+            .harvest-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .modal-content {
+                max-width: 90%;
+                padding: 1.5rem;
+            }
+
+            .modal-info {
+                grid-template-columns: 1fr;
+            }
+
             .leaderboard-card {
                 padding: 1rem;
             }
@@ -134,13 +386,9 @@
             </button>
             {{ if not .TestMode }}
                 {{ if .IsAuthenticated }}
-                    <div class="user-info">
+                    <a href="/wallet" class="user-info" style="text-decoration: none; cursor: pointer;">
                         <i class="fas fa-user-circle"></i>
                         <span>{{ .Username }}</span>
-                    </div>
-                    <a href="/wallet" class="btn btn-primary">
-                        <i class="fas fa-wallet"></i>
-                        My Wallet
                     </a>
                     <a href="/auth/logout" class="btn btn-secondary">
                         <i class="fas fa-sign-out-alt"></i>
@@ -176,6 +424,31 @@
                 <i class="fas fa-spinner fa-spin"></i> Loading leaderboard...
             </div>
         </div>
+
+        <div class="harvest-section">
+            <div class="harvest-header">
+                <h1><i class="fas fa-seedling"></i> Harvest Beans</h1>
+                <div class="search-box">
+                    <input type="text" id="harvestSearch" placeholder="Search harvests..." />
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+
+            <div id="harvestList" class="harvest-list">
+                <div class="loading-more">
+                    <i class="fas fa-spinner fa-spin"></i> Loading harvests...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="harvestModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeHarvestModal()">×</button>
+            <h2 class="modal-title" id="modalTitle"></h2>
+            <div class="modal-description" id="modalDescription"></div>
+            <div class="modal-info" id="modalInfo"></div>
+        </div>
     </div>
 
     <script>
@@ -185,21 +458,24 @@
                 const data = await response.json();
 
                 if (data.entries && data.entries.length > 0) {
+                    const filteredEntries = data.entries.filter(entry => entry.username !== 'system');
+
                     let html = '<table class="leaderboard-table"><thead><tr>';
-                    html += '<th>Rank</th><th>Username</th><th>Beans</th>';
+                    html += '<th style="width: 80px;">Rank</th><th>Username</th><th style="width: 120px; text-align: right;">Beans</th>';
                     html += '</tr></thead><tbody>';
 
-                    data.entries.forEach(entry => {
-                        const rankClass = `rank rank-${entry.rank}`;
+                    filteredEntries.forEach((entry, index) => {
+                        const displayRank = index + 1;
+                        const rankClass = `rank rank-${displayRank}`;
                         let medal = '';
-                        if (entry.rank === 1) medal = '<span class="medal">🥇</span>';
-                        else if (entry.rank === 2) medal = '<span class="medal">🥈</span>';
-                        else if (entry.rank === 3) medal = '<span class="medal">🥉</span>';
+                        if (displayRank === 1) medal = '<span class="medal">🥇</span>';
+                        else if (displayRank === 2) medal = '<span class="medal">🥈</span>';
+                        else if (displayRank === 3) medal = '<span class="medal">🥉</span>';
 
                         html += `<tr>
-                            <td class="${rankClass}">${medal}#${entry.rank}</td>
+                            <td class="${rankClass}" style="width: 80px;">${medal}#${displayRank}</td>
                             <td class="username">${entry.username}</td>
-                            <td class="beans">${entry.bean_amount.toLocaleString()}</td>
+                            <td class="beans" style="width: 120px; text-align: right;">${entry.bean_amount.toLocaleString()}</td>
                         </tr>`;
                     });
 
@@ -215,7 +491,186 @@
         }
 
         loadLeaderboard();
+
+        let currentPage = 1;
+        let searchQuery = '';
+        let isLoading = false;
+        let hasMore = true;
+
+        async function loadHarvests(reset = false) {
+            if (isLoading || (!hasMore && !reset)) return;
+
+            if (reset) {
+                currentPage = 1;
+                hasMore = true;
+                document.getElementById('harvestList').innerHTML = '';
+            }
+
+            isLoading = true;
+
+            try {
+                const params = new URLSearchParams({
+                    page: currentPage,
+                    limit: 20,
+                    search: searchQuery
+                });
+
+                const response = await fetch(`/api/v1/harvests?${params}`);
+                const data = await response.json();
+
+                if (data.harvests && data.harvests.length > 0) {
+                    renderHarvests(data.harvests);
+                    currentPage++;
+                    hasMore = currentPage <= data.total_pages;
+                } else if (reset) {
+                    document.getElementById('harvestList').innerHTML = '<p class="loading">No harvests found</p>';
+                }
+
+                if (hasMore && !reset) {
+                    addLoadingIndicator();
+                }
+            } catch (error) {
+                console.error('Failed to load harvests:', error);
+                if (reset) {
+                    document.getElementById('harvestList').innerHTML = '<p class="loading">Failed to load harvests</p>';
+                }
+            } finally {
+                isLoading = false;
+            }
+        }
+
+        function renderHarvests(harvests) {
+            const container = document.getElementById('harvestList');
+            const loadingIndicator = container.querySelector('.loading-more');
+            if (loadingIndicator) loadingIndicator.remove();
+
+            harvests.forEach(harvest => {
+                const item = document.createElement('div');
+                item.className = `harvest-item${harvest.completed ? ' completed' : ''}`;
+                item.onclick = () => showHarvestDetails(harvest);
+
+                let assigneeInfo = '';
+                if (harvest.assigned_user) {
+                    assigneeInfo = `<span class="harvest-assignee"><i class="fas fa-user"></i> ${harvest.assigned_user}</span>`;
+                }
+
+                item.innerHTML = `
+                    <div class="harvest-title">${harvest.title}</div>
+                    <div class="harvest-meta">
+                        <span class="harvest-beans"><i class="fas fa-coins"></i> 🫘${harvest.bean_amount}</span>
+                        ${assigneeInfo}
+                    </div>
+                `;
+
+                container.appendChild(item);
+            });
+        }
+
+        function addLoadingIndicator() {
+            const container = document.getElementById('harvestList');
+            if (!container.querySelector('.loading-more')) {
+                const indicator = document.createElement('div');
+                indicator.className = 'loading-more';
+                indicator.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading more...';
+                container.appendChild(indicator);
+            }
+        }
+
+        async function loadHarvestById(id) {
+            try {
+                const response = await fetch(`/api/v1/harvests?id=${id}`);
+                const data = await response.json();
+                if (data.harvests && data.harvests.length > 0) {
+                    showHarvestDetails(data.harvests[0]);
+                } else {
+                    console.error('Harvest not found');
+                }
+            } catch (error) {
+                console.error('Failed to load harvest:', error);
+            }
+        }
+
+        function showHarvestDetails(harvest) {
+            document.getElementById('modalTitle').textContent = harvest.title;
+
+            const descriptionDiv = document.getElementById('modalDescription');
+            if (typeof marked !== 'undefined') {
+                descriptionDiv.innerHTML = marked.parse(harvest.description || 'No description provided.');
+            } else {
+                descriptionDiv.innerHTML = `<p>${(harvest.description || 'No description provided.').replace(/\n/g, '<br>')}</p>`;
+            }
+
+            const createdDate = new Date(harvest.created_at).toLocaleDateString();
+            const updatedDate = new Date(harvest.updated_at).toLocaleDateString();
+
+            const assignedInfo = harvest.assigned_user
+                ? `<div class="modal-info-item"><strong>Assigned to:</strong> ${harvest.assigned_user}</div>`
+                : '';
+
+            const statusInfo = harvest.completed
+                ? '<div class="modal-info-item"><strong>Status:</strong> <span style="color: #10b981;">✓ Completed</span></div>'
+                : '<div class="modal-info-item"><strong>Status:</strong> Open</div>';
+
+            document.getElementById('modalInfo').innerHTML = `
+                <div class="modal-info-item"><strong>Reward:</strong> 🫘${harvest.bean_amount}</div>
+                ${statusInfo}
+                ${assignedInfo}
+                <div class="modal-info-item"><strong>Created:</strong> ${createdDate}</div>
+                <div class="modal-info-item"><strong>Updated:</strong> ${updatedDate}</div>
+            `;
+
+            window.location.hash = `harvest/${harvest.id}`;
+            document.getElementById('harvestModal').classList.add('active');
+        }
+
+        function closeHarvestModal() {
+            document.getElementById('harvestModal').classList.remove('active');
+            window.location.hash = '';
+        }
+
+        document.getElementById('harvestModal').addEventListener('click', (e) => {
+            if (e.target.id === 'harvestModal') {
+                closeHarvestModal();
+            }
+        });
+
+        function handleHashChange() {
+            const hash = window.location.hash.substring(1);
+            if (hash.startsWith('harvest/')) {
+                const id = hash.split('/')[1];
+                loadHarvestById(id);
+            } else {
+                const modal = document.getElementById('harvestModal');
+                if (modal.classList.contains('active')) {
+                    modal.classList.remove('active');
+                }
+            }
+        }
+
+        window.addEventListener('hashchange', handleHashChange);
+        handleHashChange();
+
+        const harvestListContainer = document.getElementById('harvestList');
+        harvestListContainer.addEventListener('scroll', () => {
+            const { scrollTop, scrollHeight, clientHeight } = harvestListContainer;
+            if (scrollTop + clientHeight >= scrollHeight - 50) {
+                loadHarvests();
+            }
+        });
+
+        const searchInput = document.getElementById('harvestSearch');
+        let searchTimeout;
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                searchQuery = e.target.value;
+                loadHarvests(true);
+            }, 300);
+        });
+
+        loadHarvests(true);
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="/static/js/theme.js"></script>
 </body>
 </html>

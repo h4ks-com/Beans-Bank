@@ -13,5 +13,6 @@ type Transaction struct {
 	ToUserID   uint      `gorm:"not null;index" json:"to_user_id"`
 	ToUser     User      `gorm:"foreignKey:ToUserID" json:"to_user,omitempty"`
 	Amount     int       `gorm:"not null" json:"amount"`
+	Note       string    `gorm:"type:text" json:"note,omitempty"`
 	Timestamp  time.Time `gorm:"autoCreateTime" json:"timestamp"`
 }
