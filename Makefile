@@ -24,7 +24,7 @@ build: swagger
 	go build -o bean-bank ./cmd/server
 
 run: swagger
-	go run cmd/server/main.go
+	go run ./cmd/server serve
 
 test:
 	go test -v -race ./...
@@ -46,7 +46,7 @@ test-cover:
 
 swagger:
 	@command -v swag >/dev/null 2>&1 || { echo "Installing swag..."; go install github.com/swaggo/swag/cmd/swag@latest; }
-	swag init -g cmd/server/main.go
+	swag init -g cmd/server/serve.go
 
 clean:
 	rm -f bean-bank

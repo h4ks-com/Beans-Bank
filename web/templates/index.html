@@ -50,14 +50,27 @@
             font-size: 1.5rem;
         }
 
+        .leaderboard-wrapper {
+            max-height: 600px;
+            overflow-y: auto;
+            border-radius: 8px;
+        }
+
         .leaderboard-table {
             width: 100%;
             border-collapse: collapse;
         }
 
         .leaderboard-table thead {
-            background: rgba(148, 163, 184, 0.1);
+            background: var(--card-bg);
             border-radius: 8px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .leaderboard-table thead tr {
+            background: rgba(148, 163, 184, 0.1);
         }
 
         .leaderboard-table th {
@@ -74,20 +87,12 @@
             text-align: left;
         }
 
-        .leaderboard-table tr {
-            position: relative;
-        }
-
         .leaderboard-table tr:last-child td {
             border-bottom: none;
         }
 
-        .leaderboard-table tr:hover {
+        .leaderboard-table tbody tr:hover {
             background: rgba(148, 163, 184, 0.1);
-        }
-
-        .leaderboard-table tr::after {
-            content: none !important;
         }
 
         .rank {
@@ -179,6 +184,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             border-left: 4px solid transparent;
+            position: relative;
         }
 
         .harvest-item:hover {
@@ -201,6 +207,52 @@
             color: #10b981;
             font-size: 1.5rem;
             font-weight: bold;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .leaderboard-wrapper::-webkit-scrollbar,
+            .harvest-list::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            .leaderboard-wrapper::-webkit-scrollbar-track,
+            .harvest-list::-webkit-scrollbar-track {
+                background: rgba(148, 163, 184, 0.1);
+                border-radius: 4px;
+            }
+
+            .leaderboard-wrapper::-webkit-scrollbar-thumb,
+            .harvest-list::-webkit-scrollbar-thumb {
+                background: rgba(148, 163, 184, 0.3);
+                border-radius: 4px;
+            }
+
+            .leaderboard-wrapper::-webkit-scrollbar-thumb:hover,
+            .harvest-list::-webkit-scrollbar-thumb:hover {
+                background: rgba(148, 163, 184, 0.5);
+            }
+        }
+
+        [data-theme="light"] .leaderboard-wrapper::-webkit-scrollbar,
+        [data-theme="light"] .harvest-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        [data-theme="light"] .leaderboard-wrapper::-webkit-scrollbar-track,
+        [data-theme="light"] .harvest-list::-webkit-scrollbar-track {
+            background: rgba(148, 163, 184, 0.15);
+            border-radius: 4px;
+        }
+
+        [data-theme="light"] .leaderboard-wrapper::-webkit-scrollbar-thumb,
+        [data-theme="light"] .harvest-list::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.4);
+            border-radius: 4px;
+        }
+
+        [data-theme="light"] .leaderboard-wrapper::-webkit-scrollbar-thumb:hover,
+        [data-theme="light"] .harvest-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.6);
         }
 
         .harvest-title {
@@ -460,7 +512,7 @@
                 if (data.entries && data.entries.length > 0) {
                     const filteredEntries = data.entries.filter(entry => entry.username !== 'system');
 
-                    let html = '<table class="leaderboard-table"><thead><tr>';
+                    let html = '<div class="leaderboard-wrapper"><table class="leaderboard-table"><thead><tr>';
                     html += '<th style="width: 80px;">Rank</th><th>Username</th><th style="width: 120px; text-align: right;">Beans</th>';
                     html += '</tr></thead><tbody>';
 
@@ -479,7 +531,7 @@
                         </tr>`;
                     });
 
-                    html += '</tbody></table>';
+                    html += '</tbody></table></div>';
                     document.getElementById('leaderboard').innerHTML = html;
                 } else {
                     document.getElementById('leaderboard').innerHTML = '<p class="loading">No wallets yet</p>';
