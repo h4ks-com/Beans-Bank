@@ -10,7 +10,7 @@ RUN go mod download
 COPY . .
 
 RUN go install github.com/swaggo/swag/cmd/swag@latest
-RUN swag init -g cmd/server/main.go
+RUN swag init -g cmd/server/serve.go --parseDependency
 
 RUN CGO_ENABLED=1 GOOS=linux go build -a -o beapin ./cmd/server
 

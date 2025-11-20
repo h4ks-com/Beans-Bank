@@ -42,7 +42,6 @@ func SwaggerUIWithBearerFix() gin.HandlerFunc {
                 ],
                 layout: "StandaloneLayout",
                 requestInterceptor: (request) => {
-                    // Automatically add "Bearer " prefix to Authorization header
                     if (request.headers.Authorization && !request.headers.Authorization.startsWith('Bearer ')) {
                         request.headers.Authorization = 'Bearer ' + request.headers.Authorization;
                     }

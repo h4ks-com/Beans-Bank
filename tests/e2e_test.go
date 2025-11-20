@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -24,11 +25,43 @@ type beanBankContainer struct {
 	URI string
 }
 
+var (
+	testImageTag   = "bean-bank-test:latest"
+	imageBuildOnce sync.Once
+	imageBuildErr  error
+)
+
 func setupBeanBank(ctx context.Context, t *testing.T) (*beanBankContainer, error) {
 	return setupBeanBankWithTestMode(ctx, t, true)
 }
 
 func setupBeanBankWithTestMode(ctx context.Context, t *testing.T, testMode bool) (*beanBankContainer, error) {
+	imageBuildOnce.Do(func() {
+		t.Log("Building Docker image once for all tests...")
+		buildReq := testcontainers.ContainerRequest{
+			FromDockerfile: testcontainers.FromDockerfile{
+				Context:       "../",
+				Dockerfile:    "Dockerfile",
+				Repo:          "bean-bank-test",
+				Tag:           "latest",
+				PrintBuildLog: false,
+				KeepImage:     true,
+			},
+		}
+
+		_, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
+			ContainerRequest: buildReq,
+			Started:          false,
+		})
+		if err != nil {
+			imageBuildErr = fmt.Errorf("failed to build image: %w", err)
+		}
+	})
+
+	if imageBuildErr != nil {
+		return nil, imageBuildErr
+	}
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -62,10 +95,7 @@ func setupBeanBankWithTestMode(ctx context.Context, t *testing.T, testMode bool)
 	}
 
 	req := testcontainers.ContainerRequest{
-		FromDockerfile: testcontainers.FromDockerfile{
-			Context:    "../",
-			Dockerfile: "Dockerfile",
-		},
+		Image:        testImageTag,
 		ExposedPorts: []string{string(natPort)},
 		Env: map[string]string{
 			"PORT":               port,
