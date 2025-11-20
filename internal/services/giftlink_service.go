@@ -156,12 +156,12 @@ func (s *GiftLinkService) RedeemGiftLink(code string, redeemUsername string) err
 			return ErrGiftLinkNotFound
 		}
 
-		if !giftLink.Active {
-			return ErrGiftLinkInactive
-		}
-
 		if giftLink.RedeemedAt != nil {
 			return ErrGiftLinkRedeemed
+		}
+
+		if !giftLink.Active {
+			return ErrGiftLinkInactive
 		}
 
 		if giftLink.ExpiresAt != nil && time.Now().After(*giftLink.ExpiresAt) {
