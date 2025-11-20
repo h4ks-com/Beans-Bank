@@ -26,4 +26,4 @@ COPY --from=builder /app/docs ./docs
 
 EXPOSE 8080
 
-CMD ["./beapin"]
+CMD ["./beapin", "serve"]

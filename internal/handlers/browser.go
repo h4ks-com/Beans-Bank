@@ -13,6 +13,7 @@ type BrowserHandler struct {
 	walletService   *services.WalletService
 	transferService *services.TransferService
 	tokenService    *services.TokenService
+	giftLinkService *services.GiftLinkService
 	logtoHandler    *auth.LogtoHandler
 }
 
@@ -20,12 +21,14 @@ func NewBrowserHandler(
 	walletService *services.WalletService,
 	transferService *services.TransferService,
 	tokenService *services.TokenService,
+	giftLinkService *services.GiftLinkService,
 	logtoHandler *auth.LogtoHandler,
 ) *BrowserHandler {
 	return &BrowserHandler{
 		walletService:   walletService,
 		transferService: transferService,
 		tokenService:    tokenService,
+		giftLinkService: giftLinkService,
 		logtoHandler:    logtoHandler,
 	}
 }
@@ -207,4 +210,102 @@ func (h *BrowserHandler) DeleteToken(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "token deleted successfully"})
+}
+
+func (h *BrowserHandler) CreateGiftLink(c *gin.Context) {
+	username, ok := h.logtoHandler.GetCurrentUser(c)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "not authenticated"})
+		return
+	}
+
+	var req struct {
+		Amount    int    `json:"amount" binding:"required"`
+		Message   string `json:"message"`
+		ExpiresIn string `json:"expires_in"`
+	}
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid request: " + err.Error()})
+		return
+	}
+
+	if req.Amount <= 0 {
+		c.JSON(http.StatusBadRequest, ErrorResponse{Error: "amount must be positive"})
+		return
+	}
+
+	giftLink, err := h.giftLinkService.CreateGiftLink(username, req.Amount, req.Message, req.ExpiresIn)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, giftLink)
+}
+
+func (h *BrowserHandler) ListGiftLinks(c *gin.Context) {
+	username, ok := h.logtoHandler.GetCurrentUser(c)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "not authenticated"})
+		return
+	}
+
+	giftLinks, err := h.giftLinkService.ListGiftLinks(username)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, giftLinks)
+}
+
+func (h *BrowserHandler) DeleteGiftLink(c *gin.Context) {
+	username, ok := h.logtoHandler.GetCurrentUser(c)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "not authenticated"})
+		return
+	}
+
+	var idParam struct {
+		ID uint `uri:"id" binding:"required"`
+	}
+
+	if err := c.ShouldBindUri(&idParam); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid gift link ID"})
+		return
+	}
+
+	err := h.giftLinkService.DeleteGiftLink(idParam.ID, username)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "gift link deleted successfully"})
+}
+
+func (h *BrowserHandler) RedeemGiftLink(c *gin.Context) {
+	username, ok := h.logtoHandler.GetCurrentUser(c)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "not authenticated"})
+		return
+	}
+
+	var req struct {
+		Code string `json:"code" binding:"required"`
+	}
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid request: " + err.Error()})
+		return
+	}
+
+	err := h.giftLinkService.RedeemGiftLink(req.Code, username)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "gift link redeemed successfully"})
 }

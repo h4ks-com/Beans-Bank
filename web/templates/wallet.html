@@ -420,6 +420,9 @@
             <button class="tab active" onclick="showTab('transfer')">
                 <i class="fas fa-exchange-alt"></i> Transfer
             </button>
+            <button class="tab" onclick="showTab('giftlinks')">
+                <i class="fas fa-gift"></i> Gift Links
+            </button>
             <button class="tab" onclick="showTab('tokens')">
                 <i class="fas fa-key"></i> API Tokens
             </button>
@@ -499,6 +502,62 @@
                             <i class="fas fa-external-link-alt"></i>
                         </button>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="giftlinks" class="tab-content">
+            <div class="card">
+                <h3><i class="fas fa-gift"></i> Create Gift Link</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.9rem;">
+                    Create a shareable link that lets anyone redeem beans. The beans will be escrowed until redeemed.
+                </p>
+                <div id="giftlinkAlert" class="alert"></div>
+                <form id="giftlinkForm">
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input type="number" id="giftAmount" required min="1" placeholder="10">
+                    </div>
+                    <div class="form-group">
+                        <label>Message (optional)</label>
+                        <input type="text" id="giftMessage" placeholder="Happy Birthday! 🎉" maxlength="200">
+                    </div>
+                    <div class="form-group">
+                        <label>Expires In (optional)</label>
+                        <select id="giftExpiresIn">
+                            <option value="">Never</option>
+                            <option value="1h">1 hour</option>
+                            <option value="24h">24 hours</option>
+                            <option value="7d">7 days</option>
+                            <option value="30d">30 days</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-gift"></i> Create Gift Link
+                    </button>
+                </form>
+
+                <div id="giftlinkDisplay" class="token-display">
+                    <h4><i class="fas fa-link"></i> Your Gift Link</h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.9rem;">
+                        <i class="fas fa-share-alt"></i> Share this link with anyone to let them redeem your gift!
+                    </p>
+                    <div class="token-box">
+                        <input type="text" id="createdGiftlink" readonly>
+                        <button class="btn btn-primary" onclick="copyGiftlink()">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <button class="btn btn-primary" onclick="openGiftlink()">
+                            <i class="fas fa-external-link-alt"></i> Open
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fas fa-list"></i> My Gift Links</h3>
+                <div id="giftlinkList" class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Loading gift links...
                 </div>
             </div>
         </div>
@@ -679,7 +738,7 @@
         const testMode = {{ .TestMode }};
 
         function showTab(tab, updateHash = true) {
-            const tabs = ['transfer', 'tokens', 'transactions', 'admin'];
+            const tabs = ['transfer', 'giftlinks', 'tokens', 'transactions', 'admin'];
             if (!tabs.includes(tab)) tab = 'transfer';
 
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -697,6 +756,7 @@
                 window.location.hash = tab;
             }
 
+            if (tab === 'giftlinks') loadGiftlinks();
             if (tab === 'tokens') loadTokens();
             if (tab === 'transactions') loadTransactions();
             if (tab === 'admin') loadHarvests();
@@ -704,7 +764,7 @@
 
         function handleTabHash() {
             const hash = window.location.hash.substring(1);
-            const validTabs = ['transfer', 'tokens', 'transactions', 'admin'];
+            const validTabs = ['transfer', 'giftlinks', 'tokens', 'transactions', 'admin'];
 
             if (validTabs.includes(hash)) {
                 showTab(hash, false);
@@ -1055,6 +1115,164 @@
             if (event.target === modal) {
                 closeExportModal();
             }
+        }
+
+        document.getElementById('giftlinkForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const amount = parseInt(document.getElementById('giftAmount').value);
+            const message = document.getElementById('giftMessage').value;
+            const expiresIn = document.getElementById('giftExpiresIn').value;
+
+            try {
+                const response = await fetch('/browser/giftlinks', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({ amount, message, expires_in: expiresIn })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    const giftUrl = window.location.origin + '/gift/' + data.code;
+                    document.getElementById('createdGiftlink').value = giftUrl;
+                    document.getElementById('giftlinkDisplay').style.display = 'block';
+                    showAlert('giftlinkAlert', 'Gift link created successfully!', 'success');
+                    document.getElementById('giftlinkForm').reset();
+
+                    navigator.clipboard.writeText(giftUrl).then(() => {
+                        showSnackbar('🎁 Gift link copied to clipboard!');
+                    }).catch(err => {
+                        showSnackbar('🎁 Gift link created but copy failed');
+                        console.error('Failed to copy:', err);
+                    });
+
+                    setTimeout(() => loadGiftlinks(), 500);
+                    loadWallet();
+                } else {
+                    showAlert('giftlinkAlert', data.error || 'Failed to create gift link', 'error');
+                }
+            } catch (error) {
+                showAlert('giftlinkAlert', 'Network error: ' + error.message, 'error');
+            }
+        });
+
+        function copyGiftlink() {
+            const linkInput = document.getElementById('createdGiftlink');
+            linkInput.select();
+            navigator.clipboard.writeText(linkInput.value).then(() => {
+                showSnackbar('🎁 Gift link copied to clipboard!');
+            }).catch(err => {
+                showSnackbar('⚠️ Failed to copy gift link');
+                console.error('Failed to copy:', err);
+            });
+        }
+
+        function openGiftlink() {
+            const link = document.getElementById('createdGiftlink').value;
+            window.open(link, '_blank');
+        }
+
+        async function loadGiftlinks() {
+            try {
+                const response = await fetch('/browser/giftlinks', {
+                    credentials: 'same-origin'
+                });
+
+                if (!response.ok) {
+                    document.getElementById('giftlinkList').innerHTML = '<p class="loading">Failed to load gift links</p>';
+                    return;
+                }
+
+                const data = await response.json();
+
+                if (data && data.length > 0) {
+                    let html = '<div class="token-list">';
+                    data.forEach(gift => {
+                        const created = new Date(gift.created_at).toLocaleString();
+                        const expires = gift.expires_at ? new Date(gift.expires_at).toLocaleString() : 'Never';
+                        const giftUrl = window.location.origin + '/gift/' + gift.code;
+
+                        const statusBadge = gift.redeemed_at
+                            ? `<span style="background: var(--success); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Redeemed by ${gift.redeemed_by}</span>`
+                            : (gift.active
+                                ? '<span style="background: var(--primary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Active</span>'
+                                : '<span style="background: #6c757d; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Inactive</span>');
+
+                        html += `<div class="token-item" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; margin-bottom: 0.75rem; background: var(--card-bg); border: 1px solid var(--item-border); border-radius: 8px;">
+                            <div class="token-info" style="flex: 1; min-width: 0;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                    <strong style="font-size: 1.1rem;">🫘${gift.amount}</strong>
+                                    ${gift.message ? `<span style="color: var(--text-secondary);">- ${gift.message}</span>` : ''}
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.85rem; color: var(--text-secondary);">
+                                    <div>Created: ${created}</div>
+                                    <div>Expires: ${expires}</div>
+                                    <div>${statusBadge}</div>
+                                    <div style="margin-top: 0.25rem;">
+                                        <a href="${giftUrl}" target="_blank" style="color: var(--brand-color); text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem;">
+                                            <i class="fas fa-link"></i> Open Gift Link
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
+                                <button class="btn btn-secondary btn-small" onclick="copyGiftUrl('${giftUrl}')" title="Copy Link">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                ${!gift.redeemed_at ? `<button class="btn btn-danger btn-small" onclick="deleteGiftlink(${gift.id})" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>` : ''}
+                            </div>
+                        </div>`;
+                    });
+                    html += '</div>';
+                    document.getElementById('giftlinkList').innerHTML = html;
+                } else {
+                    document.getElementById('giftlinkList').innerHTML = '<p class="loading">No gift links yet</p>';
+                }
+            } catch (error) {
+                console.error('Failed to load gift links:', error);
+                document.getElementById('giftlinkList').innerHTML = '<p class="loading">Failed to load gift links</p>';
+            }
+        }
+
+        function copyGiftUrl(url) {
+            navigator.clipboard.writeText(url).then(() => {
+                showSnackbar('🎁 Gift link copied to clipboard!');
+            }).catch(err => {
+                showSnackbar('⚠️ Failed to copy gift link');
+                console.error('Failed to copy:', err);
+            });
+        }
+
+        async function deleteGiftlink(id) {
+            if (!confirm('Are you sure you want to delete this gift link? If not redeemed, beans will be refunded.')) return;
+
+            try {
+                const response = await fetch(`/browser/giftlinks/${id}`, {
+                    method: 'DELETE',
+                    credentials: 'same-origin'
+                });
+
+                if (response.ok) {
+                    showSnackbar('✅ Gift link deleted and beans refunded!');
+                    loadGiftlinks();
+                    loadWallet();
+                } else {
+                    const data = await response.json();
+                    showSnackbar('❌ ' + (data.error || 'Failed to delete gift link'));
+                }
+            } catch (error) {
+                showSnackbar('❌ Network error: ' + error.message);
+            }
+        }
+
+        async function getToken() {
+            return '';
         }
 
         {{ if .IsAdmin }}

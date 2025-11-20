@@ -61,12 +61,14 @@ func runServer() {
 	transactionRepo := repository.NewTransactionRepository(db)
 	tokenRepo := repository.NewTokenRepository(db)
 	harvestRepo := repository.NewHarvestRepository(db)
+	giftLinkRepo := repository.NewGiftLinkRepository(db)
 
 	walletService := services.NewWalletService(userRepo, transactionRepo)
 	transferService := services.NewTransferService(userRepo, transactionRepo, db)
 	tokenService := services.NewTokenService(tokenRepo, userRepo, cfg.JWT.Secret)
 	harvestService := services.NewHarvestService(harvestRepo, userRepo, transactionRepo, db)
 	exportService := services.NewExportService(userRepo, transactionRepo, cfg.ExportSigningKey)
+	giftLinkService := services.NewGiftLinkService(giftLinkRepo, userRepo, transferService, db)
 
 	authMiddleware := middleware.NewAuthMiddleware(tokenService, cfg.TestMode)
 	adminMiddleware := middleware.NewAdminMiddleware(cfg.AdminUsers)
@@ -79,7 +81,8 @@ func runServer() {
 	publicHandler := handlers.NewPublicHandler(walletService, harvestService)
 	harvestHandler := handlers.NewHarvestHandler(harvestService)
 	exportHandler := handlers.NewExportHandler(exportService)
-	browserHandler := handlers.NewBrowserHandler(walletService, transferService, tokenService, logtoHandler)
+	giftLinkHandler := handlers.NewGiftLinkHandler(giftLinkService)
+	browserHandler := handlers.NewBrowserHandler(walletService, transferService, tokenService, giftLinkService, logtoHandler)
 
 	router := gin.Default()
 
@@ -130,6 +133,12 @@ func runServer() {
 			"IsAuthenticated": isAuthenticated,
 			"Username":        username,
 			"TestMode":        cfg.TestMode,
+		})
+	})
+
+	router.GET("/gift/:code", func(c *gin.Context) {
+		c.HTML(200, "gift.html", gin.H{
+			"TestMode": cfg.TestMode,
 		})
 	})
 
@@ -286,6 +295,11 @@ func runServer() {
 		browser.DELETE("/tokens/:id", browserHandler.DeleteToken)
 		browser.GET("/users/search", adminHandler.SearchUsers)
 
+		browser.POST("/giftlinks", browserHandler.CreateGiftLink)
+		browser.GET("/giftlinks", browserHandler.ListGiftLinks)
+		browser.DELETE("/giftlinks/:id", browserHandler.DeleteGiftLink)
+		browser.POST("/gift/redeem", browserHandler.RedeemGiftLink)
+
 		browserAdmin := browser.Group("/admin")
 		if !cfg.TestMode {
 			browserAdmin.Use(adminMiddleware.RequireAdmin())
@@ -306,6 +320,7 @@ func runServer() {
 		api.GET("/leaderboard", publicHandler.GetLeaderboard)
 		api.GET("/harvests", publicHandler.GetHarvests)
 		api.POST("/transactions/verify", exportHandler.VerifyExport)
+		api.GET("/gift/:code", giftLinkHandler.GetGiftLinkInfo)
 
 		authenticated := api.Group("")
 		authenticated.Use(authMiddleware.RequireAuth())
@@ -319,6 +334,11 @@ func runServer() {
 			authenticated.GET("/tokens", tokenHandler.ListTokens)
 			authenticated.DELETE("/tokens/:id", tokenHandler.DeleteToken)
 			authenticated.GET("/users/search", adminHandler.SearchUsers)
+
+			authenticated.POST("/giftlinks", giftLinkHandler.CreateGiftLink)
+			authenticated.GET("/giftlinks", giftLinkHandler.ListGiftLinks)
+			authenticated.DELETE("/giftlinks/:id", giftLinkHandler.DeleteGiftLink)
+			authenticated.POST("/gift/redeem", giftLinkHandler.RedeemGiftLink)
 		}
 
 		admin := api.Group("/admin")

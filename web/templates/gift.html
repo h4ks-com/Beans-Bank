@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bean Gift - Bean Bank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/common.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        .gift-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+            border: 1px solid var(--card-border);
+        }
+
+        .gift-icon {
+            text-align: center;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            color: var(--brand-color);
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .gift-message {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-style: italic;
+            padding: 1rem;
+            background: rgba(148, 163, 184, 0.05);
+            border-radius: 8px;
+        }
+
+        .gift-details {
+            background: rgba(148, 163, 184, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--item-border);
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--item-border);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .amount-highlight {
+            font-size: 2em;
+            color: var(--brand-color);
+        }
+
+        .bean-icon {
+            margin-left: 0.5rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .status-redeemed {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        .status-expired {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-redeem {
+            background: var(--brand-color);
+            color: white;
+        }
+
+        .btn-redeem:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-redeem:disabled {
+            background: var(--muted-color);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .btn-cancel {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--item-border);
+        }
+
+        .btn-cancel:hover {
+            background: rgba(148, 163, 184, 0.1);
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: center;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: center;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .loading {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 3px solid rgba(148, 163, 184, 0.2);
+            border-top: 3px solid var(--brand-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="gift-card">
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Loading gift...</p>
+            </div>
+
+            <div id="gift-content" style="display: none;">
+                <div class="gift-icon">🎁</div>
+                <h1>You've Received Beans!</h1>
+
+                <div id="message-container"></div>
+
+                <div class="gift-details">
+                    <div class="detail-row">
+                        <span class="detail-label">From</span>
+                        <span class="detail-value" id="from-user"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Amount</span>
+                        <span class="detail-value">
+                            <span class="amount-highlight" id="amount"></span>
+                            <span class="bean-icon">🫘</span>
+                        </span>
+                    </div>
+                    <div class="detail-row" id="expires-row" style="display: none;">
+                        <span class="detail-label">Expires</span>
+                        <span class="detail-value" id="expires"></span>
+                    </div>
+                    <div class="detail-row" id="redeemed-row" style="display: none;">
+                        <span class="detail-label">Redeemed By</span>
+                        <span class="detail-value" id="redeemed-by"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Status</span>
+                        <span class="detail-value" id="status"></span>
+                    </div>
+                </div>
+
+                <div id="error-container"></div>
+                <div id="success-container"></div>
+
+                <div class="button-group">
+                    <button class="btn-action btn-redeem" id="redeem-btn">
+                        <i class="fas fa-gift"></i> Redeem Gift
+                    </button>
+                    <button class="btn-action btn-cancel" onclick="window.location.href='/'">
+                        <i class="fas fa-home"></i> Home
+                    </button>
+                </div>
+            </div>
+
+            <div id="error-state" style="display: none;">
+                <div class="gift-icon">❌</div>
+                <h1>Gift Not Found</h1>
+                <div class="error-message">
+                    This gift link is invalid or has been removed.
+                </div>
+                <button class="btn-action btn-cancel" onclick="window.location.href='/'" style="margin-top: 1rem;">
+                    <i class="fas fa-home"></i> Go Home
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/common.js"></script>
+    <script>
+        const code = window.location.pathname.split('/').pop();
+        let giftData = null;
+
+        async function loadGift() {
+            try {
+                const response = await fetch(`/api/v1/gift/${code}`);
+
+                if (!response.ok) {
+                    showErrorState();
+                    return;
+                }
+
+                giftData = await response.json();
+                displayGift(giftData);
+            } catch (error) {
+                console.error('Error loading gift:', error);
+                showErrorState();
+            }
+        }
+
+        function displayGift(gift) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('gift-content').style.display = 'block';
+
+            document.getElementById('from-user').textContent = gift.from_username;
+            document.getElementById('amount').textContent = gift.amount;
+
+            if (gift.message) {
+                document.getElementById('message-container').innerHTML = `
+                    <div class="gift-message">
+                        "${gift.message}"
+                    </div>
+                `;
+            }
+
+            if (gift.expires_at) {
+                const expiresRow = document.getElementById('expires-row');
+                expiresRow.style.display = 'flex';
+                const expiresDate = new Date(gift.expires_at * 1000);
+                document.getElementById('expires').textContent = expiresDate.toLocaleString();
+            }
+
+            if (gift.redeemed_by) {
+                const redeemedRow = document.getElementById('redeemed-row');
+                redeemedRow.style.display = 'flex';
+                document.getElementById('redeemed-by').textContent = gift.redeemed_by;
+            }
+
+            const statusEl = document.getElementById('status');
+            const redeemBtn = document.getElementById('redeem-btn');
+
+            if (gift.redeemed_at) {
+                statusEl.innerHTML = '<span class="status-badge status-redeemed">Already Redeemed</span>';
+                redeemBtn.disabled = true;
+                redeemBtn.textContent = 'Already Redeemed';
+            } else if (!gift.active) {
+                statusEl.innerHTML = '<span class="status-badge status-expired">Inactive</span>';
+                redeemBtn.disabled = true;
+                redeemBtn.textContent = 'Inactive';
+            } else if (gift.expires_at && new Date(gift.expires_at * 1000) < new Date()) {
+                statusEl.innerHTML = '<span class="status-badge status-expired">Expired</span>';
+                redeemBtn.disabled = true;
+                redeemBtn.textContent = 'Expired';
+            } else {
+                statusEl.innerHTML = '<span class="status-badge status-active">Available</span>';
+            }
+        }
+
+        function showErrorState() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error-state').style.display = 'block';
+        }
+
+        document.getElementById('redeem-btn').addEventListener('click', async function() {
+            const user = await getAuthenticatedUser();
+
+            if (!user) {
+                window.location.href = `/auth/login?redirect=${encodeURIComponent(window.location.pathname)}`;
+                return;
+            }
+
+            if (giftData && giftData.from_username === user.username) {
+                showError("You can't redeem your own gift link!");
+                return;
+            }
+
+            try {
+                const response = await fetch('/browser/gift/redeem', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({ code: code })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showSuccess('Gift redeemed successfully! 🎉');
+                    setTimeout(() => {
+                        window.location.href = '/wallet';
+                    }, 2000);
+                } else {
+                    showError(data.error || 'Failed to redeem gift');
+                }
+            } catch (error) {
+                console.error('Error redeeming gift:', error);
+                showError('Failed to redeem gift. Please try again.');
+            }
+        });
+
+        function showError(message) {
+            const container = document.getElementById('error-container');
+            container.innerHTML = `<div class="error-message">${message}</div>`;
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            const container = document.getElementById('success-container');
+            container.innerHTML = `<div class="success-message">${message}</div>`;
+        }
+
+        loadGift();
+    </script>
+</body>
+</html>

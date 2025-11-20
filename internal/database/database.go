@@ -46,6 +46,7 @@ func Migrate(db *gorm.DB) error {
 		&models.Transaction{},
 		&models.APIToken{},
 		&models.Harvest{},
+		&models.GiftLink{},
 	)
 
 	if err != nil {

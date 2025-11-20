@@ -188,6 +188,192 @@ curl -X DELETE http://localhost:8080/api/v1/tokens/1 \
 }
 ```
 
+## Gift Link Endpoints
+
+Gift links allow users to create shareable links that transfer beans to whoever redeems them.
+
+### Create Gift Link
+
+```bash
+curl -X POST http://localhost:8080/api/v1/giftlinks \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": 50,
+    "message": "Happy Birthday! 🎉",
+    "expires_in": "24h"
+  }'
+```
+
+**Parameters:**
+- `amount` (required): Number of beans to gift
+- `message` (optional): Personal message for the recipient
+- `expires_in` (optional): Expiration duration. Options: `1h`, `24h`, `7d`, `30d`, or omit for no expiration
+
+**Response:**
+```json
+{
+  "id": 1,
+  "code": "abc123xyz...",
+  "from_user_id": 1,
+  "from_username": "alice",
+  "amount": 50,
+  "message": "Happy Birthday! 🎉",
+  "expires_at": "2024-01-16T10:30:00Z",
+  "active": true,
+  "created_at": "2024-01-15T10:30:00Z"
+}
+```
+
+⚠️ **Important:** Beans are immediately deducted from your balance and held in escrow until the gift is redeemed or deleted.
+
+### List Your Gift Links
+
+```bash
+curl http://localhost:8080/api/v1/giftlinks \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+**Response:**
+```json
+[
+  {
+    "id": 1,
+    "code": "abc123xyz...",
+    "from_user_id": 1,
+    "from_username": "alice",
+    "amount": 50,
+    "message": "Happy Birthday! 🎉",
+    "expires_at": "2024-01-16T10:30:00Z",
+    "redeemed_at": null,
+    "redeemed_by_id": null,
+    "active": true,
+    "created_at": "2024-01-15T10:30:00Z"
+  },
+  {
+    "id": 2,
+    "code": "xyz789abc...",
+    "from_user_id": 1,
+    "from_username": "alice",
+    "amount": 25,
+    "message": "Thanks!",
+    "expires_at": null,
+    "redeemed_at": "2024-01-15T12:00:00Z",
+    "redeemed_by_id": 2,
+    "redeemed_by_username": "bob",
+    "active": false,
+    "created_at": "2024-01-15T09:00:00Z"
+  }
+]
+```
+
+### Get Gift Link Info (Public)
+
+Anyone can view gift link details before redeeming:
+
+```bash
+curl http://localhost:8080/api/v1/gift/abc123xyz...
+```
+
+**Response:**
+```json
+{
+  "code": "abc123xyz...",
+  "from_username": "alice",
+  "amount": 50,
+  "message": "Happy Birthday! 🎉",
+  "expires_at": "2024-01-16T10:30:00Z",
+  "redeemed_at": null,
+  "active": true
+}
+```
+
+**Response (Expired):**
+```json
+{
+  "error": "gift link has expired"
+}
+```
+
+**Response (Already Redeemed):**
+```json
+{
+  "error": "gift link has already been redeemed"
+}
+```
+
+### Redeem Gift Link
+
+```bash
+curl -X POST http://localhost:8080/api/v1/gift/redeem \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "abc123xyz..."
+  }'
+```
+
+**Response (Success):**
+```json
+{
+  "message": "gift link redeemed successfully",
+  "amount": 50,
+  "from_user": "alice"
+}
+```
+
+**Response (Already Redeemed):**
+```json
+{
+  "error": "gift link has already been redeemed"
+}
+```
+
+**Response (Expired):**
+```json
+{
+  "error": "gift link has expired"
+}
+```
+
+**Response (Self-Redemption):**
+```json
+{
+  "error": "cannot redeem your own gift link"
+}
+```
+
+### Delete Gift Link
+
+Delete an unredeemed gift link and get your beans back:
+
+```bash
+curl -X DELETE http://localhost:8080/api/v1/giftlinks/1 \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+**Response:**
+```json
+{
+  "message": "gift link deleted successfully"
+}
+```
+
+If the gift link was active and unredeemed, your beans are automatically refunded.
+
+### Web Gift Link Flow
+
+Share gift links with this URL format:
+```
+http://localhost:8080/gift/abc123xyz...
+```
+
+This opens a web page where recipients can:
+1. View the gift details (amount, message, sender)
+2. Authenticate (if not already logged in)
+3. Redeem the gift with one click
+4. See success message with updated balance
+
 ## Admin Endpoints
 
 Requires admin user (configured in `ADMIN_USERS` env var).
@@ -291,6 +477,22 @@ curl -X POST http://localhost:8080/api/v1/transfer \
   -H "X-Test-Username: alice" \
   -H "Content-Type: application/json" \
   -d '{"to_user": "bob", "amount": 10, "force": true}'
+
+# Create gift link
+curl -X POST http://localhost:8080/api/v1/giftlinks \
+  -H "X-Test-Username: alice" \
+  -H "Content-Type: application/json" \
+  -d '{"amount": 50, "message": "Gift for you!", "expires_in": "24h"}'
+
+# List gift links
+curl http://localhost:8080/api/v1/giftlinks \
+  -H "X-Test-Username: alice"
+
+# Redeem gift link
+curl -X POST http://localhost:8080/api/v1/gift/redeem \
+  -H "X-Test-Username: bob" \
+  -H "Content-Type: application/json" \
+  -d '{"code": "abc123xyz..."}'
 ```
 
 ## Web Transfer Flow

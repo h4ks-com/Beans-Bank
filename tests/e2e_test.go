@@ -1111,3 +1111,356 @@ func TestE2E_HarvestCompleteWorkflow(t *testing.T) {
 		t.Logf("✓ Harvest workflow completed successfully")
 	})
 }
+
+func TestE2E_GiftLinkCreateAndList(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping E2E test")
+	}
+
+	ctx := context.Background()
+	beanBankC, err := setupBeanBank(ctx, t)
+	require.NoError(t, err)
+	testcontainers.CleanupContainer(t, beanBankC)
+
+	ensureWalletExists(t, beanBankC.URI, "giftcreator")
+
+	adminReq, err := http.NewRequest(http.MethodPut, beanBankC.URI+"/api/v1/admin/wallet/giftcreator", strings.NewReader(`{"bean_amount": 100}`))
+	require.NoError(t, err)
+	adminReq.Header.Set("Content-Type", "application/json")
+	adminReq.Header.Set("X-Test-Username", "admin")
+
+	adminResp, err := http.DefaultClient.Do(adminReq)
+	require.NoError(t, err)
+	adminResp.Body.Close()
+
+	t.Run("create_gift_link", func(t *testing.T) {
+		giftData := map[string]interface{}{
+			"amount":     50,
+			"message":    "Happy testing! 🎉",
+			"expires_in": "24h",
+		}
+		giftJSON, err := json.Marshal(giftData)
+		require.NoError(t, err)
+
+		req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/giftlinks", strings.NewReader(string(giftJSON)))
+		require.NoError(t, err)
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("X-Test-Username", "giftcreator")
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		require.Equal(t, http.StatusOK, resp.StatusCode)
+
+		body, err := io.ReadAll(resp.Body)
+		require.NoError(t, err)
+
+		var result map[string]interface{}
+		err = json.Unmarshal(body, &result)
+		require.NoError(t, err)
+
+		assert.NotEmpty(t, result["code"], "gift link should have a code")
+		assert.Equal(t, float64(50), result["amount"])
+		assert.Equal(t, "Happy testing! 🎉", result["message"])
+		assert.True(t, result["active"].(bool))
+		t.Logf("Created gift link with code: %s", result["code"])
+	})
+
+	t.Run("list_gift_links", func(t *testing.T) {
+		req, err := http.NewRequest(http.MethodGet, beanBankC.URI+"/api/v1/giftlinks", nil)
+		require.NoError(t, err)
+		req.Header.Set("X-Test-Username", "giftcreator")
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		require.Equal(t, http.StatusOK, resp.StatusCode)
+
+		body, err := io.ReadAll(resp.Body)
+		require.NoError(t, err)
+
+		var giftLinks []map[string]interface{}
+		err = json.Unmarshal(body, &giftLinks)
+		require.NoError(t, err)
+
+		assert.GreaterOrEqual(t, len(giftLinks), 1, "should have at least 1 gift link")
+		assert.Equal(t, "giftcreator", giftLinks[0]["from_username"])
+		t.Logf("Found %d gift links for user", len(giftLinks))
+	})
+}
+
+func TestE2E_GiftLinkRedeem(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping E2E test")
+	}
+
+	ctx := context.Background()
+	beanBankC, err := setupBeanBank(ctx, t)
+	require.NoError(t, err)
+	testcontainers.CleanupContainer(t, beanBankC)
+
+	ensureWalletExists(t, beanBankC.URI, "giftsender")
+	ensureWalletExists(t, beanBankC.URI, "giftreceiver")
+
+	adminReq, err := http.NewRequest(http.MethodPut, beanBankC.URI+"/api/v1/admin/wallet/giftsender", strings.NewReader(`{"bean_amount": 100}`))
+	require.NoError(t, err)
+	adminReq.Header.Set("Content-Type", "application/json")
+	adminReq.Header.Set("X-Test-Username", "admin")
+
+	adminResp, err := http.DefaultClient.Do(adminReq)
+	require.NoError(t, err)
+	adminResp.Body.Close()
+
+	giftData := map[string]interface{}{
+		"amount":  30,
+		"message": "Gift for you!",
+	}
+	giftJSON, err := json.Marshal(giftData)
+	require.NoError(t, err)
+
+	req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/giftlinks", strings.NewReader(string(giftJSON)))
+	require.NoError(t, err)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-Test-Username", "giftsender")
+
+	resp, err := http.DefaultClient.Do(req)
+	require.NoError(t, err)
+
+	body, err := io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	resp.Body.Close()
+
+	var giftLink map[string]interface{}
+	err = json.Unmarshal(body, &giftLink)
+	require.NoError(t, err)
+
+	giftCode := giftLink["code"].(string)
+	t.Logf("Created gift link with code: %s", giftCode)
+
+	senderWallet := getWalletTestMode(t, beanBankC.URI, "giftsender")
+	senderBalanceBefore := int(senderWallet["bean_amount"].(float64))
+
+	receiverWallet := getWalletTestMode(t, beanBankC.URI, "giftreceiver")
+	receiverBalanceBefore := int(receiverWallet["bean_amount"].(float64))
+
+	t.Run("redeem_gift_link", func(t *testing.T) {
+		redeemData := map[string]string{
+			"code": giftCode,
+		}
+		redeemJSON, err := json.Marshal(redeemData)
+		require.NoError(t, err)
+
+		req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/gift/redeem", strings.NewReader(string(redeemJSON)))
+		require.NoError(t, err)
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("X-Test-Username", "giftreceiver")
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			body, _ := io.ReadAll(resp.Body)
+			t.Logf("Redeem failed with status %d: %s", resp.StatusCode, string(body))
+		}
+
+		require.Equal(t, http.StatusOK, resp.StatusCode)
+
+		senderWalletAfter := getWalletTestMode(t, beanBankC.URI, "giftsender")
+		senderBalanceAfter := int(senderWalletAfter["bean_amount"].(float64))
+
+		receiverWalletAfter := getWalletTestMode(t, beanBankC.URI, "giftreceiver")
+		receiverBalanceAfter := int(receiverWalletAfter["bean_amount"].(float64))
+
+		assert.Equal(t, senderBalanceBefore, senderBalanceAfter, "sender balance should not change on redemption")
+		assert.Equal(t, receiverBalanceBefore+30, receiverBalanceAfter, "receiver should have 30 more beans")
+		t.Logf("✓ Gift link redeemed successfully: sender=%d, receiver=%d", senderBalanceAfter, receiverBalanceAfter)
+	})
+
+	t.Run("cannot_redeem_twice", func(t *testing.T) {
+		redeemData := map[string]string{
+			"code": giftCode,
+		}
+		redeemJSON, err := json.Marshal(redeemData)
+		require.NoError(t, err)
+
+		req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/gift/redeem", strings.NewReader(string(redeemJSON)))
+		require.NoError(t, err)
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("X-Test-Username", "giftreceiver")
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		assert.Equal(t, http.StatusBadRequest, resp.StatusCode, "should not be able to redeem already redeemed gift link")
+	})
+}
+
+func TestE2E_GiftLinkDelete(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping E2E test")
+	}
+
+	ctx := context.Background()
+	beanBankC, err := setupBeanBank(ctx, t)
+	require.NoError(t, err)
+	testcontainers.CleanupContainer(t, beanBankC)
+
+	ensureWalletExists(t, beanBankC.URI, "giftdeleter")
+
+	adminReq, err := http.NewRequest(http.MethodPut, beanBankC.URI+"/api/v1/admin/wallet/giftdeleter", strings.NewReader(`{"bean_amount": 100}`))
+	require.NoError(t, err)
+	adminReq.Header.Set("Content-Type", "application/json")
+	adminReq.Header.Set("X-Test-Username", "admin")
+
+	adminResp, err := http.DefaultClient.Do(adminReq)
+	require.NoError(t, err)
+	adminResp.Body.Close()
+
+	giftData := map[string]interface{}{
+		"amount":  40,
+		"message": "To be deleted",
+	}
+	giftJSON, err := json.Marshal(giftData)
+	require.NoError(t, err)
+
+	req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/giftlinks", strings.NewReader(string(giftJSON)))
+	require.NoError(t, err)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-Test-Username", "giftdeleter")
+
+	resp, err := http.DefaultClient.Do(req)
+	require.NoError(t, err)
+
+	body, err := io.ReadAll(resp.Body)
+	require.NoError(t, err)
+	resp.Body.Close()
+
+	var giftLink map[string]interface{}
+	err = json.Unmarshal(body, &giftLink)
+	require.NoError(t, err)
+
+	giftID := int(giftLink["id"].(float64))
+	t.Logf("Created gift link with ID: %d", giftID)
+
+	walletBefore := getWalletTestMode(t, beanBankC.URI, "giftdeleter")
+	balanceBefore := int(walletBefore["bean_amount"].(float64))
+
+	t.Run("delete_gift_link_refunds_beans", func(t *testing.T) {
+		req, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/api/v1/giftlinks/%d", beanBankC.URI, giftID), nil)
+		require.NoError(t, err)
+		req.Header.Set("X-Test-Username", "giftdeleter")
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		require.Equal(t, http.StatusOK, resp.StatusCode)
+
+		walletAfter := getWalletTestMode(t, beanBankC.URI, "giftdeleter")
+		balanceAfter := int(walletAfter["bean_amount"].(float64))
+
+		assert.Equal(t, balanceBefore+40, balanceAfter, "should refund 40 beans after deletion")
+		t.Logf("✓ Gift link deleted and beans refunded: balance=%d", balanceAfter)
+	})
+}
+
+func TestE2E_GiftLinkEdgeCases(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping E2E test")
+	}
+
+	ctx := context.Background()
+	beanBankC, err := setupBeanBank(ctx, t)
+	require.NoError(t, err)
+	testcontainers.CleanupContainer(t, beanBankC)
+
+	ensureWalletExists(t, beanBankC.URI, "edgecaseuser")
+
+	adminReq, err := http.NewRequest(http.MethodPut, beanBankC.URI+"/api/v1/admin/wallet/edgecaseuser", strings.NewReader(`{"bean_amount": 100}`))
+	require.NoError(t, err)
+	adminReq.Header.Set("Content-Type", "application/json")
+	adminReq.Header.Set("X-Test-Username", "admin")
+
+	adminResp, err := http.DefaultClient.Do(adminReq)
+	require.NoError(t, err)
+	adminResp.Body.Close()
+
+	t.Run("cannot_create_gift_with_insufficient_balance", func(t *testing.T) {
+		giftData := map[string]interface{}{
+			"amount":  200,
+			"message": "Too much!",
+		}
+		giftJSON, err := json.Marshal(giftData)
+		require.NoError(t, err)
+
+		req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/giftlinks", strings.NewReader(string(giftJSON)))
+		require.NoError(t, err)
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("X-Test-Username", "edgecaseuser")
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		assert.Equal(t, http.StatusBadRequest, resp.StatusCode, "should not allow gift creation with insufficient balance")
+	})
+
+	t.Run("cannot_redeem_own_gift_link", func(t *testing.T) {
+		giftData := map[string]interface{}{
+			"amount":  10,
+			"message": "For myself?",
+		}
+		giftJSON, err := json.Marshal(giftData)
+		require.NoError(t, err)
+
+		req, err := http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/giftlinks", strings.NewReader(string(giftJSON)))
+		require.NoError(t, err)
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("X-Test-Username", "edgecaseuser")
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+
+		body, err := io.ReadAll(resp.Body)
+		require.NoError(t, err)
+		resp.Body.Close()
+
+		var giftLink map[string]interface{}
+		err = json.Unmarshal(body, &giftLink)
+		require.NoError(t, err)
+
+		giftCode := giftLink["code"].(string)
+
+		redeemData := map[string]string{
+			"code": giftCode,
+		}
+		redeemJSON, err := json.Marshal(redeemData)
+		require.NoError(t, err)
+
+		req, err = http.NewRequest(http.MethodPost, beanBankC.URI+"/api/v1/gift/redeem", strings.NewReader(string(redeemJSON)))
+		require.NoError(t, err)
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("X-Test-Username", "edgecaseuser")
+
+		resp, err = http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		assert.Equal(t, http.StatusBadRequest, resp.StatusCode, "should not allow user to redeem their own gift link")
+	})
+
+	t.Run("cannot_get_nonexistent_gift_info", func(t *testing.T) {
+		req, err := http.NewRequest(http.MethodGet, beanBankC.URI+"/api/v1/gift/nonexistentcode", nil)
+		require.NoError(t, err)
+
+		resp, err := http.DefaultClient.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		assert.Equal(t, http.StatusNotFound, resp.StatusCode, "should return 404 for nonexistent gift link")
+	})
+}
