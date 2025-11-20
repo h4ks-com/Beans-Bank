@@ -46,6 +46,18 @@ type HarvestResponse struct {
 	UpdatedAt      string `json:"updated_at"`
 }
 
+// @Summary Create a harvest task
+// @Description Create a new harvest task that can be assigned to users for bean rewards
+// @Tags harvests
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param request body CreateHarvestRequest true "Harvest creation request"
+// @Success 201 {object} HarvestResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /admin/harvests [post]
 func (h *HarvestHandler) CreateHarvest(c *gin.Context) {
 	var req CreateHarvestRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -62,6 +74,19 @@ func (h *HarvestHandler) CreateHarvest(c *gin.Context) {
 	c.JSON(http.StatusCreated, toHarvestResponse(harvest))
 }
 
+// @Summary Update a harvest task
+// @Description Update the details of an existing harvest task
+// @Tags harvests
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path int true "Harvest ID"
+// @Param request body UpdateHarvestRequest true "Harvest update request"
+// @Success 200 {object} HarvestResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /admin/harvests/{id} [put]
 func (h *HarvestHandler) UpdateHarvest(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -85,6 +110,19 @@ func (h *HarvestHandler) UpdateHarvest(c *gin.Context) {
 	c.JSON(http.StatusOK, toHarvestResponse(harvest))
 }
 
+// @Summary Assign user to harvest
+// @Description Assign a user to a harvest task by username or user ID
+// @Tags harvests
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path int true "Harvest ID"
+// @Param request body AssignUserRequest true "User assignment request"
+// @Success 200 {object} HarvestResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /admin/harvests/{id}/assign [post]
 func (h *HarvestHandler) AssignUser(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -117,6 +155,18 @@ func (h *HarvestHandler) AssignUser(c *gin.Context) {
 	c.JSON(http.StatusOK, toHarvestResponse(harvest))
 }
 
+// @Summary Complete a harvest task
+// @Description Mark a harvest as completed and transfer beans to the assigned user
+// @Tags harvests
+// @Produce json
+// @Security BearerAuth
+// @Param id path int true "Harvest ID"
+// @Success 200 {object} HarvestResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /admin/harvests/{id}/complete [post]
 func (h *HarvestHandler) CompleteHarvest(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -146,6 +196,16 @@ func (h *HarvestHandler) CompleteHarvest(c *gin.Context) {
 	c.JSON(http.StatusOK, toHarvestResponse(harvest))
 }
 
+// @Summary Delete a harvest task
+// @Description Delete a harvest task by ID
+// @Tags harvests
+// @Security BearerAuth
+// @Param id path int true "Harvest ID"
+// @Success 204 "No Content"
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /admin/harvests/{id} [delete]
 func (h *HarvestHandler) DeleteHarvest(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -163,6 +223,15 @@ func (h *HarvestHandler) DeleteHarvest(c *gin.Context) {
 	c.Status(http.StatusNoContent)
 }
 
+// @Summary List all harvest tasks
+// @Description Get a list of all harvest tasks (admin only)
+// @Tags harvests
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {array} HarvestResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /admin/harvests [get]
 func (h *HarvestHandler) GetAllHarvests(c *gin.Context) {
 	harvests, err := h.harvestService.GetAllHarvests()
 	if err != nil {
