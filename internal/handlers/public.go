@@ -109,17 +109,59 @@ type HarvestListResponse struct {
 
 // GetHarvests godoc
 // @Summary Get harvests
-// @Description Get list of harvests with optional search and pagination
+// @Description Get list of harvests with optional search and pagination, or a specific harvest by ID
 // @Tags public
 // @Accept json
 // @Produce json
+// @Param id query int false "Harvest ID to fetch a specific harvest"
 // @Param search query string false "Search query for title and description"
 // @Param page query int false "Page number (default 1)"
 // @Param limit query int false "Items per page (default 20)"
 // @Success 200 {object} HarvestListResponse
+// @Failure 404 {object} ErrorResponse
 // @Failure 500 {object} ErrorResponse
 // @Router /harvests [get]
 func (h *PublicHandler) GetHarvests(c *gin.Context) {
+	if idStr := c.Query("id"); idStr != "" {
+		id, err := strconv.ParseUint(idStr, 10, 32)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid harvest ID"})
+			return
+		}
+
+		harvest, err := h.harvestService.GetHarvest(uint(id))
+		if err != nil {
+			c.JSON(http.StatusNotFound, ErrorResponse{Error: "harvest not found"})
+			return
+		}
+
+		item := HarvestListItem{
+			ID:          harvest.ID,
+			Title:       harvest.Title,
+			Description: harvest.Description,
+			BeanAmount:  harvest.BeanAmount,
+			Completed:   harvest.Completed,
+			CreatedAt:   harvest.CreatedAt.Format("2006-01-02 15:04:05"),
+			UpdatedAt:   harvest.UpdatedAt.Format("2006-01-02 15:04:05"),
+		}
+
+		if harvest.AssignedUserID != nil {
+			item.AssignedUserID = harvest.AssignedUserID
+			if harvest.AssignedUser != nil {
+				item.AssignedUser = harvest.AssignedUser.Username
+			}
+		}
+
+		c.JSON(http.StatusOK, HarvestListResponse{
+			Harvests:   []HarvestListItem{item},
+			Total:      1,
+			Page:       1,
+			Limit:      1,
+			TotalPages: 1,
+		})
+		return
+	}
+
 	search := c.DefaultQuery("search", "")
 	page := 1
 	limit := 20
