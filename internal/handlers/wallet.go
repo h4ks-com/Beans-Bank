@@ -22,11 +22,11 @@ type WalletResponse struct {
 }
 
 type TransactionHistoryResponse struct {
-	ID         uint   `json:"id"`
-	FromUser   string `json:"from_user"`
-	ToUser     string `json:"to_user"`
-	Amount     int    `json:"amount"`
-	Timestamp  string `json:"timestamp"`
+	ID        uint   `json:"id"`
+	FromUser  string `json:"from_user"`
+	ToUser    string `json:"to_user"`
+	Amount    int    `json:"amount"`
+	Timestamp string `json:"timestamp"`
 }
 
 // GetWallet godoc

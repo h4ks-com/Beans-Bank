@@ -11,9 +11,9 @@ import (
 )
 
 var (
-	ErrHarvestNotFound        = errors.New("harvest not found")
+	ErrHarvestNotFound         = errors.New("harvest not found")
 	ErrHarvestAlreadyCompleted = errors.New("harvest already completed")
-	ErrNoAssignedUser         = errors.New("harvest has no assigned user")
+	ErrNoAssignedUser          = errors.New("harvest has no assigned user")
 )
 
 type HarvestService struct {

@@ -13,11 +13,11 @@ import (
 )
 
 var (
-	ErrGiftLinkNotFound          = errors.New("gift link not found")
-	ErrGiftLinkExpired           = errors.New("gift link has expired")
-	ErrGiftLinkRedeemed          = errors.New("gift link has already been redeemed")
-	ErrGiftLinkInactive          = errors.New("gift link is not active")
-	ErrCannotRedeemOwnLink       = errors.New("cannot redeem your own gift link")
+	ErrGiftLinkNotFound           = errors.New("gift link not found")
+	ErrGiftLinkExpired            = errors.New("gift link has expired")
+	ErrGiftLinkRedeemed           = errors.New("gift link has already been redeemed")
+	ErrGiftLinkInactive           = errors.New("gift link is not active")
+	ErrCannotRedeemOwnLink        = errors.New("cannot redeem your own gift link")
 	ErrInsufficientBalanceForGift = errors.New("insufficient balance to create gift link")
 )
 

@@ -21,22 +21,22 @@ var (
 )
 
 type TransactionExport struct {
-	UserID      uint                   `json:"user_id"`
-	Username    string                 `json:"username"`
-	Email       string                 `json:"email"`
-	TotalBeans  int                    `json:"total_beans"`
+	UserID       uint                    `json:"user_id"`
+	Username     string                  `json:"username"`
+	Email        string                  `json:"email"`
+	TotalBeans   int                     `json:"total_beans"`
 	Transactions []TransactionExportItem `json:"transactions"`
-	ExportedAt  time.Time              `json:"exported_at"`
-	Signature   string                 `json:"signature"`
+	ExportedAt   time.Time               `json:"exported_at"`
+	Signature    string                  `json:"signature"`
 }
 
 type TransactionExportItem struct {
-	ID          uint      `json:"id"`
-	FromUser    string    `json:"from_user"`
-	ToUser      string    `json:"to_user"`
-	Amount      int       `json:"amount"`
-	Note        string    `json:"note,omitempty"`
-	CreatedAt   time.Time `json:"created_at"`
+	ID        uint      `json:"id"`
+	FromUser  string    `json:"from_user"`
+	ToUser    string    `json:"to_user"`
+	Amount    int       `json:"amount"`
+	Note      string    `json:"note,omitempty"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 type ExportService struct {
@@ -148,6 +148,14 @@ func (s *ExportService) signExport(export *TransactionExport) (string, error) {
 	return signature, nil
 }
 
+func reverseString(s string) []rune {
+	r := []rune(s)
+	for i, j := 0, len(r)-1; i < j; i, j = i+1, j-1 {
+		r[i], r[j] = r[j], r[i]
+	}
+	return r
+}
+
 // GenerateStatementPDF builds a simple, realistic-looking PDF bank statement
 // for the given username. The currency is explicitly stated as "Beans".
 func (s *ExportService) GenerateStatementPDF(username string) ([]byte, error) {
@@ -160,31 +168,57 @@ func (s *ExportService) GenerateStatementPDF(username string) ([]byte, error) {
 	pdf.SetMargins(20, 20, 20)
 	pdf.AddPage()
 
-	// Header: simple bank icon drawn with rectangles and title
-	pdf.SetFillColor(230, 40, 40)
-	// roof
-	pdf.SetDrawColor(0, 0, 0)
-	pdf.SetLineWidth(0.5)
-	pdf.Polygon([]gofpdf.PointType{{X: 20, Y: 20}, {X: 40, Y: 12}, {X: 60, Y: 20}}, "DF")
-	// building columns
-	pdf.SetFillColor(60, 60, 60)
-	pdf.Rect(24, 20, 6, 14, "F")
-	pdf.Rect(34, 20, 6, 14, "F")
-	pdf.Rect(44, 20, 6, 14, "F")
+	pageW, pageH := pdf.GetPageSize()
+	left, _, right, bottom := pdf.GetMargins()
+	contentW := pageW - left - right
 
-	// Title
-	pdf.SetFont("Arial", "B", 18)
-	pdf.SetXY(80, 16)
+	// Header: try to use embedded Font Awesome solid font (fa-solid-900.ttf) for the coins glyph;
+	// fall back to the drawn coins if embedding fails.
+	pdf.SetTextColor(25, 25, 25)
+	headerY := 18.0
+
+	// attempt to register Font Awesome TTF bundled in web/static/fonts
+	faPath := "web/static/fonts/fa-solid-900.ttf"
+	if _, err := os.Stat(faPath); err == nil {
+		// AddUTF8Font registers the font family for the current PDF.
+		// This function does not return an error value in this gofpdf version.
+		pdf.AddUTF8Font("fa", "", faPath)
+		// Set font and draw glyph (FA coins U+F51E) at left
+		pdf.SetFont("fa", "", 20)
+		pdf.SetXY(left+6, headerY-8)
+		pdf.CellFormat(0, 10, string('\uf51e'), "", 0, "L", false, 0, "")
+	} else {
+		// draw coins (three circles with slight offsets)
+		pdf.SetFont("Arial", "B", 20)
+		coinCx := left + 12.0
+		for i := 0; i < 3; i++ {
+			cx := coinCx + float64(i)*6.0
+			cy := headerY
+			r := 6.0
+			// coin body
+			pdf.SetFillColor(int(212-i*10), int(142-i*8), int(42-i*6))
+			pdf.SetDrawColor(80, 60, 30)
+			pdf.SetLineWidth(0.5)
+			pdf.Circle(cx, cy, r, "F")
+			// rim
+			pdf.SetDrawColor(120, 95, 45)
+			pdf.Circle(cx, cy, r, "D")
+			// highlight
+			pdf.SetFillColor(255, 255, 255)
+			pdf.Ellipse(cx-2.0, cy-1.5, 2.5, 1.5, 0.0, "F")
+		}
+	}
+
+	pdf.SetXY(left+36, headerY-6)
+	pdf.SetFont("Arial", "B", 20)
 	pdf.CellFormat(0, 10, "Bean Bank Statement", "", 1, "L", false, 0, "")
+	pdf.SetFont("Arial", "", 10)
+	pdf.SetXY(left+36, headerY+4)
+	pdf.CellFormat(0, 5, fmt.Sprintf("Generated: %s", export.ExportedAt.Format("2006-01-02 15:04")), "", 1, "L", false, 0, "")
+	pdf.SetXY(left+36, headerY+9)
+	pdf.CellFormat(0, 5, "Currency: Beans (fictional)", "", 1, "L", false, 0, "")
 
-	// Subtitle / metadata
-	pdf.SetFont("Arial", "", 11)
-	pdf.SetXY(80, 24)
-	pdf.CellFormat(0, 6, fmt.Sprintf("Generated: %s", export.ExportedAt.Format("2006-01-02 15:04")), "", 1, "L", false, 0, "")
-	pdf.SetXY(80, 30)
-	pdf.CellFormat(0, 6, "Currency: Beans (fictional)", "", 1, "L", false, 0, "")
-
-	// Account info
+	// Account info block
 	pdf.Ln(6)
 	pdf.SetFont("Arial", "B", 12)
 	pdf.CellFormat(0, 6, "Account Information", "", 1, "L", false, 0, "")
@@ -192,43 +226,139 @@ func (s *ExportService) GenerateStatementPDF(username string) ([]byte, error) {
 	pdf.CellFormat(0, 6, fmt.Sprintf("Username: %s", export.Username), "", 1, "L", false, 0, "")
 	pdf.CellFormat(0, 6, fmt.Sprintf("Email: %s", export.Email), "", 1, "L", false, 0, "")
 	pdf.CellFormat(0, 6, fmt.Sprintf("Current Balance: %d Beans", export.TotalBeans), "", 1, "L", false, 0, "")
-
 	pdf.Ln(4)
 
-	// Transactions table header
-	pdf.SetFont("Arial", "B", 11)
-	pdf.CellFormat(35, 7, "Date", "1", 0, "L", false, 0, "")
-	pdf.CellFormat(40, 7, "From", "1", 0, "L", false, 0, "")
-	pdf.CellFormat(40, 7, "To", "1", 0, "L", false, 0, "")
-	pdf.CellFormat(55, 7, "Note", "1", 0, "L", false, 0, "")
-	pdf.CellFormat(20, 7, "Amount", "1", 1, "R", false, 0, "")
+	// Transactions: draw inside a rounded container with gentle separators
+	formatNumber := func(n int) string {
+		s := strconv.Itoa(n)
+		if n < 0 {
+			s = s[1:]
+		}
+		out := ""
+		for i, c := range reverseString(s) {
+			if i > 0 && i%3 == 0 {
+				out = "," + out
+			}
+			out = string(c) + out
+		}
+		if n < 0 {
+			out = "-" + out
+		}
+		return out
+	}
 
-	// Transactions
 	pdf.SetFont("Arial", "", 10)
+	rowH := 10.0
+
+	tableX := left
+	tableY := pdf.GetY()
+	// columns: Date, From, To, Note, Amount
+	cwDate := 30.0
+	cwFrom := 40.0
+	cwTo := 40.0
+	cwAmt := 45.0
+	cwNote := contentW - cwDate - cwFrom - cwTo - cwAmt
+
+	headerH := rowH
+
+	// Pagination: split rows across pages with repeated headers
 	total := 0
-	for _, tx := range export.Transactions {
-		// date
-		dateStr := tx.CreatedAt.Format("2006-01-02")
-		pdf.CellFormat(35, 7, dateStr, "1", 0, "L", false, 0, "")
-		// from
-		pdf.CellFormat(40, 7, tx.FromUser, "1", 0, "L", false, 0, "")
-		// to
-		pdf.CellFormat(40, 7, tx.ToUser, "1", 0, "L", false, 0, "")
-		// note (truncate if long)
-		note := tx.Note
-		if len(note) > 40 {
-			note = note[:37] + "..."
-		}
-		pdf.CellFormat(55, 7, note, "1", 0, "L", false, 0, "")
-		// amount
-		amt := strconv.Itoa(tx.Amount) + " Beans"
-		pdf.CellFormat(20, 7, amt, "1", 1, "R", false, 0, "")
-		total += tx.Amount
-		// check for page break
-		_, y := pdf.GetXY()
-		if y > 270 {
+	rowsPerPage := int((pageH - bottom - tableY - 40) / rowH) // leave room for footer/notes
+	if rowsPerPage < 3 {
+		rowsPerPage = 3
+	}
+
+	numRows := len(export.Transactions)
+	pages := (numRows + rowsPerPage - 1) / rowsPerPage
+	rowIndex := 0
+
+	for p := 0; p < pages; p++ {
+		if p > 0 {
 			pdf.AddPage()
+			tableY = pdf.GetY()
 		}
+		// compute how many rows on this page
+		remaining := numRows - rowIndex
+		thisRows := rowsPerPage
+		if remaining < thisRows {
+			thisRows = remaining
+		}
+
+		// container height for this page
+		containerHPage := headerH + float64(thisRows)*rowH + 12.0
+		if containerHPage > pageH-bottom-tableY {
+			containerHPage = pageH - bottom - tableY - 10
+		}
+
+		// draw container
+		pdf.SetFillColor(255, 255, 255)
+		pdf.SetDrawColor(190, 190, 190)
+		pdf.SetLineWidth(0.7)
+		pdf.RoundedRect(tableX-1, tableY-1, contentW+2, containerHPage+2, 5.0, "1111", "DF")
+
+		// header band
+		pdf.SetFillColor(245, 245, 245)
+		pdf.Rect(tableX, tableY, contentW, headerH, "F")
+
+		// headers text
+		pdf.SetFont("Arial", "B", 11)
+		x := tableX
+		pdf.SetXY(x+4, tableY+3)
+		pdf.CellFormat(cwDate-8, headerH-6, "Date", "", 0, "L", false, 0, "")
+		x += cwDate
+		pdf.SetXY(x+4, tableY+3)
+		pdf.CellFormat(cwFrom-8, headerH-6, "From", "", 0, "L", false, 0, "")
+		x += cwFrom
+		pdf.SetXY(x+4, tableY+3)
+		pdf.CellFormat(cwTo-8, headerH-6, "To", "", 0, "L", false, 0, "")
+		x += cwTo
+		pdf.SetXY(x+4, tableY+3)
+		pdf.CellFormat(cwNote-8, headerH-6, "Note", "", 0, "L", false, 0, "")
+		x += cwNote
+		pdf.SetXY(x+4, tableY+3)
+		pdf.CellFormat(cwAmt-8, headerH-6, "Amount", "", 0, "R", false, 0, "")
+
+		// vertical separators (soft)
+		sepX := tableX
+		pdf.SetDrawColor(230, 230, 230)
+		for _, w := range []float64{cwDate, cwFrom, cwTo, cwNote, cwAmt} {
+			sepX += w
+			pdf.Line(sepX, tableY, sepX, tableY+containerHPage)
+		}
+
+		// rows for this page
+		pdf.SetFont("Arial", "", 10)
+		for i := 0; i < thisRows; i++ {
+			tx := export.Transactions[rowIndex]
+			ry := tableY + headerH + float64(i)*rowH
+			x = tableX
+			pdf.SetXY(x+4, ry+3)
+			pdf.CellFormat(cwDate-8, rowH-6, tx.CreatedAt.Format("2006-01-02"), "", 0, "L", false, 0, "")
+			x += cwDate
+			pdf.SetXY(x+4, ry+3)
+			pdf.CellFormat(cwFrom-8, rowH-6, tx.FromUser, "", 0, "L", false, 0, "")
+			x += cwFrom
+			pdf.SetXY(x+4, ry+3)
+			pdf.CellFormat(cwTo-8, rowH-6, tx.ToUser, "", 0, "L", false, 0, "")
+			x += cwTo
+			note := tx.Note
+			if len(note) > 120 {
+				note = note[:117] + "..."
+			}
+			pdf.SetXY(x+4, ry+3)
+			pdf.CellFormat(cwNote-8, rowH-6, note, "", 0, "L", false, 0, "")
+			x += cwNote
+			pdf.SetXY(x+4, ry+3)
+			pdf.CellFormat(cwAmt-10, rowH-6, formatNumber(tx.Amount)+" Beans", "", 0, "R", false, 0, "")
+			// row separator
+			pdf.SetDrawColor(240, 240, 240)
+			pdf.Line(tableX, ry+rowH, tableX+contentW, ry+rowH)
+			total += tx.Amount
+			rowIndex++
+		}
+
+		// move cursor after container for this page
+		pdf.SetXY(tableX, tableY+containerHPage+6)
 	}
 
 	// Totals

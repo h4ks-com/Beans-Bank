@@ -984,7 +984,7 @@ func TestE2E_HarvestCompleteWorkflow(t *testing.T) {
 
 	t.Run("complete_harvest_workflow", func(t *testing.T) {
 		harvestUser := "harvest_user"
-		
+
 		// Step 1: Create a harvest as admin
 		harvestData := map[string]interface{}{
 			"title":       "Test Harvest Task",
@@ -1011,7 +1011,7 @@ func TestE2E_HarvestCompleteWorkflow(t *testing.T) {
 		var harvestResponse map[string]interface{}
 		err = json.Unmarshal(body, &harvestResponse)
 		require.NoError(t, err)
-		
+
 		harvestID := int(harvestResponse["id"].(float64))
 		t.Logf("Created harvest with ID: %d", harvestID)
 
