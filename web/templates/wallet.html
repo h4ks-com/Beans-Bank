@@ -726,6 +726,9 @@
                 <button class="btn btn-primary" onclick="downloadExport()">
                     <i class="fas fa-download"></i> Download as File
                 </button>
+                <button class="btn btn-primary" onclick="downloadPDF()" style="margin-left:0.5rem;">
+                    <i class="fas fa-file-pdf"></i> Download PDF Statement
+                </button>
                 <button class="btn btn-secondary" onclick="closeExportModal()">
                     <i class="fas fa-times"></i> Close
                 </button>
@@ -1108,6 +1111,36 @@
             URL.revokeObjectURL(url);
 
             showSnackbar('✅ Export downloaded!');
+        }
+
+        async function downloadPDF() {
+            try {
+                const resp = await fetch('/browser/transactions/export/pdf', {
+                    credentials: 'same-origin'
+                });
+                if (!resp.ok) {
+                    showSnackbar('Failed to download PDF');
+                    return;
+                }
+                const blob = await resp.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                const jsonData = document.getElementById('exportJson').value;
+                let username = 'statement';
+                try { username = JSON.parse(jsonData).username || username } catch(e) {}
+                const timestamp = new Date().toISOString().split('T')[0];
+                a.download = `${username}_statement_${timestamp}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                showSnackbar('✅ PDF downloaded!');
+                closeExportModal();
+            } catch (err) {
+                console.error(err);
+                showSnackbar('Network error during PDF download');
+            }
         }
 
         window.onclick = function(event) {
