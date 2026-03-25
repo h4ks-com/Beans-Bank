@@ -1,0 +1,3993 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>auth: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/h4ks-com/bean-bank/internal/auth/logto_handler.go (0.0%)</option>
+				
+				<option value="file1">github.com/h4ks-com/bean-bank/internal/auth/session_storage.go (0.0%)</option>
+				
+				<option value="file2">github.com/h4ks-com/bean-bank/internal/config/config.go (0.0%)</option>
+				
+				<option value="file3">github.com/h4ks-com/bean-bank/internal/database/database.go (0.0%)</option>
+				
+				<option value="file4">github.com/h4ks-com/bean-bank/internal/handlers/admin.go (0.0%)</option>
+				
+				<option value="file5">github.com/h4ks-com/bean-bank/internal/handlers/browser.go (0.0%)</option>
+				
+				<option value="file6">github.com/h4ks-com/bean-bank/internal/handlers/export.go (0.0%)</option>
+				
+				<option value="file7">github.com/h4ks-com/bean-bank/internal/handlers/giftlink.go (0.0%)</option>
+				
+				<option value="file8">github.com/h4ks-com/bean-bank/internal/handlers/harvest.go (0.0%)</option>
+				
+				<option value="file9">github.com/h4ks-com/bean-bank/internal/handlers/public.go (0.0%)</option>
+				
+				<option value="file10">github.com/h4ks-com/bean-bank/internal/handlers/swagger.go (0.0%)</option>
+				
+				<option value="file11">github.com/h4ks-com/bean-bank/internal/handlers/token.go (0.0%)</option>
+				
+				<option value="file12">github.com/h4ks-com/bean-bank/internal/handlers/transfer.go (0.0%)</option>
+				
+				<option value="file13">github.com/h4ks-com/bean-bank/internal/handlers/wallet.go (0.0%)</option>
+				
+				<option value="file14">github.com/h4ks-com/bean-bank/internal/middleware/admin.go (0.0%)</option>
+				
+				<option value="file15">github.com/h4ks-com/bean-bank/internal/middleware/auth.go (0.0%)</option>
+				
+				<option value="file16">github.com/h4ks-com/bean-bank/internal/models/giftlink.go (0.0%)</option>
+				
+				<option value="file17">github.com/h4ks-com/bean-bank/internal/repository/giftlink_repository.go (0.0%)</option>
+				
+				<option value="file18">github.com/h4ks-com/bean-bank/internal/repository/harvest_repository.go (0.0%)</option>
+				
+				<option value="file19">github.com/h4ks-com/bean-bank/internal/repository/token_repository.go (0.0%)</option>
+				
+				<option value="file20">github.com/h4ks-com/bean-bank/internal/repository/transaction_repository.go (0.0%)</option>
+				
+				<option value="file21">github.com/h4ks-com/bean-bank/internal/repository/user_repository.go (0.0%)</option>
+				
+				<option value="file22">github.com/h4ks-com/bean-bank/internal/services/export_service.go (86.0%)</option>
+				
+				<option value="file23">github.com/h4ks-com/bean-bank/internal/services/giftlink_service.go (80.2%)</option>
+				
+				<option value="file24">github.com/h4ks-com/bean-bank/internal/services/harvest_service.go (72.1%)</option>
+				
+				<option value="file25">github.com/h4ks-com/bean-bank/internal/services/token_service.go (0.0%)</option>
+				
+				<option value="file26">github.com/h4ks-com/bean-bank/internal/services/transfer_service.go (77.4%)</option>
+				
+				<option value="file27">github.com/h4ks-com/bean-bank/internal/services/wallet_service.go (73.1%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package auth
+
+import (
+        "fmt"
+        "log"
+        "net/http"
+
+        "github.com/gin-contrib/sessions"
+        "github.com/gin-gonic/gin"
+        "github.com/h4ks-com/bean-bank/internal/config"
+        "github.com/logto-io/go/v2/client"
+)
+
+type LogtoHandler struct {
+        config *config.LogtoConfig
+}
+
+func NewLogtoHandler(cfg *config.LogtoConfig) *LogtoHandler <span class="cov0" title="0">{
+        return &amp;LogtoHandler{config: cfg}
+}</span>
+
+func (h *LogtoHandler) CreateLogtoClient(ctx *gin.Context) *client.LogtoClient <span class="cov0" title="0">{
+        session := sessions.Default(ctx)
+        logtoConfig := &amp;client.LogtoConfig{
+                Endpoint:  h.config.Endpoint,
+                AppId:     h.config.AppID,
+                AppSecret: h.config.AppSecret,
+        }
+        return client.NewLogtoClient(logtoConfig, NewSessionStorage(session))
+}</span>
+
+func (h *LogtoHandler) Login(ctx *gin.Context) <span class="cov0" title="0">{
+        logtoClient := h.CreateLogtoClient(ctx)
+
+        redirectTo := ctx.Query("redirect")
+        if redirectTo == "" </span><span class="cov0" title="0">{
+                redirectTo = "/wallet"
+        }</span>
+
+        <span class="cov0" title="0">session := sessions.Default(ctx)
+        session.Set("post_login_redirect", redirectTo)
+        if err := session.Save(); err != nil </span><span class="cov0" title="0">{
+                log.Printf("[LogtoHandler] Failed to save redirect to session: %v", err)
+        }</span>
+
+        <span class="cov0" title="0">signInUri, err := logtoClient.SignIn(&amp;client.SignInOptions{
+                RedirectUri: h.config.RedirectURI,
+        })
+        if err != nil </span><span class="cov0" title="0">{
+                ctx.String(http.StatusInternalServerError, fmt.Sprintf("Failed to initiate sign-in: %v", err))
+                return
+        }</span>
+
+        <span class="cov0" title="0">ctx.Redirect(http.StatusTemporaryRedirect, signInUri)</span>
+}
+
+func (h *LogtoHandler) Callback(ctx *gin.Context) <span class="cov0" title="0">{
+        log.Println("[LogtoHandler] Callback started")
+        logtoClient := h.CreateLogtoClient(ctx)
+
+        err := logtoClient.HandleSignInCallback(ctx.Request)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Printf("[LogtoHandler] Callback error: %v", err)
+                ctx.String(http.StatusInternalServerError, fmt.Sprintf("Failed to handle callback: %v", err))
+                return
+        }</span>
+
+        <span class="cov0" title="0">log.Printf("[LogtoHandler] Callback successful, IsAuthenticated: %v", logtoClient.IsAuthenticated())
+
+        session := sessions.Default(ctx)
+        redirectTo := "/wallet"
+        if storedRedirect := session.Get("post_login_redirect"); storedRedirect != nil </span><span class="cov0" title="0">{
+                redirectTo = storedRedirect.(string)
+                session.Delete("post_login_redirect")
+                if err := session.Save(); err != nil </span><span class="cov0" title="0">{
+                        log.Printf("[LogtoHandler] Failed to clear redirect from session: %v", err)
+                }</span>
+                <span class="cov0" title="0">log.Printf("[LogtoHandler] Redirecting to stored path: %s", redirectTo)</span>
+        }
+
+        <span class="cov0" title="0">ctx.Redirect(http.StatusFound, redirectTo)</span>
+}
+
+func (h *LogtoHandler) Logout(ctx *gin.Context) <span class="cov0" title="0">{
+        logtoClient := h.CreateLogtoClient(ctx)
+
+        signOutUri, err := logtoClient.SignOut(h.config.PostLogoutURI)
+        if err != nil </span><span class="cov0" title="0">{
+                ctx.String(http.StatusInternalServerError, fmt.Sprintf("Failed to initiate sign-out: %v", err))
+                return
+        }</span>
+
+        <span class="cov0" title="0">ctx.Redirect(http.StatusTemporaryRedirect, signOutUri)</span>
+}
+
+func (h *LogtoHandler) RequireAuth() gin.HandlerFunc <span class="cov0" title="0">{
+        return func(ctx *gin.Context) </span><span class="cov0" title="0">{
+                log.Printf("[LogtoHandler] RequireAuth for path: %s", ctx.Request.URL.Path)
+
+                if ctx.GetHeader("Authorization") != "" </span><span class="cov0" title="0">{
+                        log.Printf("[LogtoHandler] Authorization header present, skipping Logto")
+                        ctx.Next()
+                        return
+                }</span>
+
+                <span class="cov0" title="0">logtoClient := h.CreateLogtoClient(ctx)
+
+                isAuth := logtoClient.IsAuthenticated()
+                log.Printf("[LogtoHandler] IsAuthenticated: %v", isAuth)
+
+                if !isAuth </span><span class="cov0" title="0">{
+                        log.Println("[LogtoHandler] Not authenticated, redirecting to login")
+                        ctx.Redirect(http.StatusFound, "/auth/login")
+                        ctx.Abort()
+                        return
+                }</span>
+
+                <span class="cov0" title="0">idTokenClaims, err := logtoClient.GetIdTokenClaims()
+                if err != nil </span><span class="cov0" title="0">{
+                        log.Printf("[LogtoHandler] Failed to get ID token claims: %v", err)
+                        ctx.Redirect(http.StatusFound, "/auth/login")
+                        ctx.Abort()
+                        return
+                }</span>
+
+                <span class="cov0" title="0">log.Printf("[LogtoHandler] ID Token Claims: %+v", idTokenClaims)
+
+                username := idTokenClaims.Sub
+                if idTokenClaims.Username != "" </span><span class="cov0" title="0">{
+                        username = idTokenClaims.Username
+                }</span>
+
+                <span class="cov0" title="0">log.Printf("[LogtoHandler] Successfully authenticated user: %s", username)
+                ctx.Set("username", username)
+                ctx.Next()</span>
+        }
+}
+
+func (h *LogtoHandler) GetCurrentUser(ctx *gin.Context) (string, bool) <span class="cov0" title="0">{
+        userID, exists := ctx.Get("username")
+        if !exists </span><span class="cov0" title="0">{
+                return "", false
+        }</span>
+        <span class="cov0" title="0">return userID.(string), true</span>
+}
+
+func (h *LogtoHandler) GetAuthenticatedUser(ctx *gin.Context) (string, bool) <span class="cov0" title="0">{
+        logtoClient := h.CreateLogtoClient(ctx)
+
+        if !logtoClient.IsAuthenticated() </span><span class="cov0" title="0">{
+                return "", false
+        }</span>
+
+        <span class="cov0" title="0">idTokenClaims, err := logtoClient.GetIdTokenClaims()
+        if err != nil </span><span class="cov0" title="0">{
+                log.Printf("[LogtoHandler] Failed to get ID token claims: %v", err)
+                return "", false
+        }</span>
+
+        <span class="cov0" title="0">username := idTokenClaims.Sub
+        if idTokenClaims.Username != "" </span><span class="cov0" title="0">{
+                username = idTokenClaims.Username
+        }</span>
+
+        <span class="cov0" title="0">return username, true</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package auth
+
+import (
+        "log"
+
+        "github.com/gin-contrib/sessions"
+        "github.com/logto-io/go/v2/client"
+)
+
+type SessionStorage struct {
+        session sessions.Session
+}
+
+func NewSessionStorage(session sessions.Session) client.Storage <span class="cov0" title="0">{
+        return &amp;SessionStorage{session: session}
+}</span>
+
+func (s *SessionStorage) GetItem(key string) string <span class="cov0" title="0">{
+        value := s.session.Get(key)
+        if value == nil </span><span class="cov0" title="0">{
+                log.Printf("[SessionStorage] GetItem(%s) = &lt;nil&gt;", key)
+                return ""
+        }</span>
+        <span class="cov0" title="0">log.Printf("[SessionStorage] GetItem(%s) = %v", key, value)
+        return value.(string)</span>
+}
+
+func (s *SessionStorage) SetItem(key, value string) <span class="cov0" title="0">{
+        log.Printf("[SessionStorage] SetItem(%s, %s)", key, value[:min(50, len(value))]+"...")
+        s.session.Set(key, value)
+        err := s.session.Save()
+        if err != nil </span><span class="cov0" title="0">{
+                log.Printf("[SessionStorage] ERROR saving session: %v", err)
+        }</span> else<span class="cov0" title="0"> {
+                log.Printf("[SessionStorage] Session saved successfully")
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package config
+
+import (
+        "os"
+        "strings"
+
+        "github.com/joho/godotenv"
+)
+
+type Config struct {
+        Port             string
+        GinMode          string
+        Database         DatabaseConfig
+        Logto            LogtoConfig
+        JWT              JWTConfig
+        Session          SessionConfig
+        ExportSigningKey string
+        AdminUsers       []string
+        TestMode         bool
+}
+
+type DatabaseConfig struct {
+        URL string
+}
+
+type LogtoConfig struct {
+        Endpoint      string
+        AppID         string
+        AppSecret     string
+        RedirectURI   string
+        PostLogoutURI string
+}
+
+type JWTConfig struct {
+        Secret string
+}
+
+type SessionConfig struct {
+        Secret string
+        Secure bool
+}
+
+func Load() (*Config, error) <span class="cov0" title="0">{
+        godotenv.Load()
+
+        adminUsersStr := os.Getenv("ADMIN_USERS")
+        adminUsers := []string{}
+        if adminUsersStr != "" </span><span class="cov0" title="0">{
+                adminUsers = strings.Split(adminUsersStr, ",")
+                for i := range adminUsers </span><span class="cov0" title="0">{
+                        adminUsers[i] = strings.TrimSpace(adminUsers[i])
+                }</span>
+        }
+
+        <span class="cov0" title="0">return &amp;Config{
+                Port:    getEnv("PORT", "8080"),
+                GinMode: getEnv("GIN_MODE", "debug"),
+                Database: DatabaseConfig{
+                        URL: getEnv("DATABASE_URL", ""),
+                },
+                Logto: LogtoConfig{
+                        Endpoint:      getEnv("LOGTO_ENDPOINT", ""),
+                        AppID:         getEnv("LOGTO_APP_ID", ""),
+                        AppSecret:     getEnv("LOGTO_APP_SECRET", ""),
+                        RedirectURI:   getEnv("LOGTO_REDIRECT_URI", ""),
+                        PostLogoutURI: getEnv("LOGTO_POST_LOGOUT_URI", ""),
+                },
+                JWT: JWTConfig{
+                        Secret: getEnv("JWT_SECRET", ""),
+                },
+                Session: SessionConfig{
+                        Secret: getEnv("SESSION_SECRET", ""),
+                        Secure: getEnv("SESSION_SECURE", "false") == "true",
+                },
+                ExportSigningKey: getEnv("EXPORT_SIGNING_KEY", ""),
+                AdminUsers:       adminUsers,
+                TestMode:         getEnv("TEST_MODE", "false") == "true",
+        }, nil</span>
+}
+
+func getEnv(key, defaultValue string) string <span class="cov0" title="0">{
+        value := os.Getenv(key)
+        if value == "" </span><span class="cov0" title="0">{
+                return defaultValue
+        }</span>
+        <span class="cov0" title="0">return value</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package database
+
+import (
+        "fmt"
+        "log"
+
+        "github.com/h4ks-com/bean-bank/internal/models"
+        "gorm.io/driver/postgres"
+        "gorm.io/driver/sqlite"
+        "gorm.io/gorm"
+        "gorm.io/gorm/logger"
+)
+
+func Connect(databaseURL string) (*gorm.DB, error) <span class="cov0" title="0">{
+        var db *gorm.DB
+        var err error
+
+        config := &amp;gorm.Config{
+                Logger: logger.Default.LogMode(logger.Silent),
+        }
+
+        if databaseURL == "" || databaseURL == ":memory:" </span><span class="cov0" title="0">{
+                db, err = gorm.Open(sqlite.Open(":memory:"), config)
+        }</span> else<span class="cov0" title="0"> if len(databaseURL) &gt; 10 &amp;&amp; databaseURL[:6] == "sqlite" </span><span class="cov0" title="0">{
+                // Strip "sqlite:" prefix for SQLite driver
+                dbPath := databaseURL[7:]
+                // Add query parameters to ensure write access
+                dbPath = dbPath + "?_pragma=foreign_keys(1)&amp;_pragma=journal_mode(WAL)"
+                db, err = gorm.Open(sqlite.Open(dbPath), config)
+        }</span> else<span class="cov0" title="0"> {
+                db, err = gorm.Open(postgres.Open(databaseURL), config)
+        }</span>
+
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("failed to connect to database: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">return db, nil</span>
+}
+
+func Migrate(db *gorm.DB) error <span class="cov0" title="0">{
+        log.Println("Running database migrations...")
+
+        err := db.AutoMigrate(
+                &amp;models.User{},
+                &amp;models.Transaction{},
+                &amp;models.APIToken{},
+                &amp;models.Harvest{},
+                &amp;models.GiftLink{},
+        )
+
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("migration failed: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">log.Println("Database migrations completed successfully")
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package handlers
+
+import (
+        "net/http"
+
+        "github.com/gin-gonic/gin"
+        "github.com/h4ks-com/bean-bank/internal/repository"
+        "github.com/h4ks-com/bean-bank/internal/services"
+)
+
+type AdminHandler struct {
+        userRepo        *repository.UserRepository
+        transactionRepo *repository.TransactionRepository
+        walletService   *services.WalletService
+}
+
+func NewAdminHandler(userRepo *repository.UserRepository, transactionRepo *repository.TransactionRepository, walletService *services.WalletService) *AdminHandler <span class="cov0" title="0">{
+        return &amp;AdminHandler{
+                userRepo:        userRepo,
+                transactionRepo: transactionRepo,
+                walletService:   walletService,
+        }
+}</span>
+
+type UserListResponse struct {
+        Username   string `json:"username"`
+        BeanAmount int    `json:"bean_amount"`
+        CreatedAt  string `json:"created_at"`
+}
+
+type UpdateWalletRequest struct {
+        BeanAmount int `json:"bean_amount" binding:"required,gte=0"`
+}
+
+// ListUsers godoc
+// @Summary List all users (Admin)
+// @Description Get a list of all users and their wallets
+// @Tags admin
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {array} UserListResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 403 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /admin/users [get]
+func (h *AdminHandler) ListUsers(c *gin.Context) <span class="cov0" title="0">{
+        users, err := h.userRepo.FindAll()
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">response := make([]UserListResponse, len(users))
+        for i, user := range users </span><span class="cov0" title="0">{
+                response[i] = UserListResponse{
+                        Username:   user.Username,
+                        BeanAmount: user.BeanAmount,
+                        CreatedAt:  user.CreatedAt.Format("2006-01-02T15:04:05Z"),
+                }
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+}
+
+// ListAllTransactions godoc
+// @Summary List all transactions (Admin)
+// @Description Get a list of all transactions in the system
+// @Tags admin
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {array} TransactionHistoryResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 403 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /admin/transactions [get]
+func (h *AdminHandler) ListAllTransactions(c *gin.Context) <span class="cov0" title="0">{
+        transactions, err := h.transactionRepo.FindAll()
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">response := make([]TransactionHistoryResponse, len(transactions))
+        for i, tx := range transactions </span><span class="cov0" title="0">{
+                response[i] = TransactionHistoryResponse{
+                        ID:        tx.ID,
+                        FromUser:  tx.FromUser.Username,
+                        ToUser:    tx.ToUser.Username,
+                        Amount:    tx.Amount,
+                        Timestamp: tx.Timestamp.Format("2006-01-02T15:04:05Z"),
+                }
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+}
+
+// UpdateWallet godoc
+// @Summary Update wallet balance (Admin)
+// @Description Update a user's wallet balance directly
+// @Tags admin
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param username path string true "Username"
+// @Param request body UpdateWalletRequest true "New balance"
+// @Success 200 {object} WalletResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 403 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /admin/wallet/{username} [put]
+func (h *AdminHandler) UpdateWallet(c *gin.Context) <span class="cov0" title="0">{
+        username := c.Param("username")
+
+        var req UpdateWalletRequest
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid request: " + err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">err := h.walletService.UpdateBalance(username, req.BeanAmount)
+        if err != nil </span><span class="cov0" title="0">{
+                if err == services.ErrUserNotFound </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusNotFound, ErrorResponse{Error: "user not found"})
+                        return
+                }</span>
+                <span class="cov0" title="0">c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return</span>
+        }
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, WalletResponse{
+                Username:   username,
+                BeanAmount: req.BeanAmount,
+        })</span>
+}
+
+type UserSearchResponse struct {
+        Username string `json:"username"`
+}
+
+// SearchUsers godoc
+// @Summary Search users
+// @Description Search for users by username (case-insensitive)
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param q query string true "Search query"
+// @Security BearerAuth
+// @Success 200 {array} UserSearchResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /users/search [get]
+func (h *AdminHandler) SearchUsers(c *gin.Context) <span class="cov0" title="0">{
+        query := c.Query("q")
+        if query == "" </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "query parameter 'q' is required"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">users, err := h.userRepo.SearchByUsername(query, 10)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">response := make([]UserSearchResponse, len(users))
+        for i, user := range users </span><span class="cov0" title="0">{
+                response[i] = UserSearchResponse{
+                        Username: user.Username,
+                }
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package handlers
+
+import (
+        "net/http"
+        "time"
+
+        "github.com/gin-gonic/gin"
+        "github.com/h4ks-com/bean-bank/internal/auth"
+        "github.com/h4ks-com/bean-bank/internal/services"
+)
+
+type BrowserHandler struct {
+        walletService   *services.WalletService
+        transferService *services.TransferService
+        tokenService    *services.TokenService
+        giftLinkService *services.GiftLinkService
+        logtoHandler    *auth.LogtoHandler
+}
+
+func NewBrowserHandler(
+        walletService *services.WalletService,
+        transferService *services.TransferService,
+        tokenService *services.TokenService,
+        giftLinkService *services.GiftLinkService,
+        logtoHandler *auth.LogtoHandler,
+) *BrowserHandler <span class="cov0" title="0">{
+        return &amp;BrowserHandler{
+                walletService:   walletService,
+                transferService: transferService,
+                tokenService:    tokenService,
+                giftLinkService: giftLinkService,
+                logtoHandler:    logtoHandler,
+        }
+}</span>
+
+func (h *BrowserHandler) GetWallet(c *gin.Context) <span class="cov0" title="0">{
+        username, ok := h.logtoHandler.GetCurrentUser(c)
+        if !ok </span><span class="cov0" title="0">{
+                c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "not authenticated"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">user, err := h.walletService.GetOrCreateWallet(username)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, WalletResponse{
+                Username:   user.Username,
+                BeanAmount: user.BeanAmount,
+        })</span>
+}
+
+func (h *BrowserHandler) GetTransactions(c *gin.Context) <span class="cov0" title="0">{
+        username, ok := h.logtoHandler.GetCurrentUser(c)
+        if !ok </span><span class="cov0" title="0">{
+                c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "not authenticated"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">transactions, err := h.walletService.GetTransactionHistory(username)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">response := make([]TransactionHistoryResponse, len(transactions))
+        for i, tx := range transactions </span><span class="cov0" title="0">{
+                response[i] = TransactionHistoryResponse{
+                        ID:        tx.ID,
+                        FromUser:  tx.FromUser.Username,
+                        ToUser:    tx.ToUser.Username,
+                        Amount:    tx.Amount,
+                        Timestamp: tx.Timestamp.Format("2006-01-02T15:04:05Z"),
+                }
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+}
+
+func (h *BrowserHandler) Transfer(c *gin.Context) <span class="cov0" title="0">{
+        username, ok := h.logtoHandler.GetCurrentUser(c)
+        if !ok </span><span class="cov0" title="0">{
+                c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "not authenticated"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">var req struct {
+                ToUser string `json:"to_user" binding:"required"`
+                Amount int    `json:"amount" binding:"required"`
+                Force  bool   `json:"force"`
+        }
+
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid request: " + err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">if req.Amount &lt;= 0 </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "amount must be positive"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">if err := h.transferService.Transfer(username, req.ToUser, req.Amount, req.Force); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, gin.H{
+                "message": "transfer successful",
+                "to_user": req.ToUser,
+                "amount":  req.Amount,
+        })</span>
+}
+
+func (h *BrowserHandler) CreateToken(c *gin.Context) <span class="cov0" title="0">{
+        username, ok := h.logtoHandler.GetCurrentUser(c)
+        if !ok </span><span class="cov0" title="0">{
+                c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "not authenticated"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">var req CreateTokenRequest
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid request: " + err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">var duration time.Duration
+        var err error
+
+        if req.ExpiresIn == "never" </span><span class="cov0" title="0">{
+                duration = 87600 * time.Hour
+        }</span> else<span class="cov0" title="0"> {
+                duration, err = time.ParseDuration(req.ExpiresIn)
+                if err != nil </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid expires_in format"})
+                        return
+                }</span>
+        }
+
+        <span class="cov0" title="0">if duration &lt;= 0 </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "expires_in must be positive"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">token, err := h.tokenService.GenerateToken(username, duration)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusCreated, CreateTokenResponse{
+                Token:     token,
+                ExpiresAt: time.Now().Add(duration).Format(time.RFC3339),
+        })</span>
+}
+
+func (h *BrowserHandler) ListTokens(c *gin.Context) <span class="cov0" title="0">{
+        username, ok := h.logtoHandler.GetCurrentUser(c)
+        if !ok </span><span class="cov0" title="0">{
+                c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "not authenticated"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">tokens, err := h.tokenService.ListUserTokens(username)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">response := struct {
+                Tokens []TokenListResponse `json:"tokens"`
+        }{
+                Tokens: make([]TokenListResponse, len(tokens)),
+        }
+
+        for i, token := range tokens </span><span class="cov0" title="0">{
+                response.Tokens[i] = TokenListResponse{
+                        ID:        token.ID,
+                        ExpiresAt: token.ExpiresAt.Format(time.RFC3339),
+                        CreatedAt: token.CreatedAt.Format(time.RFC3339),
+                }
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+}
+
+func (h *BrowserHandler) DeleteToken(c *gin.Context) <span class="cov0" title="0">{
+        username, ok := h.logtoHandler.GetCurrentUser(c)
+        if !ok </span><span class="cov0" title="0">{
+                c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "not authenticated"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">var idParam struct {
+                ID uint `uri:"id" binding:"required"`
+        }
+
+        if err := c.ShouldBindUri(&amp;idParam); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid token ID"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">err := h.tokenService.DeleteToken(idParam.ID, username)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, gin.H{"message": "token deleted successfully"})</span>
+}
+
+func (h *BrowserHandler) CreateGiftLink(c *gin.Context) <span class="cov0" title="0">{
+        username, ok := h.logtoHandler.GetCurrentUser(c)
+        if !ok </span><span class="cov0" title="0">{
+                c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "not authenticated"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">var req struct {
+                Amount    int    `json:"amount" binding:"required"`
+                Message   string `json:"message"`
+                ExpiresIn string `json:"expires_in"`
+        }
+
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid request: " + err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">if req.Amount &lt;= 0 </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "amount must be positive"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">giftLink, err := h.giftLinkService.CreateGiftLink(username, req.Amount, req.Message, req.ExpiresIn)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, giftLink)</span>
+}
+
+func (h *BrowserHandler) ListGiftLinks(c *gin.Context) <span class="cov0" title="0">{
+        username, ok := h.logtoHandler.GetCurrentUser(c)
+        if !ok </span><span class="cov0" title="0">{
+                c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "not authenticated"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">giftLinks, err := h.giftLinkService.ListGiftLinks(username)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, giftLinks)</span>
+}
+
+func (h *BrowserHandler) DeleteGiftLink(c *gin.Context) <span class="cov0" title="0">{
+        username, ok := h.logtoHandler.GetCurrentUser(c)
+        if !ok </span><span class="cov0" title="0">{
+                c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "not authenticated"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">var idParam struct {
+                ID uint `uri:"id" binding:"required"`
+        }
+
+        if err := c.ShouldBindUri(&amp;idParam); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid gift link ID"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">err := h.giftLinkService.DeleteGiftLink(idParam.ID, username)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, gin.H{"message": "gift link deleted successfully"})</span>
+}
+
+func (h *BrowserHandler) RedeemGiftLink(c *gin.Context) <span class="cov0" title="0">{
+        username, ok := h.logtoHandler.GetCurrentUser(c)
+        if !ok </span><span class="cov0" title="0">{
+                c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "not authenticated"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">var req struct {
+                Code string `json:"code" binding:"required"`
+        }
+
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid request: " + err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">err := h.giftLinkService.RedeemGiftLink(req.Code, username)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, gin.H{"message": "gift link redeemed successfully"})</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package handlers
+
+import (
+        "net/http"
+
+        "github.com/gin-gonic/gin"
+        "github.com/h4ks-com/bean-bank/internal/middleware"
+        "github.com/h4ks-com/bean-bank/internal/services"
+)
+
+type ExportHandler struct {
+        exportService *services.ExportService
+}
+
+func NewExportHandler(exportService *services.ExportService) *ExportHandler <span class="cov0" title="0">{
+        return &amp;ExportHandler{exportService: exportService}
+}</span>
+
+type VerifyExportResponse struct {
+        Valid bool `json:"valid"`
+}
+
+// ExportTransactions godoc
+// @Summary Export transaction history
+// @Description Export user's complete transaction history with cryptographic signature
+// @Tags transactions
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} services.TransactionExport
+// @Failure 401 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /transactions/export [get]
+func (h *ExportHandler) ExportTransactions(c *gin.Context) <span class="cov0" title="0">{
+        username := middleware.GetUsername(c)
+        if username == "" </span><span class="cov0" title="0">{
+                c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "unauthorized"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">export, err := h.exportService.ExportTransactions(username)
+        if err != nil </span><span class="cov0" title="0">{
+                if err == services.ErrUserNotFound </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusNotFound, ErrorResponse{Error: "user not found"})
+                        return
+                }</span>
+                <span class="cov0" title="0">c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return</span>
+        }
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, export)</span>
+}
+
+// ExportTransactionsPDF streams a PDF statement to the authenticated user
+func (h *ExportHandler) ExportTransactionsPDF(c *gin.Context) <span class="cov0" title="0">{
+        username := middleware.GetUsername(c)
+        if username == "" </span><span class="cov0" title="0">{
+                c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "unauthorized"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">pdfBytes, err := h.exportService.GenerateStatementPDF(username)
+        if err != nil </span><span class="cov0" title="0">{
+                if err == services.ErrUserNotFound </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusNotFound, ErrorResponse{Error: "user not found"})
+                        return
+                }</span>
+                <span class="cov0" title="0">c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return</span>
+        }
+
+        <span class="cov0" title="0">filename := username + "_statement.pdf"
+        c.Header("Content-Type", "application/pdf")
+        c.Header("Content-Disposition", "attachment; filename=\""+filename+"\"")
+        c.Data(http.StatusOK, "application/pdf", pdfBytes)</span>
+}
+
+// VerifyExport godoc
+// @Summary Verify transaction export signature
+// @Description Verify the cryptographic signature of an exported transaction history
+// @Tags transactions
+// @Accept json
+// @Produce json
+// @Param request body services.TransactionExport true "Export data with signature"
+// @Success 200 {object} VerifyExportResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /transactions/verify [post]
+func (h *ExportHandler) VerifyExport(c *gin.Context) <span class="cov0" title="0">{
+        var exportData services.TransactionExport
+        if err := c.ShouldBindJSON(&amp;exportData); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid request: " + err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">valid, err := h.exportService.VerifyExportData(&amp;exportData)
+        if err != nil </span><span class="cov0" title="0">{
+                if err == services.ErrInvalidExport </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid export data"})
+                        return
+                }</span>
+                <span class="cov0" title="0">c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return</span>
+        }
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, VerifyExportResponse{Valid: valid})</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package handlers
+
+import (
+        "net/http"
+        "strconv"
+
+        "github.com/gin-gonic/gin"
+        "github.com/h4ks-com/bean-bank/internal/middleware"
+        "github.com/h4ks-com/bean-bank/internal/models"
+        "github.com/h4ks-com/bean-bank/internal/services"
+)
+
+type GiftLinkHandler struct {
+        giftLinkService *services.GiftLinkService
+}
+
+func NewGiftLinkHandler(giftLinkService *services.GiftLinkService) *GiftLinkHandler <span class="cov0" title="0">{
+        return &amp;GiftLinkHandler{giftLinkService: giftLinkService}
+}</span>
+
+type CreateGiftLinkRequest struct {
+        Amount    int    `json:"amount" binding:"required,gt=0"`
+        Message   string `json:"message"`
+        ExpiresIn string `json:"expires_in"`
+}
+
+type GiftLinkResponse struct {
+        ID           uint   `json:"id"`
+        Code         string `json:"code"`
+        Amount       int    `json:"amount"`
+        Message      string `json:"message"`
+        ExpiresAt    *int64 `json:"expires_at,omitempty"`
+        RedeemedAt   *int64 `json:"redeemed_at,omitempty"`
+        RedeemedBy   string `json:"redeemed_by,omitempty"`
+        FromUsername string `json:"from_username"`
+        Active       bool   `json:"active"`
+        CreatedAt    int64  `json:"created_at"`
+}
+
+// CreateGiftLink godoc
+// @Summary Create a gift link
+// @Description Create a shareable gift link that escrows beans until redeemed
+// @Tags giftlinks
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param request body CreateGiftLinkRequest true "Gift link creation request"
+// @Success 200 {object} GiftLinkResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /giftlinks [post]
+func (h *GiftLinkHandler) CreateGiftLink(c *gin.Context) <span class="cov0" title="0">{
+        username := middleware.GetUsername(c)
+        if username == "" </span><span class="cov0" title="0">{
+                c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "unauthorized"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">var req CreateGiftLinkRequest
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">giftLink, err := h.giftLinkService.CreateGiftLink(username, req.Amount, req.Message, req.ExpiresIn)
+        if err != nil </span><span class="cov0" title="0">{
+                switch err </span>{
+                case services.ErrInvalidAmount:<span class="cov0" title="0">
+                        c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid amount"})</span>
+                case services.ErrUserNotFound:<span class="cov0" title="0">
+                        c.JSON(http.StatusNotFound, ErrorResponse{Error: "user not found"})</span>
+                case services.ErrInsufficientBalanceForGift:<span class="cov0" title="0">
+                        c.JSON(http.StatusBadRequest, ErrorResponse{Error: "insufficient balance"})</span>
+                default:<span class="cov0" title="0">
+                        c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})</span>
+                }
+                <span class="cov0" title="0">return</span>
+        }
+
+        <span class="cov0" title="0">response := mapGiftLinkToResponse(giftLink)
+        c.JSON(http.StatusOK, response)</span>
+}
+
+// ListGiftLinks godoc
+// @Summary List user's gift links
+// @Description Get all active gift links created by the authenticated user
+// @Tags giftlinks
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {array} GiftLinkResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /giftlinks [get]
+func (h *GiftLinkHandler) ListGiftLinks(c *gin.Context) <span class="cov0" title="0">{
+        username := middleware.GetUsername(c)
+        if username == "" </span><span class="cov0" title="0">{
+                c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "unauthorized"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">giftLinks, err := h.giftLinkService.ListGiftLinks(username)
+        if err != nil </span><span class="cov0" title="0">{
+                if err == services.ErrUserNotFound </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusNotFound, ErrorResponse{Error: "user not found"})
+                        return
+                }</span>
+                <span class="cov0" title="0">c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return</span>
+        }
+
+        <span class="cov0" title="0">response := make([]GiftLinkResponse, len(giftLinks))
+        for i, gl := range giftLinks </span><span class="cov0" title="0">{
+                response[i] = mapGiftLinkToResponse(&amp;gl)
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+}
+
+// DeleteGiftLink godoc
+// @Summary Delete a gift link
+// @Description Delete a gift link and refund beans if not redeemed
+// @Tags giftlinks
+// @Produce json
+// @Security BearerAuth
+// @Param id path int true "Gift Link ID"
+// @Success 200 {object} map[string]string
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /giftlinks/{id} [delete]
+func (h *GiftLinkHandler) DeleteGiftLink(c *gin.Context) <span class="cov0" title="0">{
+        username := middleware.GetUsername(c)
+        if username == "" </span><span class="cov0" title="0">{
+                c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "unauthorized"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">idStr := c.Param("id")
+        id, err := strconv.ParseUint(idStr, 10, 32)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid gift link id"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">err = h.giftLinkService.DeleteGiftLink(uint(id), username)
+        if err != nil </span><span class="cov0" title="0">{
+                switch err </span>{
+                case services.ErrGiftLinkNotFound:<span class="cov0" title="0">
+                        c.JSON(http.StatusNotFound, ErrorResponse{Error: "gift link not found"})</span>
+                case services.ErrUserNotFound:<span class="cov0" title="0">
+                        c.JSON(http.StatusNotFound, ErrorResponse{Error: "user not found"})</span>
+                default:<span class="cov0" title="0">
+                        c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})</span>
+                }
+                <span class="cov0" title="0">return</span>
+        }
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, gin.H{"message": "gift link deleted successfully"})</span>
+}
+
+// GetGiftLinkInfo godoc
+// @Summary Get gift link information
+// @Description Get details about a gift link by code (public endpoint)
+// @Tags giftlinks
+// @Produce json
+// @Param code path string true "Gift Link Code"
+// @Success 200 {object} GiftLinkResponse
+// @Failure 404 {object} ErrorResponse
+// @Router /gift/{code} [get]
+func (h *GiftLinkHandler) GetGiftLinkInfo(c *gin.Context) <span class="cov0" title="0">{
+        code := c.Param("code")
+
+        giftLink, err := h.giftLinkService.GetGiftLinkByCode(code)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">if giftLink == nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusNotFound, ErrorResponse{Error: "gift link not found"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">response := mapGiftLinkToResponse(giftLink)
+        c.JSON(http.StatusOK, response)</span>
+}
+
+type RedeemGiftLinkRequest struct {
+        Code string `json:"code" binding:"required"`
+}
+
+// RedeemGiftLink godoc
+// @Summary Redeem a gift link
+// @Description Redeem a gift link and transfer beans to authenticated user
+// @Tags giftlinks
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param request body RedeemGiftLinkRequest true "Redeem request"
+// @Success 200 {object} map[string]string
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /gift/redeem [post]
+func (h *GiftLinkHandler) RedeemGiftLink(c *gin.Context) <span class="cov0" title="0">{
+        username := middleware.GetUsername(c)
+        if username == "" </span><span class="cov0" title="0">{
+                c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "unauthorized"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">var req RedeemGiftLinkRequest
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">err := h.giftLinkService.RedeemGiftLink(req.Code, username)
+        if err != nil </span><span class="cov0" title="0">{
+                switch err </span>{
+                case services.ErrGiftLinkNotFound:<span class="cov0" title="0">
+                        c.JSON(http.StatusNotFound, ErrorResponse{Error: "gift link not found"})</span>
+                case services.ErrGiftLinkExpired:<span class="cov0" title="0">
+                        c.JSON(http.StatusBadRequest, ErrorResponse{Error: "gift link has expired"})</span>
+                case services.ErrGiftLinkRedeemed:<span class="cov0" title="0">
+                        c.JSON(http.StatusBadRequest, ErrorResponse{Error: "gift link already redeemed"})</span>
+                case services.ErrGiftLinkInactive:<span class="cov0" title="0">
+                        c.JSON(http.StatusBadRequest, ErrorResponse{Error: "gift link is inactive"})</span>
+                case services.ErrCannotRedeemOwnLink:<span class="cov0" title="0">
+                        c.JSON(http.StatusBadRequest, ErrorResponse{Error: "cannot redeem your own gift link"})</span>
+                default:<span class="cov0" title="0">
+                        c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})</span>
+                }
+                <span class="cov0" title="0">return</span>
+        }
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, gin.H{"message": "gift link redeemed successfully"})</span>
+}
+
+func mapGiftLinkToResponse(gl *models.GiftLink) GiftLinkResponse <span class="cov0" title="0">{
+        response := GiftLinkResponse{
+                ID:           gl.ID,
+                Code:         gl.Code,
+                Amount:       gl.Amount,
+                Message:      gl.Message,
+                FromUsername: gl.FromUser.Username,
+                Active:       gl.Active,
+                CreatedAt:    gl.CreatedAt.Unix(),
+        }
+
+        if gl.ExpiresAt != nil </span><span class="cov0" title="0">{
+                expiresAt := gl.ExpiresAt.Unix()
+                response.ExpiresAt = &amp;expiresAt
+        }</span>
+
+        <span class="cov0" title="0">if gl.RedeemedAt != nil </span><span class="cov0" title="0">{
+                redeemedAt := gl.RedeemedAt.Unix()
+                response.RedeemedAt = &amp;redeemedAt
+        }</span>
+
+        <span class="cov0" title="0">if gl.RedeemedBy != nil </span><span class="cov0" title="0">{
+                response.RedeemedBy = gl.RedeemedBy.Username
+        }</span>
+
+        <span class="cov0" title="0">return response</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package handlers
+
+import (
+        "net/http"
+        "strconv"
+
+        "github.com/gin-gonic/gin"
+        "github.com/h4ks-com/bean-bank/internal/models"
+        "github.com/h4ks-com/bean-bank/internal/services"
+)
+
+type HarvestHandler struct {
+        harvestService *services.HarvestService
+}
+
+func NewHarvestHandler(harvestService *services.HarvestService) *HarvestHandler <span class="cov0" title="0">{
+        return &amp;HarvestHandler{harvestService: harvestService}
+}</span>
+
+type CreateHarvestRequest struct {
+        Title       string `json:"title" binding:"required"`
+        Description string `json:"description"`
+        BeanAmount  int    `json:"bean_amount" binding:"required,min=1"`
+}
+
+type UpdateHarvestRequest struct {
+        Title       string `json:"title" binding:"required"`
+        Description string `json:"description"`
+        BeanAmount  int    `json:"bean_amount" binding:"required,min=1"`
+}
+
+type AssignUserRequest struct {
+        UserID   uint   `json:"user_id"`
+        Username string `json:"username"`
+}
+
+type HarvestResponse struct {
+        ID             uint   `json:"id"`
+        Title          string `json:"title"`
+        Description    string `json:"description"`
+        BeanAmount     int    `json:"bean_amount"`
+        AssignedUserID *uint  `json:"assigned_user_id,omitempty"`
+        AssignedUser   string `json:"assigned_user,omitempty"`
+        Completed      bool   `json:"completed"`
+        CreatedAt      string `json:"created_at"`
+        UpdatedAt      string `json:"updated_at"`
+}
+
+// @Summary Create a harvest task
+// @Description Create a new harvest task that can be assigned to users for bean rewards
+// @Tags harvests
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param request body CreateHarvestRequest true "Harvest creation request"
+// @Success 201 {object} HarvestResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /admin/harvests [post]
+func (h *HarvestHandler) CreateHarvest(c *gin.Context) <span class="cov0" title="0">{
+        var req CreateHarvestRequest
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid request: " + err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">harvest, err := h.harvestService.CreateHarvest(req.Title, req.Description, req.BeanAmount)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusCreated, toHarvestResponse(harvest))</span>
+}
+
+// @Summary Update a harvest task
+// @Description Update the details of an existing harvest task
+// @Tags harvests
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path int true "Harvest ID"
+// @Param request body UpdateHarvestRequest true "Harvest update request"
+// @Success 200 {object} HarvestResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /admin/harvests/{id} [put]
+func (h *HarvestHandler) UpdateHarvest(c *gin.Context) <span class="cov0" title="0">{
+        idStr := c.Param("id")
+        id, err := strconv.ParseUint(idStr, 10, 32)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid harvest ID"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">var req UpdateHarvestRequest
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid request: " + err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">harvest, err := h.harvestService.UpdateHarvest(uint(id), req.Title, req.Description, req.BeanAmount)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, toHarvestResponse(harvest))</span>
+}
+
+// @Summary Assign user to harvest
+// @Description Assign a user to a harvest task by username or user ID
+// @Tags harvests
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path int true "Harvest ID"
+// @Param request body AssignUserRequest true "User assignment request"
+// @Success 200 {object} HarvestResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /admin/harvests/{id}/assign [post]
+func (h *HarvestHandler) AssignUser(c *gin.Context) <span class="cov0" title="0">{
+        idStr := c.Param("id")
+        id, err := strconv.ParseUint(idStr, 10, 32)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid harvest ID"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">var req AssignUserRequest
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid request: " + err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">var harvest *models.Harvest
+        if req.Username != "" </span><span class="cov0" title="0">{
+                harvest, err = h.harvestService.AssignUserByUsername(uint(id), req.Username)
+        }</span> else<span class="cov0" title="0"> if req.UserID != 0 </span><span class="cov0" title="0">{
+                harvest, err = h.harvestService.AssignUser(uint(id), req.UserID)
+        }</span> else<span class="cov0" title="0"> {
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "either username or user_id is required"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, toHarvestResponse(harvest))</span>
+}
+
+// @Summary Complete a harvest task
+// @Description Mark a harvest as completed and transfer beans to the assigned user
+// @Tags harvests
+// @Produce json
+// @Security BearerAuth
+// @Param id path int true "Harvest ID"
+// @Success 200 {object} HarvestResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /admin/harvests/{id}/complete [post]
+func (h *HarvestHandler) CompleteHarvest(c *gin.Context) <span class="cov0" title="0">{
+        idStr := c.Param("id")
+        id, err := strconv.ParseUint(idStr, 10, 32)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid harvest ID"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">harvest, err := h.harvestService.CompleteHarvest(uint(id))
+        if err != nil </span><span class="cov0" title="0">{
+                if err == services.ErrHarvestNotFound </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusNotFound, ErrorResponse{Error: "harvest not found"})
+                        return
+                }</span>
+                <span class="cov0" title="0">if err == services.ErrHarvestAlreadyCompleted </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusBadRequest, ErrorResponse{Error: "harvest already completed"})
+                        return
+                }</span>
+                <span class="cov0" title="0">if err == services.ErrNoAssignedUser </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusBadRequest, ErrorResponse{Error: "harvest has no assigned user"})
+                        return
+                }</span>
+                <span class="cov0" title="0">c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return</span>
+        }
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, toHarvestResponse(harvest))</span>
+}
+
+// @Summary Delete a harvest task
+// @Description Delete a harvest task by ID
+// @Tags harvests
+// @Security BearerAuth
+// @Param id path int true "Harvest ID"
+// @Success 204 "No Content"
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /admin/harvests/{id} [delete]
+func (h *HarvestHandler) DeleteHarvest(c *gin.Context) <span class="cov0" title="0">{
+        idStr := c.Param("id")
+        id, err := strconv.ParseUint(idStr, 10, 32)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid harvest ID"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">err = h.harvestService.DeleteHarvest(uint(id))
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.Status(http.StatusNoContent)</span>
+}
+
+// @Summary List all harvest tasks
+// @Description Get a list of all harvest tasks (admin only)
+// @Tags harvests
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {array} HarvestResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /admin/harvests [get]
+func (h *HarvestHandler) GetAllHarvests(c *gin.Context) <span class="cov0" title="0">{
+        harvests, err := h.harvestService.GetAllHarvests()
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">responses := make([]HarvestResponse, len(harvests))
+        for i, harvest := range harvests </span><span class="cov0" title="0">{
+                responses[i] = *toHarvestResponse(&amp;harvest)
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, responses)</span>
+}
+
+func toHarvestResponse(harvest *models.Harvest) *HarvestResponse <span class="cov0" title="0">{
+        resp := &amp;HarvestResponse{
+                ID:          harvest.ID,
+                Title:       harvest.Title,
+                Description: harvest.Description,
+                BeanAmount:  harvest.BeanAmount,
+                Completed:   harvest.Completed,
+                CreatedAt:   harvest.CreatedAt.Format("2006-01-02 15:04:05"),
+                UpdatedAt:   harvest.UpdatedAt.Format("2006-01-02 15:04:05"),
+        }
+
+        if harvest.AssignedUserID != nil </span><span class="cov0" title="0">{
+                resp.AssignedUserID = harvest.AssignedUserID
+                if harvest.AssignedUser != nil </span><span class="cov0" title="0">{
+                        resp.AssignedUser = harvest.AssignedUser.Username
+                }</span>
+        }
+
+        <span class="cov0" title="0">return resp</span>
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package handlers
+
+import (
+        "net/http"
+        "strconv"
+
+        "github.com/gin-gonic/gin"
+        "github.com/h4ks-com/bean-bank/internal/services"
+)
+
+type PublicHandler struct {
+        walletService  *services.WalletService
+        harvestService *services.HarvestService
+}
+
+func NewPublicHandler(walletService *services.WalletService, harvestService *services.HarvestService) *PublicHandler <span class="cov0" title="0">{
+        return &amp;PublicHandler{
+                walletService:  walletService,
+                harvestService: harvestService,
+        }
+}</span>
+
+type TotalBeansResponse struct {
+        TotalBeans int64 `json:"total_beans"`
+}
+
+type LeaderboardEntry struct {
+        Rank       int    `json:"rank"`
+        Username   string `json:"username"`
+        BeanAmount int    `json:"bean_amount"`
+}
+
+type LeaderboardResponse struct {
+        Entries []LeaderboardEntry `json:"entries"`
+        Total   int                `json:"total"`
+}
+
+// GetTotalBeans godoc
+// @Summary Get total beans
+// @Description Get the total number of beans in the system
+// @Tags public
+// @Accept json
+// @Produce json
+// @Success 200 {object} TotalBeansResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /total [get]
+func (h *PublicHandler) GetTotalBeans(c *gin.Context) <span class="cov0" title="0">{
+        total, err := h.walletService.GetTotalBeans()
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, TotalBeansResponse{
+                TotalBeans: total,
+        })</span>
+}
+
+// GetLeaderboard godoc
+// @Summary Get top bean wallets
+// @Description Get the top 50 wallets by bean amount
+// @Tags public
+// @Accept json
+// @Produce json
+// @Success 200 {object} LeaderboardResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /leaderboard [get]
+func (h *PublicHandler) GetLeaderboard(c *gin.Context) <span class="cov0" title="0">{
+        users, err := h.walletService.GetTopWallets(50)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">entries := make([]LeaderboardEntry, len(users))
+        for i, user := range users </span><span class="cov0" title="0">{
+                entries[i] = LeaderboardEntry{
+                        Rank:       i + 1,
+                        Username:   user.Username,
+                        BeanAmount: user.BeanAmount,
+                }
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, LeaderboardResponse{
+                Entries: entries,
+                Total:   len(entries),
+        })</span>
+}
+
+type HarvestListItem struct {
+        ID             uint   `json:"id"`
+        Title          string `json:"title"`
+        Description    string `json:"description"`
+        BeanAmount     int    `json:"bean_amount"`
+        AssignedUserID *uint  `json:"assigned_user_id,omitempty"`
+        AssignedUser   string `json:"assigned_user,omitempty"`
+        Completed      bool   `json:"completed"`
+        CreatedAt      string `json:"created_at"`
+        UpdatedAt      string `json:"updated_at"`
+}
+
+type HarvestListResponse struct {
+        Harvests   []HarvestListItem `json:"harvests"`
+        Total      int64             `json:"total"`
+        Page       int               `json:"page"`
+        Limit      int               `json:"limit"`
+        TotalPages int               `json:"total_pages"`
+}
+
+// GetHarvests godoc
+// @Summary Get harvests
+// @Description Get list of harvests with optional search and pagination, or a specific harvest by ID
+// @Tags public
+// @Accept json
+// @Produce json
+// @Param id query int false "Harvest ID to fetch a specific harvest"
+// @Param search query string false "Search query for title and description"
+// @Param page query int false "Page number (default 1)"
+// @Param limit query int false "Items per page (default 20)"
+// @Success 200 {object} HarvestListResponse
+// @Failure 404 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /harvests [get]
+func (h *PublicHandler) GetHarvests(c *gin.Context) <span class="cov0" title="0">{
+        if idStr := c.Query("id"); idStr != "" </span><span class="cov0" title="0">{
+                id, err := strconv.ParseUint(idStr, 10, 32)
+                if err != nil </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid harvest ID"})
+                        return
+                }</span>
+
+                <span class="cov0" title="0">harvest, err := h.harvestService.GetHarvest(uint(id))
+                if err != nil </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusNotFound, ErrorResponse{Error: "harvest not found"})
+                        return
+                }</span>
+
+                <span class="cov0" title="0">item := HarvestListItem{
+                        ID:          harvest.ID,
+                        Title:       harvest.Title,
+                        Description: harvest.Description,
+                        BeanAmount:  harvest.BeanAmount,
+                        Completed:   harvest.Completed,
+                        CreatedAt:   harvest.CreatedAt.Format("2006-01-02 15:04:05"),
+                        UpdatedAt:   harvest.UpdatedAt.Format("2006-01-02 15:04:05"),
+                }
+
+                if harvest.AssignedUserID != nil </span><span class="cov0" title="0">{
+                        item.AssignedUserID = harvest.AssignedUserID
+                        if harvest.AssignedUser != nil </span><span class="cov0" title="0">{
+                                item.AssignedUser = harvest.AssignedUser.Username
+                        }</span>
+                }
+
+                <span class="cov0" title="0">c.JSON(http.StatusOK, HarvestListResponse{
+                        Harvests:   []HarvestListItem{item},
+                        Total:      1,
+                        Page:       1,
+                        Limit:      1,
+                        TotalPages: 1,
+                })
+                return</span>
+        }
+
+        <span class="cov0" title="0">search := c.DefaultQuery("search", "")
+        page := 1
+        limit := 20
+
+        if pageStr := c.Query("page"); pageStr != "" </span><span class="cov0" title="0">{
+                if p, err := strconv.Atoi(pageStr); err == nil &amp;&amp; p &gt; 0 </span><span class="cov0" title="0">{
+                        page = p
+                }</span>
+        }
+
+        <span class="cov0" title="0">if limitStr := c.Query("limit"); limitStr != "" </span><span class="cov0" title="0">{
+                if l, err := strconv.Atoi(limitStr); err == nil &amp;&amp; l &gt; 0 &amp;&amp; l &lt;= 100 </span><span class="cov0" title="0">{
+                        limit = l
+                }</span>
+        }
+
+        <span class="cov0" title="0">harvests, total, err := h.harvestService.SearchHarvests(search, page, limit)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">items := make([]HarvestListItem, len(harvests))
+        for i, harvest := range harvests </span><span class="cov0" title="0">{
+                item := HarvestListItem{
+                        ID:          harvest.ID,
+                        Title:       harvest.Title,
+                        Description: harvest.Description,
+                        BeanAmount:  harvest.BeanAmount,
+                        Completed:   harvest.Completed,
+                        CreatedAt:   harvest.CreatedAt.Format("2006-01-02 15:04:05"),
+                        UpdatedAt:   harvest.UpdatedAt.Format("2006-01-02 15:04:05"),
+                }
+
+                if harvest.AssignedUserID != nil </span><span class="cov0" title="0">{
+                        item.AssignedUserID = harvest.AssignedUserID
+                        if harvest.AssignedUser != nil </span><span class="cov0" title="0">{
+                                item.AssignedUser = harvest.AssignedUser.Username
+                        }</span>
+                }
+
+                <span class="cov0" title="0">items[i] = item</span>
+        }
+
+        <span class="cov0" title="0">totalPages := int(total) / limit
+        if int(total)%limit != 0 </span><span class="cov0" title="0">{
+                totalPages++
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, HarvestListResponse{
+                Harvests:   items,
+                Total:      total,
+                Page:       page,
+                Limit:      limit,
+                TotalPages: totalPages,
+        })</span>
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package handlers
+
+import (
+        "html/template"
+
+        "github.com/gin-gonic/gin"
+)
+
+func SwaggerUIWithBearerFix() gin.HandlerFunc <span class="cov0" title="0">{
+        return func(c *gin.Context) </span><span class="cov0" title="0">{
+                c.Header("Content-Type", "text/html; charset=utf-8")
+
+                htmlTemplate := `
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Bean Bank API Documentation&lt;/title&gt;
+    &lt;link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css"&gt;
+    &lt;style&gt;
+        html { box-sizing: border-box; overflow: -moz-scrollbars-vertical; overflow-y: scroll; }
+        *, *:before, *:after { box-sizing: inherit; }
+        body { margin:0; padding:0; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id="swagger-ui"&gt;&lt;/div&gt;
+    &lt;script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js"&gt;&lt;/script&gt;
+    &lt;script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-standalone-preset.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        window.onload = function() {
+            window.ui = SwaggerUIBundle({
+                url: "/swagger/doc.json",
+                dom_id: '#swagger-ui',
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ],
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                layout: "StandaloneLayout",
+                requestInterceptor: (request) =&gt; {
+                    if (request.headers.Authorization &amp;&amp; !request.headers.Authorization.startsWith('Bearer ')) {
+                        request.headers.Authorization = 'Bearer ' + request.headers.Authorization;
+                    }
+                    return request;
+                },
+                persistAuthorization: true
+            });
+        };
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+`
+                tmpl := template.Must(template.New("swagger").Parse(htmlTemplate))
+                tmpl.Execute(c.Writer, nil)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package handlers
+
+import (
+        "net/http"
+        "time"
+
+        "github.com/gin-gonic/gin"
+        "github.com/h4ks-com/bean-bank/internal/middleware"
+        "github.com/h4ks-com/bean-bank/internal/services"
+)
+
+type TokenHandler struct {
+        tokenService *services.TokenService
+}
+
+func NewTokenHandler(tokenService *services.TokenService) *TokenHandler <span class="cov0" title="0">{
+        return &amp;TokenHandler{tokenService: tokenService}
+}</span>
+
+type CreateTokenRequest struct {
+        ExpiresIn string `json:"expires_in" binding:"required"`
+}
+
+type CreateTokenResponse struct {
+        Token     string `json:"token"`
+        ExpiresAt string `json:"expires_at"`
+}
+
+type TokenListResponse struct {
+        ID        uint   `json:"id"`
+        ExpiresAt string `json:"expires_at"`
+        CreatedAt string `json:"created_at"`
+}
+
+// CreateToken godoc
+// @Summary Create API token
+// @Description Create a new API token with specified expiration
+// @Tags tokens
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param request body CreateTokenRequest true "Token expiration (e.g., 24h, 7d, 30d)"
+// @Success 201 {object} CreateTokenResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /tokens [post]
+func (h *TokenHandler) CreateToken(c *gin.Context) <span class="cov0" title="0">{
+        username := middleware.GetUsername(c)
+
+        var req CreateTokenRequest
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid request: " + err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">duration, err := time.ParseDuration(req.ExpiresIn)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid expires_in format, use duration like 24h, 7d, 30d"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">if duration &lt;= 0 </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "expires_in must be positive"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">token, err := h.tokenService.GenerateToken(username, duration)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusCreated, CreateTokenResponse{
+                Token:     token,
+                ExpiresAt: time.Now().Add(duration).Format(time.RFC3339),
+        })</span>
+}
+
+// ListTokens godoc
+// @Summary List API tokens
+// @Description List all API tokens for authenticated user
+// @Tags tokens
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {array} TokenListResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /tokens [get]
+func (h *TokenHandler) ListTokens(c *gin.Context) <span class="cov0" title="0">{
+        username := middleware.GetUsername(c)
+
+        tokens, err := h.tokenService.ListUserTokens(username)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">response := make([]TokenListResponse, len(tokens))
+        for i, token := range tokens </span><span class="cov0" title="0">{
+                response[i] = TokenListResponse{
+                        ID:        token.ID,
+                        ExpiresAt: token.ExpiresAt.Format(time.RFC3339),
+                        CreatedAt: token.CreatedAt.Format(time.RFC3339),
+                }
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+}
+
+// DeleteToken godoc
+// @Summary Delete API token
+// @Description Delete an API token by ID
+// @Tags tokens
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path int true "Token ID"
+// @Success 200 {object} map[string]string
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /tokens/{id} [delete]
+func (h *TokenHandler) DeleteToken(c *gin.Context) <span class="cov0" title="0">{
+        username := middleware.GetUsername(c)
+
+        var idParam struct {
+                ID uint `uri:"id" binding:"required"`
+        }
+
+        if err := c.ShouldBindUri(&amp;idParam); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid token ID"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">err := h.tokenService.DeleteToken(idParam.ID, username)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, gin.H{"message": "token deleted successfully"})</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package handlers
+
+import (
+        "net/http"
+
+        "github.com/gin-gonic/gin"
+        "github.com/h4ks-com/bean-bank/internal/middleware"
+        "github.com/h4ks-com/bean-bank/internal/services"
+)
+
+type TransferHandler struct {
+        transferService *services.TransferService
+}
+
+func NewTransferHandler(transferService *services.TransferService) *TransferHandler <span class="cov0" title="0">{
+        return &amp;TransferHandler{transferService: transferService}
+}</span>
+
+type TransferRequest struct {
+        ToUser string `json:"to_user" binding:"required"`
+        Amount int    `json:"amount" binding:"required,gt=0"`
+        Force  bool   `json:"force"`
+}
+
+type TransferResponse struct {
+        Message string `json:"message"`
+        Amount  int    `json:"amount"`
+        ToUser  string `json:"to_user"`
+}
+
+type ErrorResponse struct {
+        Error string `json:"error"`
+}
+
+// Transfer godoc
+// @Summary Transfer beans
+// @Description Transfer beans from authenticated user to recipient
+// @Tags transfer
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param request body TransferRequest true "Transfer details"
+// @Success 200 {object} TransferResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /transfer [post]
+func (h *TransferHandler) Transfer(c *gin.Context) <span class="cov0" title="0">{
+        username := middleware.GetUsername(c)
+
+        var req TransferRequest
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, ErrorResponse{Error: "invalid request: " + err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">err := h.transferService.Transfer(username, req.ToUser, req.Amount, req.Force)
+        if err != nil </span><span class="cov0" title="0">{
+                switch err </span>{
+                case services.ErrInsufficientBalance:<span class="cov0" title="0">
+                        c.JSON(http.StatusBadRequest, ErrorResponse{Error: "insufficient balance"})</span>
+                case services.ErrRecipientNotFound:<span class="cov0" title="0">
+                        c.JSON(http.StatusNotFound, ErrorResponse{Error: "recipient not found, use force=true to create wallet"})</span>
+                case services.ErrInvalidAmount:<span class="cov0" title="0">
+                        c.JSON(http.StatusBadRequest, ErrorResponse{Error: "amount must be positive"})</span>
+                case services.ErrSelfTransfer:<span class="cov0" title="0">
+                        c.JSON(http.StatusBadRequest, ErrorResponse{Error: "cannot transfer to yourself"})</span>
+                case services.ErrUserNotFound:<span class="cov0" title="0">
+                        c.JSON(http.StatusNotFound, ErrorResponse{Error: "sender not found"})</span>
+                default:<span class="cov0" title="0">
+                        c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})</span>
+                }
+                <span class="cov0" title="0">return</span>
+        }
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, TransferResponse{
+                Message: "transfer successful",
+                Amount:  req.Amount,
+                ToUser:  req.ToUser,
+        })</span>
+}
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package handlers
+
+import (
+        "net/http"
+
+        "github.com/gin-gonic/gin"
+        "github.com/h4ks-com/bean-bank/internal/middleware"
+        "github.com/h4ks-com/bean-bank/internal/services"
+)
+
+type WalletHandler struct {
+        walletService *services.WalletService
+}
+
+func NewWalletHandler(walletService *services.WalletService) *WalletHandler <span class="cov0" title="0">{
+        return &amp;WalletHandler{walletService: walletService}
+}</span>
+
+type WalletResponse struct {
+        Username   string `json:"username"`
+        BeanAmount int    `json:"bean_amount"`
+}
+
+type TransactionHistoryResponse struct {
+        ID        uint   `json:"id"`
+        FromUser  string `json:"from_user"`
+        ToUser    string `json:"to_user"`
+        Amount    int    `json:"amount"`
+        Timestamp string `json:"timestamp"`
+}
+
+// GetWallet godoc
+// @Summary Get wallet balance
+// @Description Get the authenticated user's wallet balance
+// @Tags wallet
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} WalletResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Router /wallet [get]
+func (h *WalletHandler) GetWallet(c *gin.Context) <span class="cov0" title="0">{
+        username := middleware.GetUsername(c)
+        if username == "" </span><span class="cov0" title="0">{
+                c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "username not found in context"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">user, err := h.walletService.GetOrCreateWallet(username)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, WalletResponse{
+                Username:   user.Username,
+                BeanAmount: user.BeanAmount,
+        })</span>
+}
+
+// GetTransactions godoc
+// @Summary Get transaction history
+// @Description Get the authenticated user's transaction history
+// @Tags wallet
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {array} TransactionHistoryResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /transactions [get]
+func (h *WalletHandler) GetTransactions(c *gin.Context) <span class="cov0" title="0">{
+        username := middleware.GetUsername(c)
+        if username == "" </span><span class="cov0" title="0">{
+                c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "username not found in context"})
+                return
+        }</span>
+
+        <span class="cov0" title="0">transactions, err := h.walletService.GetTransactionHistory(username)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+                return
+        }</span>
+
+        <span class="cov0" title="0">response := make([]TransactionHistoryResponse, len(transactions))
+        for i, tx := range transactions </span><span class="cov0" title="0">{
+                response[i] = TransactionHistoryResponse{
+                        ID:        tx.ID,
+                        FromUser:  tx.FromUser.Username,
+                        ToUser:    tx.ToUser.Username,
+                        Amount:    tx.Amount,
+                        Timestamp: tx.Timestamp.Format("2006-01-02T15:04:05Z"),
+                }
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package middleware
+
+import (
+        "net/http"
+
+        "github.com/gin-gonic/gin"
+)
+
+type AdminMiddleware struct {
+        adminUsers []string
+}
+
+func NewAdminMiddleware(adminUsers []string) *AdminMiddleware <span class="cov0" title="0">{
+        return &amp;AdminMiddleware{
+                adminUsers: adminUsers,
+        }
+}</span>
+
+func (m *AdminMiddleware) RequireAdmin() gin.HandlerFunc <span class="cov0" title="0">{
+        return func(c *gin.Context) </span><span class="cov0" title="0">{
+                username := GetUsername(c)
+                if username == "" </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusUnauthorized, gin.H{"error": "authentication required"})
+                        c.Abort()
+                        return
+                }</span>
+
+                <span class="cov0" title="0">isAdmin := false
+                for _, admin := range m.adminUsers </span><span class="cov0" title="0">{
+                        if admin == username </span><span class="cov0" title="0">{
+                                isAdmin = true
+                                break</span>
+                        }
+                }
+
+                <span class="cov0" title="0">if !isAdmin </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusForbidden, gin.H{"error": "admin access required"})
+                        c.Abort()
+                        return
+                }</span>
+
+                <span class="cov0" title="0">c.Next()</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package middleware
+
+import (
+        "net/http"
+        "strings"
+
+        "github.com/gin-gonic/gin"
+        "github.com/h4ks-com/bean-bank/internal/services"
+)
+
+type AuthMiddleware struct {
+        tokenService *services.TokenService
+        testMode     bool
+}
+
+func NewAuthMiddleware(tokenService *services.TokenService, testMode bool) *AuthMiddleware <span class="cov0" title="0">{
+        return &amp;AuthMiddleware{
+                tokenService: tokenService,
+                testMode:     testMode,
+        }
+}</span>
+
+func (m *AuthMiddleware) RequireAuth() gin.HandlerFunc <span class="cov0" title="0">{
+        return func(c *gin.Context) </span><span class="cov0" title="0">{
+                if m.testMode </span><span class="cov0" title="0">{
+                        username := c.GetHeader("X-Test-Username")
+                        if username == "" </span><span class="cov0" title="0">{
+                                c.JSON(http.StatusUnauthorized, gin.H{"error": "X-Test-Username header required in test mode"})
+                                c.Abort()
+                                return
+                        }</span>
+                        <span class="cov0" title="0">c.Set("username", username)
+                        c.Next()
+                        return</span>
+                }
+
+                <span class="cov0" title="0">authHeader := c.GetHeader("Authorization")
+                if authHeader == "" </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusUnauthorized, gin.H{"error": "authorization header required"})
+                        c.Abort()
+                        return
+                }</span>
+
+                <span class="cov0" title="0">parts := strings.Split(authHeader, " ")
+                if len(parts) != 2 || parts[0] != "Bearer" </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid authorization header format"})
+                        c.Abort()
+                        return
+                }</span>
+
+                <span class="cov0" title="0">tokenString := parts[1]
+                claims, err := m.tokenService.ValidateToken(tokenString)
+                if err != nil </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid or expired token"})
+                        c.Abort()
+                        return
+                }</span>
+
+                <span class="cov0" title="0">c.Set("username", claims.Username)
+                c.Next()</span>
+        }
+}
+
+func GetUsername(c *gin.Context) string <span class="cov0" title="0">{
+        username, exists := c.Get("username")
+        if !exists </span><span class="cov0" title="0">{
+                return ""
+        }</span>
+        <span class="cov0" title="0">return username.(string)</span>
+}
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package models
+
+import (
+        "encoding/json"
+        "time"
+
+        "gorm.io/gorm"
+)
+
+type GiftLink struct {
+        gorm.Model
+        Code         string     `gorm:"uniqueIndex;not null;size:64" json:"code"`
+        FromUserID   uint       `gorm:"not null;index" json:"from_user_id"`
+        FromUser     User       `gorm:"foreignKey:FromUserID" json:"-"`
+        Amount       int        `gorm:"not null" json:"amount"`
+        Message      string     `gorm:"type:text" json:"message"`
+        ExpiresAt    *time.Time `gorm:"index" json:"expires_at"`
+        RedeemedAt   *time.Time `json:"redeemed_at"`
+        RedeemedByID *uint      `gorm:"index" json:"redeemed_by_id"`
+        RedeemedBy   *User      `gorm:"foreignKey:RedeemedByID" json:"-"`
+        Active       bool       `gorm:"default:true;index" json:"active"`
+}
+
+func (g GiftLink) MarshalJSON() ([]byte, error) <span class="cov0" title="0">{
+        type Alias GiftLink
+        var redeemedByUsername *string
+        if g.RedeemedBy != nil </span><span class="cov0" title="0">{
+                redeemedByUsername = &amp;g.RedeemedBy.Username
+        }</span>
+
+        <span class="cov0" title="0">return json.Marshal(&amp;struct {
+                ID                 uint       `json:"id"`
+                CreatedAt          time.Time  `json:"created_at"`
+                UpdatedAt          time.Time  `json:"updated_at"`
+                Code               string     `json:"code"`
+                FromUserID         uint       `json:"from_user_id"`
+                FromUsername       string     `json:"from_username"`
+                Amount             int        `json:"amount"`
+                Message            string     `json:"message"`
+                ExpiresAt          *time.Time `json:"expires_at"`
+                RedeemedAt         *time.Time `json:"redeemed_at"`
+                RedeemedByID       *uint      `json:"redeemed_by_id"`
+                RedeemedBy         *string    `json:"redeemed_by,omitempty"`
+                RedeemedByUsername *string    `json:"redeemed_by_username,omitempty"`
+                Active             bool       `json:"active"`
+        }{
+                ID:                 g.ID,
+                CreatedAt:          g.CreatedAt,
+                UpdatedAt:          g.UpdatedAt,
+                Code:               g.Code,
+                FromUserID:         g.FromUserID,
+                FromUsername:       g.FromUser.Username,
+                Amount:             g.Amount,
+                Message:            g.Message,
+                ExpiresAt:          g.ExpiresAt,
+                RedeemedAt:         g.RedeemedAt,
+                RedeemedByID:       g.RedeemedByID,
+                RedeemedBy:         redeemedByUsername,
+                RedeemedByUsername: redeemedByUsername,
+                Active:             g.Active,
+        })</span>
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package repository
+
+import (
+        "github.com/h4ks-com/bean-bank/internal/models"
+        "gorm.io/gorm"
+        "gorm.io/gorm/clause"
+)
+
+type GiftLinkRepository struct {
+        db *gorm.DB
+}
+
+func NewGiftLinkRepository(db *gorm.DB) *GiftLinkRepository <span class="cov0" title="0">{
+        return &amp;GiftLinkRepository{db: db}
+}</span>
+
+func (r *GiftLinkRepository) Create(giftLink *models.GiftLink) error <span class="cov0" title="0">{
+        return r.db.Create(giftLink).Error
+}</span>
+
+func (r *GiftLinkRepository) FindByCode(code string) (*models.GiftLink, error) <span class="cov0" title="0">{
+        var giftLink models.GiftLink
+        err := r.db.Preload("FromUser").Preload("RedeemedBy").
+                Where("code = ?", code).
+                First(&amp;giftLink).Error
+
+        if err == gorm.ErrRecordNotFound </span><span class="cov0" title="0">{
+                return nil, nil
+        }</span>
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;giftLink, nil</span>
+}
+
+func (r *GiftLinkRepository) FindByCodeForUpdate(tx *gorm.DB, code string) (*models.GiftLink, error) <span class="cov0" title="0">{
+        var giftLink models.GiftLink
+        err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
+                Preload("FromUser").
+                Where("code = ?", code).
+                First(&amp;giftLink).Error
+
+        if err == gorm.ErrRecordNotFound </span><span class="cov0" title="0">{
+                return nil, nil
+        }</span>
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;giftLink, nil</span>
+}
+
+func (r *GiftLinkRepository) ListByFromUserID(userID uint) ([]models.GiftLink, error) <span class="cov0" title="0">{
+        var giftLinks []models.GiftLink
+        err := r.db.Preload("FromUser").Preload("RedeemedBy").
+                Where("from_user_id = ? AND active = ?", userID, true).
+                Order("created_at DESC").
+                Find(&amp;giftLinks).Error
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return giftLinks, nil</span>
+}
+
+func (r *GiftLinkRepository) FindByID(id uint) (*models.GiftLink, error) <span class="cov0" title="0">{
+        var giftLink models.GiftLink
+        err := r.db.Preload("FromUser").Preload("RedeemedBy").
+                Where("id = ?", id).
+                First(&amp;giftLink).Error
+
+        if err == gorm.ErrRecordNotFound </span><span class="cov0" title="0">{
+                return nil, nil
+        }</span>
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;giftLink, nil</span>
+}
+
+func (r *GiftLinkRepository) Update(giftLink *models.GiftLink) error <span class="cov0" title="0">{
+        return r.db.Save(giftLink).Error
+}</span>
+
+func (r *GiftLinkRepository) UpdateInTx(tx *gorm.DB, giftLink *models.GiftLink) error <span class="cov0" title="0">{
+        return tx.Save(giftLink).Error
+}</span>
+
+func (r *GiftLinkRepository) Delete(id uint) error <span class="cov0" title="0">{
+        return r.db.Delete(&amp;models.GiftLink{}, id).Error
+}</span>
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package repository
+
+import (
+        "github.com/h4ks-com/bean-bank/internal/models"
+        "gorm.io/gorm"
+        "gorm.io/gorm/clause"
+)
+
+type HarvestRepository struct {
+        db *gorm.DB
+}
+
+func NewHarvestRepository(db *gorm.DB) *HarvestRepository <span class="cov0" title="0">{
+        return &amp;HarvestRepository{db: db}
+}</span>
+
+func (r *HarvestRepository) Create(harvest *models.Harvest) error <span class="cov0" title="0">{
+        return r.db.Create(harvest).Error
+}</span>
+
+func (r *HarvestRepository) FindByID(id uint) (*models.Harvest, error) <span class="cov0" title="0">{
+        var harvest models.Harvest
+        err := r.db.Preload("AssignedUser").First(&amp;harvest, id).Error
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;harvest, nil</span>
+}
+
+func (r *HarvestRepository) FindByIDForUpdate(tx *gorm.DB, id uint) (*models.Harvest, error) <span class="cov0" title="0">{
+        var harvest models.Harvest
+        err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(&amp;harvest, id).Error
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;harvest, nil</span>
+}
+
+func (r *HarvestRepository) Update(harvest *models.Harvest) error <span class="cov0" title="0">{
+        return r.db.Save(harvest).Error
+}</span>
+
+func (r *HarvestRepository) UpdateInTx(tx *gorm.DB, harvest *models.Harvest) error <span class="cov0" title="0">{
+        return tx.Save(harvest).Error
+}</span>
+
+func (r *HarvestRepository) Delete(id uint) error <span class="cov0" title="0">{
+        return r.db.Delete(&amp;models.Harvest{}, id).Error
+}</span>
+
+func (r *HarvestRepository) Search(query string, page, limit int) ([]models.Harvest, error) <span class="cov0" title="0">{
+        var harvests []models.Harvest
+        offset := (page - 1) * limit
+
+        db := r.db.Preload("AssignedUser")
+
+        if query != "" </span><span class="cov0" title="0">{
+                searchPattern := "%" + query + "%"
+                db = db.Where("title LIKE ? OR description LIKE ?", searchPattern, searchPattern)
+        }</span>
+
+        <span class="cov0" title="0">err := db.Order("updated_at DESC").
+                Offset(offset).
+                Limit(limit).
+                Find(&amp;harvests).Error
+
+        return harvests, err</span>
+}
+
+func (r *HarvestRepository) CountSearch(query string) (int64, error) <span class="cov0" title="0">{
+        var count int64
+        db := r.db.Model(&amp;models.Harvest{})
+
+        if query != "" </span><span class="cov0" title="0">{
+                searchPattern := "%" + query + "%"
+                db = db.Where("title LIKE ? OR description LIKE ?", searchPattern, searchPattern)
+        }</span>
+
+        <span class="cov0" title="0">err := db.Count(&amp;count).Error
+        return count, err</span>
+}
+
+func (r *HarvestRepository) FindAll() ([]models.Harvest, error) <span class="cov0" title="0">{
+        var harvests []models.Harvest
+        err := r.db.Preload("AssignedUser").Order("updated_at DESC").Find(&amp;harvests).Error
+        return harvests, err
+}</span>
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package repository
+
+import (
+        "time"
+
+        "github.com/h4ks-com/bean-bank/internal/models"
+        "gorm.io/gorm"
+)
+
+type TokenRepository struct {
+        db *gorm.DB
+}
+
+func NewTokenRepository(db *gorm.DB) *TokenRepository <span class="cov0" title="0">{
+        return &amp;TokenRepository{db: db}
+}</span>
+
+func (r *TokenRepository) Create(token *models.APIToken) error <span class="cov0" title="0">{
+        return r.db.Create(token).Error
+}</span>
+
+func (r *TokenRepository) FindByToken(tokenStr string) (*models.APIToken, error) <span class="cov0" title="0">{
+        var token models.APIToken
+        err := r.db.Where("token = ? AND expires_at &gt; ?", tokenStr, time.Now()).
+                Preload("User").
+                First(&amp;token).Error
+        if err != nil </span><span class="cov0" title="0">{
+                if err == gorm.ErrRecordNotFound </span><span class="cov0" title="0">{
+                        return nil, nil
+                }</span>
+                <span class="cov0" title="0">return nil, err</span>
+        }
+        <span class="cov0" title="0">return &amp;token, nil</span>
+}
+
+func (r *TokenRepository) FindByUserID(userID uint) ([]models.APIToken, error) <span class="cov0" title="0">{
+        var tokens []models.APIToken
+        err := r.db.Where("user_id = ?", userID).
+                Order("created_at DESC").
+                Find(&amp;tokens).Error
+        return tokens, err
+}</span>
+
+func (r *TokenRepository) Delete(id uint, userID uint) error <span class="cov0" title="0">{
+        return r.db.Where("id = ? AND user_id = ?", id, userID).Delete(&amp;models.APIToken{}).Error
+}</span>
+
+func (r *TokenRepository) DeleteExpired() error <span class="cov0" title="0">{
+        return r.db.Where("expires_at &lt; ?", time.Now()).Delete(&amp;models.APIToken{}).Error
+}</span>
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">package repository
+
+import (
+        "github.com/h4ks-com/bean-bank/internal/models"
+        "gorm.io/gorm"
+)
+
+type TransactionRepository struct {
+        db *gorm.DB
+}
+
+func NewTransactionRepository(db *gorm.DB) *TransactionRepository <span class="cov0" title="0">{
+        return &amp;TransactionRepository{db: db}
+}</span>
+
+func (r *TransactionRepository) Create(tx *gorm.DB, transaction *models.Transaction) error <span class="cov0" title="0">{
+        return tx.Create(transaction).Error
+}</span>
+
+func (r *TransactionRepository) FindByUsername(username string) ([]models.Transaction, error) <span class="cov0" title="0">{
+        var transactions []models.Transaction
+        err := r.db.
+                Joins("JOIN users as from_user ON from_user.id = transactions.from_user_id").
+                Joins("JOIN users as to_user ON to_user.id = transactions.to_user_id").
+                Where("from_user.username = ? OR to_user.username = ?", username, username).
+                Preload("FromUser").
+                Preload("ToUser").
+                Order("transactions.created_at DESC").
+                Find(&amp;transactions).Error
+        return transactions, err
+}</span>
+
+func (r *TransactionRepository) FindAll() ([]models.Transaction, error) <span class="cov0" title="0">{
+        var transactions []models.Transaction
+        err := r.db.
+                Preload("FromUser").
+                Preload("ToUser").
+                Order("created_at DESC").
+                Find(&amp;transactions).Error
+        return transactions, err
+}</span>
+</pre>
+		
+		<pre class="file" id="file21" style="display: none">package repository
+
+import (
+        "errors"
+
+        "github.com/h4ks-com/bean-bank/internal/models"
+        "gorm.io/gorm"
+        "gorm.io/gorm/clause"
+)
+
+type UserRepository struct {
+        db *gorm.DB
+}
+
+func NewUserRepository(db *gorm.DB) *UserRepository <span class="cov0" title="0">{
+        return &amp;UserRepository{db: db}
+}</span>
+
+func (r *UserRepository) Create(user *models.User) error <span class="cov0" title="0">{
+        if user.Username == "system" </span><span class="cov0" title="0">{
+                return errors.New("username 'system' is reserved")
+        }</span>
+        <span class="cov0" title="0">return r.db.Create(user).Error</span>
+}
+
+func (r *UserRepository) FindByID(id uint) (*models.User, error) <span class="cov0" title="0">{
+        var user models.User
+        err := r.db.First(&amp;user, id).Error
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                        return nil, nil
+                }</span>
+                <span class="cov0" title="0">return nil, err</span>
+        }
+        <span class="cov0" title="0">return &amp;user, nil</span>
+}
+
+func (r *UserRepository) FindByUsername(username string) (*models.User, error) <span class="cov0" title="0">{
+        var user models.User
+        err := r.db.Where("username = ?", username).First(&amp;user).Error
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                        return nil, nil
+                }</span>
+                <span class="cov0" title="0">return nil, err</span>
+        }
+        <span class="cov0" title="0">return &amp;user, nil</span>
+}
+
+func (r *UserRepository) FindByUsernameForUpdate(tx *gorm.DB, username string) (*models.User, error) <span class="cov0" title="0">{
+        var user models.User
+        err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
+                Where("username = ?", username).
+                First(&amp;user).Error
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;user, nil</span>
+}
+
+func (r *UserRepository) Update(user *models.User) error <span class="cov0" title="0">{
+        return r.db.Save(user).Error
+}</span>
+
+func (r *UserRepository) UpdateInTx(tx *gorm.DB, user *models.User) error <span class="cov0" title="0">{
+        return tx.Save(user).Error
+}</span>
+
+func (r *UserRepository) FindAll() ([]models.User, error) <span class="cov0" title="0">{
+        var users []models.User
+        err := r.db.Find(&amp;users).Error
+        return users, err
+}</span>
+
+func (r *UserRepository) GetTotalBeans() (int64, error) <span class="cov0" title="0">{
+        var total int64
+        err := r.db.Model(&amp;models.User{}).Select("COALESCE(SUM(bean_amount), 0)").Scan(&amp;total).Error
+        return total, err
+}</span>
+
+func (r *UserRepository) GetTopWallets(limit int) ([]models.User, error) <span class="cov0" title="0">{
+        var users []models.User
+        err := r.db.Order("bean_amount DESC").Limit(limit).Find(&amp;users).Error
+        return users, err
+}</span>
+
+func (r *UserRepository) SearchByUsername(query string, limit int) ([]models.User, error) <span class="cov0" title="0">{
+        var users []models.User
+        err := r.db.Where("LOWER(username) LIKE LOWER(?)", "%"+query+"%").
+                Order("username ASC").
+                Limit(limit).
+                Find(&amp;users).Error
+        return users, err
+}</span>
+</pre>
+		
+		<pre class="file" id="file22" style="display: none">package services
+
+import (
+        "bytes"
+        "crypto/hmac"
+        "crypto/sha256"
+        "encoding/hex"
+        "encoding/json"
+        "errors"
+        "fmt"
+        "os"
+        "strconv"
+        "time"
+
+        "github.com/h4ks-com/bean-bank/internal/repository"
+        "github.com/jung-kurt/gofpdf"
+)
+
+var (
+        ErrInvalidSignature = errors.New("invalid signature")
+        ErrInvalidExport    = errors.New("invalid export data")
+)
+
+type TransactionExport struct {
+        UserID       uint                    `json:"user_id"`
+        Username     string                  `json:"username"`
+        Email        string                  `json:"email"`
+        TotalBeans   int                     `json:"total_beans"`
+        Transactions []TransactionExportItem `json:"transactions"`
+        ExportedAt   time.Time               `json:"exported_at"`
+        Signature    string                  `json:"signature"`
+}
+
+type TransactionExportItem struct {
+        ID        uint      `json:"id"`
+        FromUser  string    `json:"from_user"`
+        ToUser    string    `json:"to_user"`
+        Amount    int       `json:"amount"`
+        Note      string    `json:"note,omitempty"`
+        CreatedAt time.Time `json:"created_at"`
+}
+
+type ExportService struct {
+        userRepo        *repository.UserRepository
+        transactionRepo *repository.TransactionRepository
+        signingKey      string
+}
+
+func NewExportService(userRepo *repository.UserRepository, transactionRepo *repository.TransactionRepository, signingKey string) *ExportService <span class="cov10" title="11">{
+        return &amp;ExportService{
+                userRepo:        userRepo,
+                transactionRepo: transactionRepo,
+                signingKey:      signingKey,
+        }
+}</span>
+
+func (s *ExportService) ExportTransactions(username string) (*TransactionExport, error) <span class="cov8" title="8">{
+        user, err := s.userRepo.FindByUsername(username)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="8">if user == nil </span><span class="cov1" title="1">{
+                return nil, ErrUserNotFound
+        }</span>
+
+        <span class="cov8" title="7">transactions, err := s.transactionRepo.FindByUsername(username)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="7">exportItems := make([]TransactionExportItem, len(transactions))
+        for i, tx := range transactions </span><span class="cov8" title="8">{
+                exportItems[i] = TransactionExportItem{
+                        ID:        tx.ID,
+                        FromUser:  tx.FromUser.Username,
+                        ToUser:    tx.ToUser.Username,
+                        Amount:    tx.Amount,
+                        Note:      tx.Note,
+                        CreatedAt: tx.CreatedAt,
+                }
+        }</span>
+
+        <span class="cov8" title="7">export := &amp;TransactionExport{
+                UserID:       user.ID,
+                Username:     user.Username,
+                Email:        user.Email,
+                TotalBeans:   user.BeanAmount,
+                Transactions: exportItems,
+                ExportedAt:   time.Now(),
+        }
+
+        signature, err := s.signExport(export)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="7">export.Signature = signature
+
+        return export, nil</span>
+}
+
+func (s *ExportService) VerifyExport(exportData []byte, signature string) (bool, error) <span class="cov7" title="5">{
+        var export TransactionExport
+        err := json.Unmarshal(exportData, &amp;export)
+        if err != nil </span><span class="cov1" title="1">{
+                return false, ErrInvalidExport
+        }</span>
+
+        <span class="cov6" title="4">export.Signature = ""
+
+        computedSignature, err := s.signExport(&amp;export)
+        if err != nil </span><span class="cov0" title="0">{
+                return false, err
+        }</span>
+
+        <span class="cov6" title="4">return hmac.Equal([]byte(computedSignature), []byte(signature)), nil</span>
+}
+
+func (s *ExportService) VerifyExportData(exportData *TransactionExport) (bool, error) <span class="cov0" title="0">{
+        if exportData.Signature == "" </span><span class="cov0" title="0">{
+                return false, ErrInvalidExport
+        }</span>
+
+        <span class="cov0" title="0">providedSignature := exportData.Signature
+
+        exportCopy := *exportData
+        exportCopy.Signature = ""
+
+        computedSignature, err := s.signExport(&amp;exportCopy)
+        if err != nil </span><span class="cov0" title="0">{
+                return false, err
+        }</span>
+
+        <span class="cov0" title="0">return hmac.Equal([]byte(computedSignature), []byte(providedSignature)), nil</span>
+}
+
+func (s *ExportService) signExport(export *TransactionExport) (string, error) <span class="cov10" title="11">{
+        exportCopy := *export
+        exportCopy.Signature = ""
+
+        data, err := json.Marshal(exportCopy)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+
+        <span class="cov10" title="11">h := hmac.New(sha256.New, []byte(s.signingKey))
+        h.Write(data)
+        signature := hex.EncodeToString(h.Sum(nil))
+
+        return signature, nil</span>
+}
+
+func reverseString(s string) []rune <span class="cov1" title="1">{
+        r := []rune(s)
+        for i, j := 0, len(r)-1; i &lt; j; i, j = i+1, j-1 </span><span class="cov1" title="1">{
+                r[i], r[j] = r[j], r[i]
+        }</span>
+        <span class="cov1" title="1">return r</span>
+}
+
+// GenerateStatementPDF builds a simple, realistic-looking PDF bank statement
+// for the given username. The currency is explicitly stated as "Beans".
+func (s *ExportService) GenerateStatementPDF(username string) ([]byte, error) <span class="cov1" title="1">{
+        export, err := s.ExportTransactions(username)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov1" title="1">pdf := gofpdf.New("P", "mm", "A4", "")
+        pdf.SetMargins(20, 20, 20)
+        pdf.AddPage()
+
+        pageW, pageH := pdf.GetPageSize()
+        left, _, right, bottom := pdf.GetMargins()
+        contentW := pageW - left - right
+
+        // Header: try to use embedded Font Awesome solid font (fa-solid-900.ttf) for the coins glyph;
+        // fall back to the drawn coins if embedding fails.
+        pdf.SetTextColor(25, 25, 25)
+        headerY := 18.0
+
+        // attempt to register Font Awesome TTF bundled in web/static/fonts
+        faPath := "web/static/fonts/fa-solid-900.ttf"
+        if _, err := os.Stat(faPath); err == nil </span><span class="cov0" title="0">{
+                // AddUTF8Font registers the font family for the current PDF.
+                // This function does not return an error value in this gofpdf version.
+                pdf.AddUTF8Font("fa", "", faPath)
+                // Set font and draw glyph (FA coins U+F51E) at left
+                pdf.SetFont("fa", "", 20)
+                pdf.SetXY(left+6, headerY-8)
+                pdf.CellFormat(0, 10, string('\uf51e'), "", 0, "L", false, 0, "")
+        }</span> else<span class="cov1" title="1"> {
+                // draw coins (three circles with slight offsets)
+                pdf.SetFont("Arial", "B", 20)
+                coinCx := left + 12.0
+                for i := 0; i &lt; 3; i++ </span><span class="cov5" title="3">{
+                        cx := coinCx + float64(i)*6.0
+                        cy := headerY
+                        r := 6.0
+                        // coin body
+                        pdf.SetFillColor(int(212-i*10), int(142-i*8), int(42-i*6))
+                        pdf.SetDrawColor(80, 60, 30)
+                        pdf.SetLineWidth(0.5)
+                        pdf.Circle(cx, cy, r, "F")
+                        // rim
+                        pdf.SetDrawColor(120, 95, 45)
+                        pdf.Circle(cx, cy, r, "D")
+                        // highlight
+                        pdf.SetFillColor(255, 255, 255)
+                        pdf.Ellipse(cx-2.0, cy-1.5, 2.5, 1.5, 0.0, "F")
+                }</span>
+        }
+
+        <span class="cov1" title="1">pdf.SetXY(left+36, headerY-6)
+        pdf.SetFont("Arial", "B", 20)
+        pdf.CellFormat(0, 10, "Bean Bank Statement", "", 1, "L", false, 0, "")
+        pdf.SetFont("Arial", "", 10)
+        pdf.SetXY(left+36, headerY+4)
+        pdf.CellFormat(0, 5, fmt.Sprintf("Generated: %s", export.ExportedAt.Format("2006-01-02 15:04")), "", 1, "L", false, 0, "")
+        pdf.SetXY(left+36, headerY+9)
+        pdf.CellFormat(0, 5, "Currency: Beans (fictional)", "", 1, "L", false, 0, "")
+
+        // Account info block
+        pdf.Ln(6)
+        pdf.SetFont("Arial", "B", 12)
+        pdf.CellFormat(0, 6, "Account Information", "", 1, "L", false, 0, "")
+        pdf.SetFont("Arial", "", 11)
+        pdf.CellFormat(0, 6, fmt.Sprintf("Username: %s", export.Username), "", 1, "L", false, 0, "")
+        pdf.CellFormat(0, 6, fmt.Sprintf("Email: %s", export.Email), "", 1, "L", false, 0, "")
+        pdf.CellFormat(0, 6, fmt.Sprintf("Current Balance: %d Beans", export.TotalBeans), "", 1, "L", false, 0, "")
+        pdf.Ln(4)
+
+        // Transactions: draw inside a rounded container with gentle separators
+        formatNumber := func(n int) string </span><span class="cov1" title="1">{
+                s := strconv.Itoa(n)
+                if n &lt; 0 </span><span class="cov0" title="0">{
+                        s = s[1:]
+                }</span>
+                <span class="cov1" title="1">out := ""
+                for i, c := range reverseString(s) </span><span class="cov3" title="2">{
+                        if i &gt; 0 &amp;&amp; i%3 == 0 </span><span class="cov0" title="0">{
+                                out = "," + out
+                        }</span>
+                        <span class="cov3" title="2">out = string(c) + out</span>
+                }
+                <span class="cov1" title="1">if n &lt; 0 </span><span class="cov0" title="0">{
+                        out = "-" + out
+                }</span>
+                <span class="cov1" title="1">return out</span>
+        }
+
+        <span class="cov1" title="1">pdf.SetFont("Arial", "", 10)
+        rowH := 10.0
+
+        tableX := left
+        tableY := pdf.GetY()
+        // columns: Date, From, To, Note, Amount
+        cwDate := 30.0
+        cwFrom := 40.0
+        cwTo := 40.0
+        cwAmt := 45.0
+        cwNote := contentW - cwDate - cwFrom - cwTo - cwAmt
+
+        headerH := rowH
+
+        // Pagination: split rows across pages with repeated headers
+        total := 0
+        rowsPerPage := int((pageH - bottom - tableY - 40) / rowH) // leave room for footer/notes
+        if rowsPerPage &lt; 3 </span><span class="cov0" title="0">{
+                rowsPerPage = 3
+        }</span>
+
+        <span class="cov1" title="1">numRows := len(export.Transactions)
+        pages := (numRows + rowsPerPage - 1) / rowsPerPage
+        rowIndex := 0
+
+        for p := 0; p &lt; pages; p++ </span><span class="cov1" title="1">{
+                if p &gt; 0 </span><span class="cov0" title="0">{
+                        pdf.AddPage()
+                        tableY = pdf.GetY()
+                }</span>
+                // compute how many rows on this page
+                <span class="cov1" title="1">remaining := numRows - rowIndex
+                thisRows := rowsPerPage
+                if remaining &lt; thisRows </span><span class="cov1" title="1">{
+                        thisRows = remaining
+                }</span>
+
+                // container height for this page
+                <span class="cov1" title="1">containerHPage := headerH + float64(thisRows)*rowH + 12.0
+                if containerHPage &gt; pageH-bottom-tableY </span><span class="cov0" title="0">{
+                        containerHPage = pageH - bottom - tableY - 10
+                }</span>
+
+                // draw container
+                <span class="cov1" title="1">pdf.SetFillColor(255, 255, 255)
+                pdf.SetDrawColor(190, 190, 190)
+                pdf.SetLineWidth(0.7)
+                pdf.RoundedRect(tableX-1, tableY-1, contentW+2, containerHPage+2, 5.0, "1111", "DF")
+
+                // header band
+                pdf.SetFillColor(245, 245, 245)
+                pdf.Rect(tableX, tableY, contentW, headerH, "F")
+
+                // headers text
+                pdf.SetFont("Arial", "B", 11)
+                x := tableX
+                pdf.SetXY(x+4, tableY+3)
+                pdf.CellFormat(cwDate-8, headerH-6, "Date", "", 0, "L", false, 0, "")
+                x += cwDate
+                pdf.SetXY(x+4, tableY+3)
+                pdf.CellFormat(cwFrom-8, headerH-6, "From", "", 0, "L", false, 0, "")
+                x += cwFrom
+                pdf.SetXY(x+4, tableY+3)
+                pdf.CellFormat(cwTo-8, headerH-6, "To", "", 0, "L", false, 0, "")
+                x += cwTo
+                pdf.SetXY(x+4, tableY+3)
+                pdf.CellFormat(cwNote-8, headerH-6, "Note", "", 0, "L", false, 0, "")
+                x += cwNote
+                pdf.SetXY(x+4, tableY+3)
+                pdf.CellFormat(cwAmt-8, headerH-6, "Amount", "", 0, "R", false, 0, "")
+
+                // vertical separators (soft)
+                sepX := tableX
+                pdf.SetDrawColor(230, 230, 230)
+                for _, w := range []float64{cwDate, cwFrom, cwTo, cwNote, cwAmt} </span><span class="cov7" title="5">{
+                        sepX += w
+                        pdf.Line(sepX, tableY, sepX, tableY+containerHPage)
+                }</span>
+
+                // rows for this page
+                <span class="cov1" title="1">pdf.SetFont("Arial", "", 10)
+                for i := 0; i &lt; thisRows; i++ </span><span class="cov1" title="1">{
+                        tx := export.Transactions[rowIndex]
+                        ry := tableY + headerH + float64(i)*rowH
+                        x = tableX
+                        pdf.SetXY(x+4, ry+3)
+                        pdf.CellFormat(cwDate-8, rowH-6, tx.CreatedAt.Format("2006-01-02"), "", 0, "L", false, 0, "")
+                        x += cwDate
+                        pdf.SetXY(x+4, ry+3)
+                        pdf.CellFormat(cwFrom-8, rowH-6, tx.FromUser, "", 0, "L", false, 0, "")
+                        x += cwFrom
+                        pdf.SetXY(x+4, ry+3)
+                        pdf.CellFormat(cwTo-8, rowH-6, tx.ToUser, "", 0, "L", false, 0, "")
+                        x += cwTo
+                        note := tx.Note
+                        if len(note) &gt; 120 </span><span class="cov0" title="0">{
+                                note = note[:117] + "..."
+                        }</span>
+                        <span class="cov1" title="1">pdf.SetXY(x+4, ry+3)
+                        pdf.CellFormat(cwNote-8, rowH-6, note, "", 0, "L", false, 0, "")
+                        x += cwNote
+                        pdf.SetXY(x+4, ry+3)
+                        pdf.CellFormat(cwAmt-10, rowH-6, formatNumber(tx.Amount)+" Beans", "", 0, "R", false, 0, "")
+                        // row separator
+                        pdf.SetDrawColor(240, 240, 240)
+                        pdf.Line(tableX, ry+rowH, tableX+contentW, ry+rowH)
+                        total += tx.Amount
+                        rowIndex++</span>
+                }
+
+                // move cursor after container for this page
+                <span class="cov1" title="1">pdf.SetXY(tableX, tableY+containerHPage+6)</span>
+        }
+
+        // Totals
+        <span class="cov1" title="1">pdf.SetFont("Arial", "B", 11)
+        pdf.CellFormat(170, 8, "Total (listed)", "1", 0, "R", false, 0, "")
+        pdf.CellFormat(20, 8, fmt.Sprintf("%d Beans", total), "1", 1, "R", false, 0, "")
+
+        pdf.Ln(6)
+        pdf.SetFont("Arial", "I", 9)
+        pdf.MultiCell(0, 5, "This statement is for demonstration purposes. The currency used by Bean Bank is 'Beans' and is fictional. This document is not a real bank statement.", "", "L", false)
+
+        var buf bytes.Buffer
+        if err := pdf.Output(&amp;buf); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov1" title="1">return buf.Bytes(), nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file23" style="display: none">package services
+
+import (
+        "crypto/rand"
+        "encoding/base64"
+        "errors"
+        "fmt"
+        "time"
+
+        "github.com/h4ks-com/bean-bank/internal/models"
+        "github.com/h4ks-com/bean-bank/internal/repository"
+        "gorm.io/gorm"
+)
+
+var (
+        ErrGiftLinkNotFound           = errors.New("gift link not found")
+        ErrGiftLinkExpired            = errors.New("gift link has expired")
+        ErrGiftLinkRedeemed           = errors.New("gift link has already been redeemed")
+        ErrGiftLinkInactive           = errors.New("gift link is not active")
+        ErrCannotRedeemOwnLink        = errors.New("cannot redeem your own gift link")
+        ErrInsufficientBalanceForGift = errors.New("insufficient balance to create gift link")
+)
+
+type GiftLinkService struct {
+        giftLinkRepo    *repository.GiftLinkRepository
+        userRepo        *repository.UserRepository
+        transferService *TransferService
+        db              *gorm.DB
+}
+
+func NewGiftLinkService(
+        giftLinkRepo *repository.GiftLinkRepository,
+        userRepo *repository.UserRepository,
+        transferService *TransferService,
+        db *gorm.DB,
+) *GiftLinkService <span class="cov8" title="18">{
+        return &amp;GiftLinkService{
+                giftLinkRepo:    giftLinkRepo,
+                userRepo:        userRepo,
+                transferService: transferService,
+                db:              db,
+        }
+}</span>
+
+func (s *GiftLinkService) generateUniqueCode() (string, error) <span class="cov9" title="22">{
+        for i := 0; i &lt; 10; i++ </span><span class="cov9" title="22">{
+                bytes := make([]byte, 32)
+                if _, err := rand.Read(bytes); err != nil </span><span class="cov0" title="0">{
+                        return "", err
+                }</span>
+
+                <span class="cov9" title="22">code := base64.URLEncoding.EncodeToString(bytes)
+
+                existing, err := s.giftLinkRepo.FindByCode(code)
+                if err != nil </span><span class="cov0" title="0">{
+                        return "", err
+                }</span>
+                <span class="cov9" title="22">if existing == nil </span><span class="cov9" title="22">{
+                        return code, nil
+                }</span>
+        }
+        <span class="cov0" title="0">return "", errors.New("failed to generate unique code after 10 attempts")</span>
+}
+
+func (s *GiftLinkService) parseExpiry(expiresIn string) *time.Time <span class="cov9" title="22">{
+        if expiresIn == "" || expiresIn == "never" </span><span class="cov4" title="4">{
+                return nil
+        }</span>
+
+        <span class="cov8" title="18">var duration time.Duration
+        switch expiresIn </span>{
+        case "1h":<span class="cov2" title="2">
+                duration = 1 * time.Hour</span>
+        case "24h":<span class="cov8" title="13">
+                duration = 24 * time.Hour</span>
+        case "7d":<span class="cov1" title="1">
+                duration = 7 * 24 * time.Hour</span>
+        case "30d":<span class="cov1" title="1">
+                duration = 30 * 24 * time.Hour</span>
+        default:<span class="cov1" title="1">
+                return nil</span>
+        }
+
+        <span class="cov8" title="17">expiry := time.Now().Add(duration)
+        return &amp;expiry</span>
+}
+
+func (s *GiftLinkService) CreateGiftLink(fromUsername string, amount int, message string, expiresIn string) (*models.GiftLink, error) <span class="cov10" title="26">{
+        if amount &lt;= 0 </span><span class="cov2" title="2">{
+                return nil, ErrInvalidAmount
+        }</span>
+
+        <span class="cov9" title="24">fromUser, err := s.userRepo.FindByUsername(fromUsername)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov9" title="24">if fromUser == nil </span><span class="cov1" title="1">{
+                return nil, ErrUserNotFound
+        }</span>
+
+        <span class="cov9" title="23">if fromUser.BeanAmount &lt; amount </span><span class="cov1" title="1">{
+                return nil, ErrInsufficientBalanceForGift
+        }</span>
+
+        <span class="cov9" title="22">code, err := s.generateUniqueCode()
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("failed to generate gift code: %w", err)
+        }</span>
+
+        <span class="cov9" title="22">expiry := s.parseExpiry(expiresIn)
+
+        err = s.db.Transaction(func(tx *gorm.DB) error </span><span class="cov9" title="22">{
+                if err := s.transferService.TransferInTx(tx, fromUsername, "system", amount, true); err != nil </span><span class="cov0" title="0">{
+                        return fmt.Errorf("failed to escrow beans: %w", err)
+                }</span>
+
+                <span class="cov9" title="22">giftLink := &amp;models.GiftLink{
+                        Code:       code,
+                        FromUserID: fromUser.ID,
+                        Amount:     amount,
+                        Message:    message,
+                        ExpiresAt:  expiry,
+                        Active:     true,
+                }
+
+                if err := tx.Create(giftLink).Error; err != nil </span><span class="cov0" title="0">{
+                        return fmt.Errorf("failed to create gift link: %w", err)
+                }</span>
+
+                <span class="cov9" title="22">if err := tx.Preload("FromUser").First(giftLink, giftLink.ID).Error; err != nil </span><span class="cov0" title="0">{
+                        return fmt.Errorf("failed to reload gift link: %w", err)
+                }</span>
+
+                <span class="cov9" title="22">return nil</span>
+        })
+
+        <span class="cov9" title="22">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov9" title="22">reloadedGift, err := s.giftLinkRepo.FindByCode(code)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov9" title="22">return reloadedGift, nil</span>
+}
+
+func (s *GiftLinkService) RedeemGiftLink(code string, redeemUsername string) error <span class="cov7" title="9">{
+        return s.db.Transaction(func(tx *gorm.DB) error </span><span class="cov7" title="9">{
+                giftLink, err := s.giftLinkRepo.FindByCodeForUpdate(tx, code)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov7" title="9">if giftLink == nil </span><span class="cov1" title="1">{
+                        return ErrGiftLinkNotFound
+                }</span>
+
+                <span class="cov6" title="8">if giftLink.RedeemedAt != nil </span><span class="cov1" title="1">{
+                        return ErrGiftLinkRedeemed
+                }</span>
+
+                <span class="cov6" title="7">if !giftLink.Active </span><span class="cov1" title="1">{
+                        return ErrGiftLinkInactive
+                }</span>
+
+                <span class="cov5" title="6">if giftLink.ExpiresAt != nil &amp;&amp; time.Now().After(*giftLink.ExpiresAt) </span><span class="cov1" title="1">{
+                        return ErrGiftLinkExpired
+                }</span>
+
+                <span class="cov5" title="5">if giftLink.FromUser.Username == redeemUsername </span><span class="cov1" title="1">{
+                        return ErrCannotRedeemOwnLink
+                }</span>
+
+                <span class="cov4" title="4">if err := s.transferService.TransferInTx(tx, "system", redeemUsername, giftLink.Amount, true); err != nil </span><span class="cov0" title="0">{
+                        return fmt.Errorf("failed to transfer beans: %w", err)
+                }</span>
+
+                <span class="cov4" title="4">redeemUser, err := s.userRepo.FindByUsernameForUpdate(tx, redeemUsername)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov4" title="4">if redeemUser == nil </span><span class="cov0" title="0">{
+                        return ErrUserNotFound
+                }</span>
+
+                <span class="cov4" title="4">now := time.Now()
+                giftLink.RedeemedAt = &amp;now
+                giftLink.RedeemedByID = &amp;redeemUser.ID
+                giftLink.Active = false
+
+                if err := s.giftLinkRepo.UpdateInTx(tx, giftLink); err != nil </span><span class="cov0" title="0">{
+                        return fmt.Errorf("failed to update gift link: %w", err)
+                }</span>
+
+                <span class="cov4" title="4">return nil</span>
+        })
+}
+
+func (s *GiftLinkService) ListGiftLinks(username string) ([]models.GiftLink, error) <span class="cov4" title="4">{
+        user, err := s.userRepo.FindByUsername(username)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov4" title="4">if user == nil </span><span class="cov1" title="1">{
+                return nil, ErrUserNotFound
+        }</span>
+
+        <span class="cov4" title="3">return s.giftLinkRepo.ListByFromUserID(user.ID)</span>
+}
+
+func (s *GiftLinkService) DeleteGiftLink(id uint, username string) error <span class="cov4" title="4">{
+        user, err := s.userRepo.FindByUsername(username)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov4" title="4">if user == nil </span><span class="cov0" title="0">{
+                return ErrUserNotFound
+        }</span>
+
+        <span class="cov4" title="4">giftLink, err := s.giftLinkRepo.FindByID(id)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov4" title="4">if giftLink == nil </span><span class="cov1" title="1">{
+                return ErrGiftLinkNotFound
+        }</span>
+
+        <span class="cov4" title="3">if giftLink.FromUserID != user.ID </span><span class="cov1" title="1">{
+                return errors.New("cannot delete gift link you don't own")
+        }</span>
+
+        <span class="cov2" title="2">return s.db.Transaction(func(tx *gorm.DB) error </span><span class="cov2" title="2">{
+                if giftLink.RedeemedAt == nil &amp;&amp; giftLink.Active </span><span class="cov1" title="1">{
+                        if err := s.transferService.TransferInTx(tx, "system", username, giftLink.Amount, true); err != nil </span><span class="cov0" title="0">{
+                                return fmt.Errorf("failed to refund beans: %w", err)
+                        }</span>
+                }
+
+                <span class="cov2" title="2">giftLink.Active = false
+                if err := s.giftLinkRepo.UpdateInTx(tx, giftLink); err != nil </span><span class="cov0" title="0">{
+                        return fmt.Errorf("failed to deactivate gift link: %w", err)
+                }</span>
+
+                <span class="cov2" title="2">return nil</span>
+        })
+}
+
+func (s *GiftLinkService) GetGiftLinkByCode(code string) (*models.GiftLink, error) <span class="cov2" title="2">{
+        return s.giftLinkRepo.FindByCode(code)
+}</span>
+</pre>
+		
+		<pre class="file" id="file24" style="display: none">package services
+
+import (
+        "errors"
+        "fmt"
+
+        "github.com/h4ks-com/bean-bank/internal/models"
+        "github.com/h4ks-com/bean-bank/internal/repository"
+        "gorm.io/gorm"
+        "gorm.io/gorm/clause"
+)
+
+var (
+        ErrHarvestNotFound         = errors.New("harvest not found")
+        ErrHarvestAlreadyCompleted = errors.New("harvest already completed")
+        ErrNoAssignedUser          = errors.New("harvest has no assigned user")
+)
+
+type HarvestService struct {
+        harvestRepo     *repository.HarvestRepository
+        userRepo        *repository.UserRepository
+        transactionRepo *repository.TransactionRepository
+        db              *gorm.DB
+}
+
+func NewHarvestService(
+        harvestRepo *repository.HarvestRepository,
+        userRepo *repository.UserRepository,
+        transactionRepo *repository.TransactionRepository,
+        db *gorm.DB,
+) *HarvestService <span class="cov6" title="11">{
+        return &amp;HarvestService{
+                harvestRepo:     harvestRepo,
+                userRepo:        userRepo,
+                transactionRepo: transactionRepo,
+                db:              db,
+        }
+}</span>
+
+func (s *HarvestService) CreateHarvest(title, description string, beanAmount int) (*models.Harvest, error) <span class="cov10" title="39">{
+        harvest := &amp;models.Harvest{
+                Title:       title,
+                Description: description,
+                BeanAmount:  beanAmount,
+                Completed:   false,
+        }
+
+        err := s.harvestRepo.Create(harvest)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov10" title="39">return harvest, nil</span>
+}
+
+func (s *HarvestService) UpdateHarvest(id uint, title, description string, beanAmount int) (*models.Harvest, error) <span class="cov1" title="1">{
+        harvest, err := s.harvestRepo.FindByID(id)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov1" title="1">harvest.Title = title
+        harvest.Description = description
+        harvest.BeanAmount = beanAmount
+
+        err = s.harvestRepo.Update(harvest)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov1" title="1">return harvest, nil</span>
+}
+
+func (s *HarvestService) AssignUser(harvestID, userID uint) (*models.Harvest, error) <span class="cov3" title="3">{
+        harvest, err := s.harvestRepo.FindByID(harvestID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov3" title="3">user, err := s.userRepo.FindByID(userID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov3" title="3">if user == nil </span><span class="cov0" title="0">{
+                return nil, ErrUserNotFound
+        }</span>
+
+        <span class="cov3" title="3">harvest.AssignedUserID = &amp;userID
+
+        err = s.harvestRepo.Update(harvest)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov3" title="3">return s.harvestRepo.FindByID(harvestID)</span>
+}
+
+func (s *HarvestService) AssignUserByUsername(harvestID uint, username string) (*models.Harvest, error) <span class="cov0" title="0">{
+        user, err := s.userRepo.FindByUsername(username)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">if user == nil </span><span class="cov0" title="0">{
+                return nil, ErrUserNotFound
+        }</span>
+        <span class="cov0" title="0">return s.AssignUser(harvestID, user.ID)</span>
+}
+
+func (s *HarvestService) CompleteHarvest(harvestID uint) (*models.Harvest, error) <span class="cov4" title="4">{
+        var harvest *models.Harvest
+
+        err := s.db.Transaction(func(tx *gorm.DB) error </span><span class="cov4" title="4">{
+                var err error
+                harvest, err = s.harvestRepo.FindByIDForUpdate(tx, harvestID)
+                if err != nil </span><span class="cov0" title="0">{
+                        if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                                return ErrHarvestNotFound
+                        }</span>
+                        <span class="cov0" title="0">return err</span>
+                }
+
+                <span class="cov4" title="4">if harvest.Completed </span><span class="cov1" title="1">{
+                        return ErrHarvestAlreadyCompleted
+                }</span>
+
+                <span class="cov3" title="3">if harvest.AssignedUserID == nil </span><span class="cov1" title="1">{
+                        return ErrNoAssignedUser
+                }</span>
+
+                <span class="cov2" title="2">var assignedUser models.User
+                err = tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(&amp;assignedUser, harvest.AssignedUserID).Error
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+
+                <span class="cov2" title="2">assignedUser.BeanAmount += harvest.BeanAmount
+
+                err = tx.Save(&amp;assignedUser).Error
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+
+                <span class="cov2" title="2">var systemUser models.User
+                err = tx.Where("username = ?", "system").First(&amp;systemUser).Error
+                if err != nil </span><span class="cov2" title="2">{
+                        if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov2" title="2">{
+                                systemUser = models.User{
+                                        Username:   "system",
+                                        BeanAmount: 0,
+                                }
+                                err = tx.Create(&amp;systemUser).Error
+                                if err != nil </span><span class="cov0" title="0">{
+                                        return err
+                                }</span>
+                        } else<span class="cov0" title="0"> {
+                                return err
+                        }</span>
+                }
+
+                <span class="cov2" title="2">transaction := &amp;models.Transaction{
+                        FromUserID: systemUser.ID,
+                        ToUserID:   assignedUser.ID,
+                        Amount:     harvest.BeanAmount,
+                        Note:       fmt.Sprintf("Harvest completed: %s", harvest.Title),
+                }
+
+                err = s.transactionRepo.Create(tx, transaction)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+
+                <span class="cov2" title="2">harvest.Completed = true
+                err = s.harvestRepo.UpdateInTx(tx, harvest)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+
+                <span class="cov2" title="2">return nil</span>
+        })
+
+        <span class="cov4" title="4">if err != nil </span><span class="cov2" title="2">{
+                return nil, err
+        }</span>
+
+        <span class="cov2" title="2">return s.harvestRepo.FindByID(harvestID)</span>
+}
+
+func (s *HarvestService) GetHarvest(id uint) (*models.Harvest, error) <span class="cov1" title="1">{
+        return s.harvestRepo.FindByID(id)
+}</span>
+
+func (s *HarvestService) GetAllHarvests() ([]models.Harvest, error) <span class="cov1" title="1">{
+        return s.harvestRepo.FindAll()
+}</span>
+
+func (s *HarvestService) SearchHarvests(query string, page, limit int) ([]models.Harvest, int64, error) <span class="cov4" title="5">{
+        harvests, err := s.harvestRepo.Search(query, page, limit)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, 0, err
+        }</span>
+
+        <span class="cov4" title="5">count, err := s.harvestRepo.CountSearch(query)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, 0, err
+        }</span>
+
+        <span class="cov4" title="5">return harvests, count, nil</span>
+}
+
+func (s *HarvestService) DeleteHarvest(id uint) error <span class="cov1" title="1">{
+        return s.harvestRepo.Delete(id)
+}</span>
+</pre>
+		
+		<pre class="file" id="file25" style="display: none">package services
+
+import (
+        "errors"
+        "time"
+
+        "github.com/golang-jwt/jwt/v5"
+        "github.com/google/uuid"
+        "github.com/h4ks-com/bean-bank/internal/models"
+        "github.com/h4ks-com/bean-bank/internal/repository"
+)
+
+var (
+        ErrInvalidToken = errors.New("invalid token")
+        ErrExpiredToken = errors.New("token expired")
+)
+
+type TokenClaims struct {
+        Username string `json:"username"`
+        jwt.RegisteredClaims
+}
+
+type TokenService struct {
+        tokenRepo *repository.TokenRepository
+        userRepo  *repository.UserRepository
+        jwtSecret string
+}
+
+func NewTokenService(tokenRepo *repository.TokenRepository, userRepo *repository.UserRepository, jwtSecret string) *TokenService <span class="cov0" title="0">{
+        return &amp;TokenService{
+                tokenRepo: tokenRepo,
+                userRepo:  userRepo,
+                jwtSecret: jwtSecret,
+        }
+}</span>
+
+func (s *TokenService) GenerateToken(username string, expiresIn time.Duration) (string, error) <span class="cov0" title="0">{
+        user, err := s.userRepo.FindByUsername(username)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+        <span class="cov0" title="0">if user == nil </span><span class="cov0" title="0">{
+                return "", ErrUserNotFound
+        }</span>
+
+        <span class="cov0" title="0">claims := TokenClaims{
+                Username: username,
+                RegisteredClaims: jwt.RegisteredClaims{
+                        ExpiresAt: jwt.NewNumericDate(time.Now().Add(expiresIn)),
+                        IssuedAt:  jwt.NewNumericDate(time.Now()),
+                        Issuer:    "bean-bank",
+                        ID:        uuid.New().String(),
+                },
+        }
+
+        token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+        tokenString, err := token.SignedString([]byte(s.jwtSecret))
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+
+        <span class="cov0" title="0">apiToken := &amp;models.APIToken{
+                UserID:    user.ID,
+                Token:     tokenString,
+                ExpiresAt: time.Now().Add(expiresIn),
+        }
+
+        err = s.tokenRepo.Create(apiToken)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+
+        <span class="cov0" title="0">return tokenString, nil</span>
+}
+
+func (s *TokenService) ValidateToken(tokenString string) (*TokenClaims, error) <span class="cov0" title="0">{
+        token, err := jwt.ParseWithClaims(tokenString, &amp;TokenClaims{}, func(token *jwt.Token) (interface{}, error) </span><span class="cov0" title="0">{
+                if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok </span><span class="cov0" title="0">{
+                        return nil, ErrInvalidToken
+                }</span>
+                <span class="cov0" title="0">return []byte(s.jwtSecret), nil</span>
+        })
+
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, ErrInvalidToken
+        }</span>
+
+        <span class="cov0" title="0">claims, ok := token.Claims.(*TokenClaims)
+        if !ok || !token.Valid </span><span class="cov0" title="0">{
+                return nil, ErrInvalidToken
+        }</span>
+
+        <span class="cov0" title="0">dbToken, err := s.tokenRepo.FindByToken(tokenString)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">if dbToken == nil </span><span class="cov0" title="0">{
+                return nil, ErrInvalidToken
+        }</span>
+
+        <span class="cov0" title="0">if dbToken.ExpiresAt.Before(time.Now()) </span><span class="cov0" title="0">{
+                return nil, ErrExpiredToken
+        }</span>
+
+        <span class="cov0" title="0">return claims, nil</span>
+}
+
+func (s *TokenService) ListUserTokens(username string) ([]models.APIToken, error) <span class="cov0" title="0">{
+        user, err := s.userRepo.FindByUsername(username)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">if user == nil </span><span class="cov0" title="0">{
+                return nil, ErrUserNotFound
+        }</span>
+
+        <span class="cov0" title="0">return s.tokenRepo.FindByUserID(user.ID)</span>
+}
+
+func (s *TokenService) DeleteToken(tokenID uint, username string) error <span class="cov0" title="0">{
+        user, err := s.userRepo.FindByUsername(username)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">if user == nil </span><span class="cov0" title="0">{
+                return ErrUserNotFound
+        }</span>
+
+        <span class="cov0" title="0">return s.tokenRepo.Delete(tokenID, user.ID)</span>
+}
+</pre>
+		
+		<pre class="file" id="file26" style="display: none">package services
+
+import (
+        "errors"
+
+        "github.com/h4ks-com/bean-bank/internal/models"
+        "github.com/h4ks-com/bean-bank/internal/repository"
+        "gorm.io/gorm"
+)
+
+var (
+        ErrInsufficientBalance = errors.New("insufficient balance")
+        ErrRecipientNotFound   = errors.New("recipient not found")
+        ErrInvalidAmount       = errors.New("invalid amount")
+        ErrSelfTransfer        = errors.New("cannot transfer to yourself")
+)
+
+type TransferService struct {
+        userRepo        *repository.UserRepository
+        transactionRepo *repository.TransactionRepository
+        db              *gorm.DB
+}
+
+func NewTransferService(userRepo *repository.UserRepository, transactionRepo *repository.TransactionRepository, db *gorm.DB) *TransferService <span class="cov9" title="24">{
+        return &amp;TransferService{
+                userRepo:        userRepo,
+                transactionRepo: transactionRepo,
+                db:              db,
+        }
+}</span>
+
+func (s *TransferService) TransferInTx(tx *gorm.DB, fromUsername, toUsername string, amount int, force bool) error <span class="cov10" title="34">{
+        if amount &lt;= 0 </span><span class="cov2" title="2">{
+                return ErrInvalidAmount
+        }</span>
+
+        <span class="cov9" title="32">if fromUsername == toUsername </span><span class="cov1" title="1">{
+                return ErrSelfTransfer
+        }</span>
+
+        <span class="cov9" title="31">fromUser, err := s.userRepo.FindByUsernameForUpdate(tx, fromUsername)
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                        return ErrUserNotFound
+                }</span>
+                <span class="cov0" title="0">return err</span>
+        }
+
+        <span class="cov9" title="31">if fromUser.BeanAmount &lt; amount </span><span class="cov1" title="1">{
+                return ErrInsufficientBalance
+        }</span>
+
+        <span class="cov9" title="30">toUser, err := s.userRepo.FindByUsernameForUpdate(tx, toUsername)
+        if err != nil &amp;&amp; !errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov9" title="30">if toUser == nil </span><span class="cov3" title="3">{
+                if !force </span><span class="cov1" title="1">{
+                        return ErrRecipientNotFound
+                }</span>
+                <span class="cov2" title="2">toUser = &amp;models.User{
+                        Username:   toUsername,
+                        BeanAmount: 0,
+                }
+                if err := tx.Create(toUser).Error; err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+        }
+
+        <span class="cov9" title="29">fromUser.BeanAmount -= amount
+        toUser.BeanAmount += amount
+
+        if err := s.userRepo.UpdateInTx(tx, fromUser); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov9" title="29">if err := s.userRepo.UpdateInTx(tx, toUser); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov9" title="29">transaction := &amp;models.Transaction{
+                FromUserID: fromUser.ID,
+                ToUserID:   toUser.ID,
+                Amount:     amount,
+        }
+
+        return s.transactionRepo.Create(tx, transaction)</span>
+}
+
+func (s *TransferService) Transfer(fromUsername, toUsername string, amount int, force bool) error <span class="cov5" title="7">{
+        return s.db.Transaction(func(tx *gorm.DB) error </span><span class="cov5" title="7">{
+                return s.TransferInTx(tx, fromUsername, toUsername, amount, force)
+        }</span>)
+}
+</pre>
+		
+		<pre class="file" id="file27" style="display: none">package services
+
+import (
+        "errors"
+
+        "github.com/h4ks-com/bean-bank/internal/models"
+        "github.com/h4ks-com/bean-bank/internal/repository"
+)
+
+var (
+        ErrUserNotFound = errors.New("user not found")
+)
+
+type WalletService struct {
+        userRepo        *repository.UserRepository
+        transactionRepo *repository.TransactionRepository
+}
+
+func NewWalletService(userRepo *repository.UserRepository, transactionRepo *repository.TransactionRepository) *WalletService <span class="cov10" title="6">{
+        return &amp;WalletService{
+                userRepo:        userRepo,
+                transactionRepo: transactionRepo,
+        }
+}</span>
+
+func (s *WalletService) GetOrCreateWallet(username string) (*models.User, error) <span class="cov4" title="2">{
+        user, err := s.userRepo.FindByUsername(username)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov4" title="2">if user == nil </span><span class="cov1" title="1">{
+                user = &amp;models.User{
+                        Username:   username,
+                        BeanAmount: 1,
+                }
+                err = s.userRepo.Create(user)
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+        }
+
+        <span class="cov4" title="2">return user, nil</span>
+}
+
+func (s *WalletService) GetBalance(username string) (int, error) <span class="cov6" title="3">{
+        user, err := s.userRepo.FindByUsername(username)
+        if err != nil </span><span class="cov0" title="0">{
+                return 0, err
+        }</span>
+        <span class="cov6" title="3">if user == nil </span><span class="cov1" title="1">{
+                return 0, ErrUserNotFound
+        }</span>
+        <span class="cov4" title="2">return user.BeanAmount, nil</span>
+}
+
+func (s *WalletService) GetTransactionHistory(username string) ([]models.Transaction, error) <span class="cov0" title="0">{
+        return s.transactionRepo.FindByUsername(username)
+}</span>
+
+func (s *WalletService) GetTotalBeans() (int64, error) <span class="cov1" title="1">{
+        return s.userRepo.GetTotalBeans()
+}</span>
+
+func (s *WalletService) UpdateBalance(username string, newAmount int) error <span class="cov1" title="1">{
+        user, err := s.userRepo.FindByUsername(username)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov1" title="1">if user == nil </span><span class="cov0" title="0">{
+                return ErrUserNotFound
+        }</span>
+
+        <span class="cov1" title="1">user.BeanAmount = newAmount
+        return s.userRepo.Update(user)</span>
+}
+
+func (s *WalletService) GetTopWallets(limit int) ([]models.User, error) <span class="cov0" title="0">{
+        return s.userRepo.GetTopWallets(limit)
+}</span>
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

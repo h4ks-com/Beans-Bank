@@ -289,6 +289,7 @@ func runServer() {
 		browser.GET("/wallet", browserHandler.GetWallet)
 		browser.GET("/transactions", browserHandler.GetTransactions)
 		browser.GET("/transactions/export", exportHandler.ExportTransactions)
+		browser.GET("/transactions/export/pdf", exportHandler.ExportTransactionsPDF)
 		browser.POST("/transfer", browserHandler.Transfer)
 		browser.POST("/tokens", browserHandler.CreateToken)
 		browser.GET("/tokens", browserHandler.ListTokens)
@@ -329,6 +330,7 @@ func runServer() {
 			authenticated.GET("/transactions", walletHandler.GetTransactions)
 			authenticated.POST("/transfer", transferHandler.Transfer)
 			authenticated.GET("/transactions/export", exportHandler.ExportTransactions)
+			authenticated.GET("/transactions/export/pdf", exportHandler.ExportTransactionsPDF)
 
 			authenticated.POST("/tokens", tokenHandler.CreateToken)
 			authenticated.GET("/tokens", tokenHandler.ListTokens)

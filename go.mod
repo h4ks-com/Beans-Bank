@@ -17,6 +17,7 @@ require (
 	gorm.io/driver/postgres v1.5.9
 	gorm.io/driver/sqlite v1.5.7
 	gorm.io/gorm v1.25.12
+	github.com/jung-kurt/gofpdf v1.9.0
 )
 
 require (

@@ -52,6 +52,30 @@ func (h *ExportHandler) ExportTransactions(c *gin.Context) {
 	c.JSON(http.StatusOK, export)
 }
 
+// ExportTransactionsPDF streams a PDF statement to the authenticated user
+func (h *ExportHandler) ExportTransactionsPDF(c *gin.Context) {
+	username := middleware.GetUsername(c)
+	if username == "" {
+		c.JSON(http.StatusUnauthorized, ErrorResponse{Error: "unauthorized"})
+		return
+	}
+
+	pdfBytes, err := h.exportService.GenerateStatementPDF(username)
+	if err != nil {
+		if err == services.ErrUserNotFound {
+			c.JSON(http.StatusNotFound, ErrorResponse{Error: "user not found"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	filename := username + "_statement.pdf"
+	c.Header("Content-Type", "application/pdf")
+	c.Header("Content-Disposition", "attachment; filename=\""+filename+"\"")
+	c.Data(http.StatusOK, "application/pdf", pdfBytes)
+}
+
 // VerifyExport godoc
 // @Summary Verify transaction export signature
 // @Description Verify the cryptographic signature of an exported transaction history

@@ -24,11 +24,11 @@ type DatabaseConfig struct {
 }
 
 type LogtoConfig struct {
-	Endpoint         string
-	AppID            string
-	AppSecret        string
-	RedirectURI      string
-	PostLogoutURI    string
+	Endpoint      string
+	AppID         string
+	AppSecret     string
+	RedirectURI   string
+	PostLogoutURI string
 }
 
 type JWTConfig struct {

@@ -20,11 +20,11 @@ type WalletImport struct {
 }
 
 var (
-	importFile       string
-	skipZero         bool
-	skipInvalid      bool
-	strictMode       bool
-	usernameRegex    = regexp.MustCompile(`^[a-zA-Z0-9_-]{1,50}$`)
+	importFile    string
+	skipZero      bool
+	skipInvalid   bool
+	strictMode    bool
+	usernameRegex = regexp.MustCompile(`^[a-zA-Z0-9_-]{1,50}$`)
 )
 
 var importCmd = &cobra.Command{
