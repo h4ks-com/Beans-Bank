@@ -6,6 +6,7 @@
     <title>My Wallet - Bean Bank</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/static/css/common.css">
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
     <style>
         .balance-card {
             background: var(--card-bg);
@@ -964,13 +965,16 @@
                                 <strong>Token #${token.id}</strong>
                                 <small>Created: ${created} | Expires: ${expires}</small>
                             </div>
-                            <button class="btn btn-danger btn-small" onclick="deleteToken(${token.id})">
+                            <button class="btn btn-danger btn-small" data-action="delete-token" data-id="${token.id}">
                                 <i class="fas fa-trash"></i> Delete
                             </button>
                         </div>`;
                     });
                     html += '</div>';
-                    document.getElementById('tokenList').innerHTML = html;
+                    document.getElementById('tokenList').innerHTML = DOMPurify.sanitize(html);
+                    document.getElementById('tokenList').querySelectorAll('button[data-action="delete-token"]').forEach(btn => {
+                        btn.addEventListener('click', () => deleteToken(parseInt(btn.dataset.id)));
+                    });
                 } else {
                     document.getElementById('tokenList').innerHTML = '<p class="loading">No tokens yet</p>';
                 }
@@ -1028,24 +1032,27 @@
 
                         html += `<div class="transaction-item">
                             <div class="transaction-info">
-                                <strong>${tx.from_user} → ${tx.to_user}</strong>
+                                <strong>${DOMPurify.sanitize(tx.from_user)} → ${DOMPurify.sanitize(tx.to_user)}</strong>
                                 <small>🫘${tx.amount} | ${date}</small>
                             </div>
                         </div>`;
                     });
                     html += '</div>';
-                    document.getElementById('transactionList').innerHTML = html;
+                    document.getElementById('transactionList').innerHTML = DOMPurify.sanitize(html);
 
                     const totalPages = Math.ceil(data.length / pageSize);
                     let paginationHtml = '';
 
                     if (totalPages > 1) {
-                        paginationHtml += `<button onclick="loadTransactions(${page - 1})" ${page === 0 ? 'disabled' : ''}>Previous</button>`;
+                        paginationHtml += `<button ${page === 0 ? 'disabled' : ''} data-page="${page - 1}">Previous</button>`;
                         paginationHtml += `<span>Page ${page + 1} of ${totalPages}</span>`;
-                        paginationHtml += `<button onclick="loadTransactions(${page + 1})" ${page >= totalPages - 1 ? 'disabled' : ''}>Next</button>`;
+                        paginationHtml += `<button ${page >= totalPages - 1 ? 'disabled' : ''} data-page="${page + 1}">Next</button>`;
                     }
 
-                    document.getElementById('pagination').innerHTML = paginationHtml;
+                    document.getElementById('pagination').innerHTML = DOMPurify.sanitize(paginationHtml);
+                    document.getElementById('pagination').querySelectorAll('button[data-page]').forEach(btn => {
+                        btn.addEventListener('click', () => loadTransactions(parseInt(btn.dataset.page)));
+                    });
                 } else {
                     document.getElementById('transactionList').innerHTML = '<p class="loading">No transactions yet</p>';
                     document.getElementById('pagination').innerHTML = '';
@@ -1230,7 +1237,7 @@
                         const giftUrl = window.location.origin + '/gift/' + gift.code;
 
                         const statusBadge = gift.redeemed_at
-                            ? `<span style="background: var(--success); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Redeemed by ${gift.redeemed_by}</span>`
+                            ? `<span style="background: var(--success); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Redeemed by ${DOMPurify.sanitize(gift.redeemed_by)}</span>`
                             : (gift.active
                                 ? '<span style="background: var(--primary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Active</span>'
                                 : '<span style="background: #6c757d; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Inactive</span>');
@@ -1239,7 +1246,7 @@
                             <div class="token-info" style="flex: 1; min-width: 0;">
                                 <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
                                     <strong style="font-size: 1.1rem;">🫘${gift.amount}</strong>
-                                    ${gift.message ? `<span style="color: var(--text-secondary);">- ${gift.message}</span>` : ''}
+                                    ${gift.message ? `<span style="color: var(--text-secondary);">- ${DOMPurify.sanitize(gift.message)}</span>` : ''}
                                 </div>
                                 <div style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.85rem; color: var(--text-secondary);">
                                     <div>Created: ${created}</div>
@@ -1263,7 +1270,7 @@
                         </div>`;
                     });
                     html += '</div>';
-                    document.getElementById('giftlinkList').innerHTML = html;
+                    document.getElementById('giftlinkList').innerHTML = DOMPurify.sanitize(html);
                 } else {
                     document.getElementById('giftlinkList').innerHTML = '<p class="loading">No gift links yet</p>';
                 }
@@ -1346,26 +1353,26 @@
                 const assigned = harvest.assigned_user || '-';
 
                 const assignBtn = harvest.completed ? '' :
-                    `<button class="btn btn-small btn-secondary" onclick="assignHarvest(${harvest.id}, '${assigned}')" title="Assign User">
+                    `<button class="btn btn-small btn-secondary" data-action="assign" data-id="${harvest.id}" data-assigned="${harvest.assigned_user || ''}" title="Assign User">
                         <i class="fas fa-user-plus"></i>
                     </button>`;
                 const completeBtn = harvest.completed || !harvest.assigned_user ? '' :
-                    `<button class="btn btn-small btn-success" onclick="completeHarvest(${harvest.id})" title="Mark Complete">
+                    `<button class="btn btn-small btn-success" data-action="complete" data-id="${harvest.id}" title="Mark Complete">
                         <i class="fas fa-check"></i>
                     </button>`;
 
                 html += `<tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.75rem;"><strong>${harvest.title}</strong></td>
+                    <td style="padding: 0.75rem;"><strong>${DOMPurify.sanitize(harvest.title)}</strong></td>
                     <td style="padding: 0.75rem;">${harvest.bean_amount}</td>
-                    <td style="padding: 0.75rem;">${assigned}</td>
+                    <td style="padding: 0.75rem;">${DOMPurify.sanitize(assigned)}</td>
                     <td style="padding: 0.75rem;">${statusBadge}</td>
                     <td style="padding: 0.75rem; text-align: right;">
                         ${assignBtn}
                         ${completeBtn}
-                        <button class="btn btn-small btn-secondary" onclick="editHarvest(${harvest.id})" title="Edit">
+                        <button class="btn btn-small btn-secondary" data-action="edit" data-id="${harvest.id}" title="Edit">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-small btn-danger" onclick="deleteHarvest(${harvest.id})" title="Delete">
+                        <button class="btn btn-small btn-danger" data-action="delete" data-id="${harvest.id}" title="Delete">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -1373,7 +1380,18 @@
             });
 
             html += '</tbody></table>';
-            container.innerHTML = html;
+            container.innerHTML = DOMPurify.sanitize(html);
+
+            container.querySelectorAll('button[data-action]').forEach(btn => {
+                const id = parseInt(btn.dataset.id);
+                btn.addEventListener('click', () => {
+                    const action = btn.dataset.action;
+                    if (action === 'assign') assignHarvest(id, btn.dataset.assigned || '-');
+                    else if (action === 'complete') completeHarvest(id);
+                    else if (action === 'edit') editHarvest(id);
+                    else if (action === 'delete') deleteHarvest(id);
+                });
+            });
         }
 
         async function saveHarvest(event) {
@@ -1486,11 +1504,14 @@
                         return;
                     }
 
-                    suggestionsEl.innerHTML = users.map(user =>
-                        `<div class="autocomplete-item" onclick="selectUser('${user.username}')">
-                            <i class="fas fa-user"></i> ${user.username}
+                    suggestionsEl.innerHTML = DOMPurify.sanitize(users.map(user =>
+                        `<div class="autocomplete-item" data-username="${DOMPurify.sanitize(user.username)}">
+                            <i class="fas fa-user"></i> ${DOMPurify.sanitize(user.username)}
                         </div>`
-                    ).join('');
+                    ).join(''));
+                    suggestionsEl.querySelectorAll('.autocomplete-item').forEach(el => {
+                        el.addEventListener('click', () => selectUser(el.dataset.username));
+                    });
                     suggestionsEl.classList.add('active');
                 } catch (error) {
                     console.error('Failed to search users:', error);
@@ -1537,11 +1558,14 @@
                         return;
                     }
 
-                    suggestionsEl.innerHTML = users.map(user =>
-                        `<div class="autocomplete-item" onclick="selectTransferUser('${user.username}')">
-                            <i class="fas fa-user"></i> ${user.username}
+                    suggestionsEl.innerHTML = DOMPurify.sanitize(users.map(user =>
+                        `<div class="autocomplete-item" data-username="${DOMPurify.sanitize(user.username)}">
+                            <i class="fas fa-user"></i> ${DOMPurify.sanitize(user.username)}
                         </div>`
-                    ).join('');
+                    ).join(''));
+                    suggestionsEl.querySelectorAll('.autocomplete-item').forEach(el => {
+                        el.addEventListener('click', () => selectTransferUser(el.dataset.username));
+                    });
                     suggestionsEl.classList.add('active');
                 } catch (error) {
                     console.error('Failed to search users:', error);
@@ -1588,11 +1612,14 @@
                         return;
                     }
 
-                    suggestionsEl.innerHTML = users.map(user =>
-                        `<div class="autocomplete-item" onclick="selectLinkUser('${field}', '${user.username}')">
-                            <i class="fas fa-user"></i> ${user.username}
+                    suggestionsEl.innerHTML = DOMPurify.sanitize(users.map(user =>
+                        `<div class="autocomplete-item" data-username="${DOMPurify.sanitize(user.username)}">
+                            <i class="fas fa-user"></i> ${DOMPurify.sanitize(user.username)}
                         </div>`
-                    ).join('');
+                    ).join(''));
+                    suggestionsEl.querySelectorAll('.autocomplete-item').forEach(el => {
+                        el.addEventListener('click', () => selectLinkUser(field, el.dataset.username));
+                    });
                     suggestionsEl.classList.add('active');
                 } catch (error) {
                     console.error('Failed to search users:', error);

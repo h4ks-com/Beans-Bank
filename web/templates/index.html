@@ -6,6 +6,7 @@
     <title>Bean Bank - Bean Leaderboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/static/css/common.css">
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
     <style>
         .stats-card {
             background: var(--card-bg);
@@ -526,13 +527,13 @@
 
                         html += `<tr>
                             <td class="${rankClass}" style="width: 80px;">${medal}#${displayRank}</td>
-                            <td class="username">${entry.username}</td>
+                            <td class="username">${DOMPurify.sanitize(entry.username)}</td>
                             <td class="beans" style="width: 120px; text-align: right;">${entry.bean_amount.toLocaleString()}</td>
                         </tr>`;
                     });
 
                     html += '</tbody></table></div>';
-                    document.getElementById('leaderboard').innerHTML = html;
+                    document.getElementById('leaderboard').innerHTML = DOMPurify.sanitize(html);
                 } else {
                     document.getElementById('leaderboard').innerHTML = '<p class="loading">No wallets yet</p>';
                 }
@@ -603,16 +604,16 @@
 
                 let assigneeInfo = '';
                 if (harvest.assigned_user) {
-                    assigneeInfo = `<span class="harvest-assignee"><i class="fas fa-user"></i> ${harvest.assigned_user}</span>`;
+                    assigneeInfo = `<span class="harvest-assignee"><i class="fas fa-user"></i> ${DOMPurify.sanitize(harvest.assigned_user)}</span>`;
                 }
 
-                item.innerHTML = `
-                    <div class="harvest-title">${harvest.title}</div>
+                item.innerHTML = DOMPurify.sanitize(`
+                    <div class="harvest-title">${DOMPurify.sanitize(harvest.title)}</div>
                     <div class="harvest-meta">
                         <span class="harvest-beans"><i class="fas fa-coins"></i> 🫘${harvest.bean_amount}</span>
                         ${assigneeInfo}
                     </div>
-                `;
+                `);
 
                 container.appendChild(item);
             });
@@ -647,29 +648,31 @@
 
             const descriptionDiv = document.getElementById('modalDescription');
             if (typeof marked !== 'undefined') {
-                descriptionDiv.innerHTML = marked.parse(harvest.description || 'No description provided.');
+                descriptionDiv.innerHTML = DOMPurify.sanitize(marked.parse(harvest.description || 'No description provided.'));
             } else {
-                descriptionDiv.innerHTML = `<p>${(harvest.description || 'No description provided.').replace(/\n/g, '<br>')}</p>`;
+                const p = document.createElement('p');
+                p.textContent = harvest.description || 'No description provided.';
+                descriptionDiv.replaceChildren(p);
             }
 
             const createdDate = new Date(harvest.created_at).toLocaleDateString();
             const updatedDate = new Date(harvest.updated_at).toLocaleDateString();
 
             const assignedInfo = harvest.assigned_user
-                ? `<div class="modal-info-item"><strong>Assigned to:</strong> ${harvest.assigned_user}</div>`
+                ? `<div class="modal-info-item"><strong>Assigned to:</strong> ${DOMPurify.sanitize(harvest.assigned_user)}</div>`
                 : '';
 
             const statusInfo = harvest.completed
                 ? '<div class="modal-info-item"><strong>Status:</strong> <span style="color: #10b981;">✓ Completed</span></div>'
                 : '<div class="modal-info-item"><strong>Status:</strong> Open</div>';
 
-            document.getElementById('modalInfo').innerHTML = `
+            document.getElementById('modalInfo').innerHTML = DOMPurify.sanitize(`
                 <div class="modal-info-item"><strong>Reward:</strong> 🫘${harvest.bean_amount}</div>
                 ${statusInfo}
                 ${assignedInfo}
                 <div class="modal-info-item"><strong>Created:</strong> ${createdDate}</div>
                 <div class="modal-info-item"><strong>Updated:</strong> ${updatedDate}</div>
-            `;
+            `);
 
             window.location.hash = `harvest/${harvest.id}`;
             document.getElementById('harvestModal').classList.add('active');

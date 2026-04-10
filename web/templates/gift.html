@@ -296,11 +296,10 @@
             document.getElementById('amount').textContent = gift.amount;
 
             if (gift.message) {
-                document.getElementById('message-container').innerHTML = `
-                    <div class="gift-message">
-                        "${gift.message}"
-                    </div>
-                `;
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'gift-message';
+                msgDiv.textContent = `"${gift.message}"`;
+                document.getElementById('message-container').appendChild(msgDiv);
             }
 
             if (gift.expires_at) {
@@ -382,7 +381,10 @@
 
         function showError(message) {
             const container = document.getElementById('error-container');
-            container.innerHTML = `<div class="error-message">${message}</div>`;
+            const div = document.createElement('div');
+            div.className = 'error-message';
+            div.textContent = message;
+            container.replaceChildren(div);
             setTimeout(() => {
                 container.innerHTML = '';
             }, 5000);
@@ -390,7 +392,10 @@
 
         function showSuccess(message) {
             const container = document.getElementById('success-container');
-            container.innerHTML = `<div class="success-message">${message}</div>`;
+            const div = document.createElement('div');
+            div.className = 'success-message';
+            div.textContent = message;
+            container.replaceChildren(div);
         }
 
         loadGift();

@@ -6,6 +6,7 @@
     <title>Admin Settings - Bean Bank</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/static/css/common.css">
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
     <style>
         .tabs {
             display: flex;
@@ -347,8 +348,8 @@
                 users = data.users || [];
 
                 const select = document.getElementById('assignUser');
-                select.innerHTML = '<option value="">Select a user...</option>' +
-                    users.map(u => `<option value="${u.id}">${u.username}</option>`).join('');
+                select.innerHTML = DOMPurify.sanitize('<option value="">Select a user...</option>' +
+                    users.map(u => `<option value="${u.id}">${u.username}</option>`).join(''));
             } catch (error) {
                 console.error('Failed to load users:', error);
             }
@@ -387,26 +388,26 @@
                 const assignedText = harvest.assigned_user || '-';
 
                 html += `<tr>
-                    <td><strong>${harvest.title}</strong></td>
+                    <td><strong>${DOMPurify.sanitize(harvest.title)}</strong></td>
                     <td>${harvest.bean_amount}</td>
-                    <td>${assignedText}</td>
+                    <td>${DOMPurify.sanitize(assignedText)}</td>
                     <td><span class="status-badge ${statusClass}">${statusText}</span></td>
                     <td>
                         <div class="action-buttons">
-                            <button class="btn-icon" onclick="editHarvest(${harvest.id})" title="Edit">
+                            <button class="btn-icon" data-action="edit" data-id="${harvest.id}" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </button>
                             ${!harvest.completed ? `
-                                <button class="btn-icon" onclick="openAssignModal(${harvest.id})" title="Assign User">
+                                <button class="btn-icon" data-action="assign" data-id="${harvest.id}" title="Assign User">
                                     <i class="fas fa-user-plus"></i>
                                 </button>
                                 ${harvest.assigned_user_id ? `
-                                    <button class="btn-icon" onclick="completeHarvest(${harvest.id})" title="Complete">
+                                    <button class="btn-icon" data-action="complete" data-id="${harvest.id}" title="Complete">
                                         <i class="fas fa-check"></i>
                                     </button>
                                 ` : ''}
                             ` : ''}
-                            <button class="btn-icon danger" onclick="deleteHarvest(${harvest.id})" title="Delete">
+                            <button class="btn-icon danger" data-action="delete" data-id="${harvest.id}" title="Delete">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
@@ -415,7 +416,18 @@
             });
 
             html += '</tbody></table>';
-            container.innerHTML = html;
+            container.innerHTML = DOMPurify.sanitize(html);
+
+            container.querySelectorAll('button[data-action]').forEach(btn => {
+                const id = parseInt(btn.dataset.id);
+                btn.addEventListener('click', () => {
+                    const action = btn.dataset.action;
+                    if (action === 'edit') editHarvest(id);
+                    else if (action === 'assign') openAssignModal(id);
+                    else if (action === 'complete') completeHarvest(id);
+                    else if (action === 'delete') deleteHarvest(id);
+                });
+            });
         }
 
         async function saveHarvest(event) {
