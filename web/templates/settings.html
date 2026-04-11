@@ -335,6 +335,9 @@
     </div>
 
     <script>
+        const PLAIN = { ALLOWED_TAGS: [], ALLOWED_ATTR: [] };
+        const txt = str => DOMPurify.sanitize(String(str), PLAIN);
+
         let harvests = [];
         let users = [];
         let editingId = null;
@@ -349,7 +352,7 @@
 
                 const select = document.getElementById('assignUser');
                 select.innerHTML = DOMPurify.sanitize('<option value="">Select a user...</option>' +
-                    users.map(u => `<option value="${u.id}">${u.username}</option>`).join(''));
+                    users.map(u => `<option value="${u.id}">${txt(u.username)}</option>`).join(''));
             } catch (error) {
                 console.error('Failed to load users:', error);
             }
@@ -388,9 +391,9 @@
                 const assignedText = harvest.assigned_user || '-';
 
                 html += `<tr>
-                    <td><strong>${DOMPurify.sanitize(harvest.title)}</strong></td>
+                    <td><strong>${txt(harvest.title)}</strong></td>
                     <td>${harvest.bean_amount}</td>
-                    <td>${DOMPurify.sanitize(assignedText)}</td>
+                    <td>${txt(assignedText)}</td>
                     <td><span class="status-badge ${statusClass}">${statusText}</span></td>
                     <td>
                         <div class="action-buttons">

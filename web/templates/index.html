@@ -505,6 +505,9 @@
     </div>
 
     <script>
+        const PLAIN = { ALLOWED_TAGS: [], ALLOWED_ATTR: [] };
+        const txt = str => DOMPurify.sanitize(String(str), PLAIN);
+
         async function loadLeaderboard() {
             try {
                 const response = await fetch('/api/v1/leaderboard');
@@ -527,7 +530,7 @@
 
                         html += `<tr>
                             <td class="${rankClass}" style="width: 80px;">${medal}#${displayRank}</td>
-                            <td class="username">${DOMPurify.sanitize(entry.username)}</td>
+                            <td class="username">${txt(entry.username)}</td>
                             <td class="beans" style="width: 120px; text-align: right;">${entry.bean_amount.toLocaleString()}</td>
                         </tr>`;
                     });
@@ -604,11 +607,11 @@
 
                 let assigneeInfo = '';
                 if (harvest.assigned_user) {
-                    assigneeInfo = `<span class="harvest-assignee"><i class="fas fa-user"></i> ${DOMPurify.sanitize(harvest.assigned_user)}</span>`;
+                    assigneeInfo = `<span class="harvest-assignee"><i class="fas fa-user"></i> ${txt(harvest.assigned_user)}</span>`;
                 }
 
                 item.innerHTML = DOMPurify.sanitize(`
-                    <div class="harvest-title">${DOMPurify.sanitize(harvest.title)}</div>
+                    <div class="harvest-title">${txt(harvest.title)}</div>
                     <div class="harvest-meta">
                         <span class="harvest-beans"><i class="fas fa-coins"></i> 🫘${harvest.bean_amount}</span>
                         ${assigneeInfo}
@@ -659,7 +662,7 @@
             const updatedDate = new Date(harvest.updated_at).toLocaleDateString();
 
             const assignedInfo = harvest.assigned_user
-                ? `<div class="modal-info-item"><strong>Assigned to:</strong> ${DOMPurify.sanitize(harvest.assigned_user)}</div>`
+                ? `<div class="modal-info-item"><strong>Assigned to:</strong> ${txt(harvest.assigned_user)}</div>`
                 : '';
 
             const statusInfo = harvest.completed

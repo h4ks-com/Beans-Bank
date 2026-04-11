@@ -741,6 +741,8 @@
         const isAuthenticated = {{ .IsAuthenticated }};
         const testMode = {{ .TestMode }};
 
+        const PLAIN = { ALLOWED_TAGS: [], ALLOWED_ATTR: [] };
+        const txt = str => DOMPurify.sanitize(String(str), PLAIN);
         function showTab(tab, updateHash = true) {
             const tabs = ['transfer', 'giftlinks', 'tokens', 'transactions', 'admin'];
             if (!tabs.includes(tab)) tab = 'transfer';
@@ -1032,7 +1034,7 @@
 
                         html += `<div class="transaction-item">
                             <div class="transaction-info">
-                                <strong>${DOMPurify.sanitize(tx.from_user)} → ${DOMPurify.sanitize(tx.to_user)}</strong>
+                                <strong>${txt(tx.from_user)} → ${txt(tx.to_user)}</strong>
                                 <small>🫘${tx.amount} | ${date}</small>
                             </div>
                         </div>`;
@@ -1237,7 +1239,7 @@
                         const giftUrl = window.location.origin + '/gift/' + gift.code;
 
                         const statusBadge = gift.redeemed_at
-                            ? `<span style="background: var(--success); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Redeemed by ${DOMPurify.sanitize(gift.redeemed_by)}</span>`
+                            ? `<span style="background: var(--success); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Redeemed by ${txt(gift.redeemed_by)}</span>`
                             : (gift.active
                                 ? '<span style="background: var(--primary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Active</span>'
                                 : '<span style="background: #6c757d; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Inactive</span>');
@@ -1246,7 +1248,7 @@
                             <div class="token-info" style="flex: 1; min-width: 0;">
                                 <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
                                     <strong style="font-size: 1.1rem;">🫘${gift.amount}</strong>
-                                    ${gift.message ? `<span style="color: var(--text-secondary);">- ${DOMPurify.sanitize(gift.message)}</span>` : ''}
+                                    ${gift.message ? `<span style="color: var(--text-secondary);">- ${txt(gift.message)}</span>` : ''}
                                 </div>
                                 <div style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.85rem; color: var(--text-secondary);">
                                     <div>Created: ${created}</div>
@@ -1362,9 +1364,9 @@
                     </button>`;
 
                 html += `<tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.75rem;"><strong>${DOMPurify.sanitize(harvest.title)}</strong></td>
+                    <td style="padding: 0.75rem;"><strong>${txt(harvest.title)}</strong></td>
                     <td style="padding: 0.75rem;">${harvest.bean_amount}</td>
-                    <td style="padding: 0.75rem;">${DOMPurify.sanitize(assigned)}</td>
+                    <td style="padding: 0.75rem;">${txt(assigned)}</td>
                     <td style="padding: 0.75rem;">${statusBadge}</td>
                     <td style="padding: 0.75rem; text-align: right;">
                         ${assignBtn}
@@ -1505,8 +1507,8 @@
                     }
 
                     suggestionsEl.innerHTML = DOMPurify.sanitize(users.map(user =>
-                        `<div class="autocomplete-item" data-username="${DOMPurify.sanitize(user.username)}">
-                            <i class="fas fa-user"></i> ${DOMPurify.sanitize(user.username)}
+                        `<div class="autocomplete-item" data-username="${txt(user.username)}">
+                            <i class="fas fa-user"></i> ${txt(user.username)}
                         </div>`
                     ).join(''));
                     suggestionsEl.querySelectorAll('.autocomplete-item').forEach(el => {
@@ -1559,8 +1561,8 @@
                     }
 
                     suggestionsEl.innerHTML = DOMPurify.sanitize(users.map(user =>
-                        `<div class="autocomplete-item" data-username="${DOMPurify.sanitize(user.username)}">
-                            <i class="fas fa-user"></i> ${DOMPurify.sanitize(user.username)}
+                        `<div class="autocomplete-item" data-username="${txt(user.username)}">
+                            <i class="fas fa-user"></i> ${txt(user.username)}
                         </div>`
                     ).join(''));
                     suggestionsEl.querySelectorAll('.autocomplete-item').forEach(el => {
@@ -1613,8 +1615,8 @@
                     }
 
                     suggestionsEl.innerHTML = DOMPurify.sanitize(users.map(user =>
-                        `<div class="autocomplete-item" data-username="${DOMPurify.sanitize(user.username)}">
-                            <i class="fas fa-user"></i> ${DOMPurify.sanitize(user.username)}
+                        `<div class="autocomplete-item" data-username="${txt(user.username)}">
+                            <i class="fas fa-user"></i> ${txt(user.username)}
                         </div>`
                     ).join(''));
                     suggestionsEl.querySelectorAll('.autocomplete-item').forEach(el => {
